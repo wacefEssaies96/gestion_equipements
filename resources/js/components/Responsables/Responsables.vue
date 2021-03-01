@@ -16,7 +16,7 @@
     </div>
     <!-- /.card-header -->
     <!-- @responsable-added="refresh" -->
-  <add-responsable ></add-responsable>
+  <add-responsable @responsable-added="refresh"></add-responsable>
     <!-- <button>Ajouter un nouveau responsable</button> -->    
     <div class="card-body table-responsive p-0">
       <table class="table table-hover text-nowrap">
@@ -27,6 +27,7 @@
             <th>Prenom</th>
             <th>Pseudo</th>
             <th>Email</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -36,6 +37,13 @@
             <td>{{ responsable.prenom }}</td>
             <td>{{ responsable.pseudo }}</td>
             <td>{{ responsable.email }}</td>
+            <td>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getResponsable(responsable.id)">
+              Modifier
+              </button>
+              <button type="button" class="btn btn-danger" @click="deleteResponsable(responsable.id)">Supprimer</button>
+              <edit-responsable v-bind:responsableToEdit="responsableToEdit" @responsable-updated="refresh"></edit-responsable>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -48,7 +56,7 @@
       data(){
         return{
           responsables: {},
-          
+          responsableToEdit: '',
         }
       },
       created(){
@@ -56,10 +64,19 @@
         .then(response => this.responsables = response.data)
         .catch(error => console.log(error))
       },
-      //single page application
       methods:{
         refresh(responsables){
           this.responsables = responsables.data; 
+        },
+        getResponsable(id){
+            axios.get('http://localhost:8000/responsables/edit/' + id)
+            .then(response => this.responsableToEdit = response.data)
+            .catch(error => console.log(error));
+        },
+        deleteResponsable(id){
+            axios.delete('http://localhost:8000/responsables/' + id)
+            .then(response => this.responsables = response.data)
+            .catch(error => console.log(error));               
         },
       },
       mounted() {
