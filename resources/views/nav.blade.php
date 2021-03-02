@@ -17,6 +17,11 @@
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         {{-- <a href="#" class="nav-link">Contact</a> --}}
+        {{-- <router-link to="/hotlines" class="nav-link">Hotlines</router-link> --}}
+        <a href="{{url('/hotlines')}}" class="nav-link">Hotlines</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        {{-- <a href="#" class="nav-link">Contact</a> --}}
         <router-link to="/products" class="nav-link">Products</router-link>
       </li>
     </ul>
