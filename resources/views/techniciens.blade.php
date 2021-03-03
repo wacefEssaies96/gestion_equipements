@@ -8,17 +8,17 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1>Responsables</h1>
+              <h1>Techniciens</h1>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
-                <li class="breadcrumb-item active">Responsables</li>
+                <li class="breadcrumb-item active">Techniciens</li>
               </ol>
             </div>
           </div>
         </div><!-- /.container-fluid -->
       </section>
-      <liste-responsable></liste-responsable>
+      <liste-technicien></liste-technicien>
   </div>
 @endsection

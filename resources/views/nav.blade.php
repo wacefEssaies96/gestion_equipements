@@ -7,22 +7,18 @@
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{url('/')}}" class="nav-link">Acceuil</a>
-        {{-- <a href="index3.html" class="nav-link">Home</a>
-        <router-link to="/" class="nav-link">Dashboard</router-link> --}}
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        {{-- <a href="#" class="nav-link">Contact</a> --}}
-        {{-- <router-link to="/responsables" class="nav-link">Responsables</router-link> --}}
         <a href="{{url('/responsables')}}" class="nav-link">Responsables</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        {{-- <a href="#" class="nav-link">Contact</a> --}}
-        {{-- <router-link to="/hotlines" class="nav-link">Hotlines</router-link> --}}
         <a href="{{url('/hotlines')}}" class="nav-link">Hotlines</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        {{-- <a href="#" class="nav-link">Contact</a> --}}
-        <router-link to="/products" class="nav-link">Products</router-link>
+        <a href="{{url('/techniciens')}}" class="nav-link">Techniciens</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        {{-- <router-link to="/products" class="nav-link">Products</router-link> --}}
       </li>
     </ul>
 

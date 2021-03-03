@@ -68,12 +68,6 @@ class ResponsableController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Responsable  $responsable
-     * @return \Illuminate\Http\Response
-     */
     public function show(Responsable $responsable)
     {
         //

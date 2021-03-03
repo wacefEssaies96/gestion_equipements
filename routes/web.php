@@ -22,9 +22,11 @@ Route::get('/hotlines/edit/{id}', 'HotlineController@edit');
 Route::patch('/hotlines/edit/{id}', 'HotlineController@update');
 Route::delete('/hotlines/{id}', 'HotlineController@destroy');
 
-Route::get('/products', 'SinglePageController@index');
-Route::post('/products', 'SinglePageController@store');
-Route::get('/products/edit/{id}', 'SinglePageController@edit');
-Route::patch('/products/edit/{id}', 'SinglePageController@update');
-Route::delete('/products/{id}', 'SinglePageController@destroy');
+//Technicien
+Route::get('/techniciens', 'TechnicienController@index');
+Route::post('/techniciens', 'TechnicienController@store');
+Route::get('/techniciens/liste', 'TechnicienController@liste');
+Route::get('/techniciens/edit/{id}', 'TechnicienController@edit');
+Route::patch('/techniciens/edit/{id}', 'TechnicienController@update');
+Route::delete('/techniciens/{id}', 'TechnicienController@destroy');
 

@@ -22,7 +22,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form @submit.prevent="checkForm">
+              <form @submit.prevent="checkAddForm">
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm-6">
@@ -101,7 +101,7 @@
                   <div class="form-group">
                     <label for="mdp">Répéter le mot de passe</label>
                     <input type="password" id="repeatPassword" class="form-control" placeholder="Répéter le mot de passe" v-model="repeatPassword"
-                    :class="{'is-invalid':$v.password.$invalid, 'is-valid': (password != '') ? !$v.repeatPassword.$invalid : '' }" >
+                    :class="{'is-invalid':$v.repeatPassword.$invalid, 'is-valid': (password != '') ? !$v.repeatPassword.$invalid : '' }" >
                     <div class="valid-feedback">Mot de passe identique !</div>
                     <div class="invalid-feedback">
                       <span v-if="!$v.repeatPassword.sameAsPassword">Les mots de passes doivent être identique !</span>
@@ -119,7 +119,7 @@
             </div>
             <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                  <button hidden type="submit" id="submit" class="btn btn-primary" @click="hotlineStore" data-dismiss="modal"></button>
+                  <button hidden type="submit" id="submitAddHotline" class="btn btn-primary" @click="hotlineStore" data-dismiss="modal"></button>
             </div>
             </div>
         </div>
@@ -192,11 +192,13 @@ import { required, minLength,maxLength, between, sameAs } from 'vuelidate/lib/va
           }
         },
         methods:{
-          checkForm(){
+          checkAddForm(){
             this.$v.$touch()
             if(!this.$v.$invalid){
-              var submitForm = document.getElementById('submit');
+              var submitForm = document.getElementById('submitAddHotline');
               submitForm.click();
+            }else{
+                alert("Veuillez remplir les champs correctement !");
             }
           },
           hotlineStore(){

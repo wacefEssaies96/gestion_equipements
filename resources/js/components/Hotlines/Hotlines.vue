@@ -15,28 +15,26 @@
       </div>
     </div>
     <!-- /.card-header -->
-    <!-- @hotline-added="refresh" -->
-  <add-hotline @hotline-added="refresh"></add-hotline>
-    <!-- <button>Ajouter un nouveau hotline</button> -->    
+  <add-hotline @hotline-added="refresh"></add-hotline>  
     <div class="card-body table-responsive p-0">
       <table class="table table-hover text-nowrap">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Nom</th>
             <th>Prenom</th>
             <th>Pseudo</th>
             <th>Email</th>
+            <th>Téléphone</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="hotline in hotlines" :key="hotline.id">
-            <td>{{ hotline.id }}</td>
             <td>{{ hotline.nom }}</td>
             <td>{{ hotline.prenom }}</td>
             <td>{{ hotline.pseudo }}</td>
             <td>{{ hotline.email }}</td>
+            <td>{{ hotline.tel }}</td>
             <td>
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getHotline(hotline.id)">
               Modifier
@@ -68,7 +66,7 @@
         refresh(hotlines){
           this.hotlines = hotlines.data; 
         },
-        gethotline(id){
+        getHotline(id){
             axios.get('http://localhost:8000/hotlines/edit/' + id)
             .then(response => this.hotlineToEdit = response.data)
             .catch(error => console.log(error));
