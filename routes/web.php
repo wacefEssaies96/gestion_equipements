@@ -2,8 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function(){
-    return view('dashboard');
+
+//Authentification
+Route::group(['middleware' => ['auth' , 'ADMIN']],function() {
+    Route::get('/', function(){
+        return view('dashboard');
+    });
+  
 });
 
 //Responsable
@@ -28,3 +33,7 @@ Route::get('/products/edit/{id}', 'SinglePageController@edit');
 Route::patch('/products/edit/{id}', 'SinglePageController@update');
 Route::delete('/products/{id}', 'SinglePageController@destroy');
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

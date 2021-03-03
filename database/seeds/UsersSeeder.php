@@ -11,6 +11,15 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 10)->create();
+      
+         // Create Admin
+         User::create([
+            'nom' => 'COFAT',
+            'prenom' => 'Cofat',
+            'email' => 'admin@cofat.com',
+            'tel' => '00525755',
+            'password' => bcrypt('password'),
+            'role' => 'ADMIN'
+         ]);
     }
 }
