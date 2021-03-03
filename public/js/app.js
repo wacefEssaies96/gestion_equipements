@@ -43615,10 +43615,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
 /* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vuelidate__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_ProductsComponent_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/ProductsComponent.vue */ "./resources/js/components/ProductsComponent.vue");
-/* harmony import */ var _components_Responsables_Responsables_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Responsables/Responsables.vue */ "./resources/js/components/Responsables/Responsables.vue");
-/* harmony import */ var _components_Hotlines_Hotlines_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Hotlines/Hotlines.vue */ "./resources/js/components/Hotlines/Hotlines.vue");
-/* harmony import */ var _components_Techniciens_Techniciens_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Techniciens/Techniciens.vue */ "./resources/js/components/Techniciens/Techniciens.vue");
+/* harmony import */ var _components_Responsables_Responsables_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Responsables/Responsables.vue */ "./resources/js/components/Responsables/Responsables.vue");
+/* harmony import */ var _components_Hotlines_Hotlines_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Hotlines/Hotlines.vue */ "./resources/js/components/Hotlines/Hotlines.vue");
+/* harmony import */ var _components_Techniciens_Techniciens_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Techniciens/Techniciens.vue */ "./resources/js/components/Techniciens/Techniciens.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -43626,9 +43625,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 
 Vue.use(vuelidate__WEBPACK_IMPORTED_MODULE_1___default.a);
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
-Vue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js"));
-Vue.component('add-product', __webpack_require__(/*! ./components/AddProductComponent.vue */ "./resources/js/components/AddProductComponent.vue")["default"]);
-Vue.component('edit-product', __webpack_require__(/*! ./components/EditProductComponent.vue */ "./resources/js/components/EditProductComponent.vue")["default"]); //Responsables
+Vue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js")); //Responsables
 
 Vue.component('liste-responsable', __webpack_require__(/*! ./components/Responsables/Responsables.vue */ "./resources/js/components/Responsables/Responsables.vue")["default"]);
 Vue.component('add-responsable', __webpack_require__(/*! ./components/Responsables/AddResponsable.vue */ "./resources/js/components/Responsables/AddResponsable.vue")["default"]);
@@ -43644,19 +43641,15 @@ Vue.component('edit-technicien', __webpack_require__(/*! ./components/Technicien
 
 
 
-
 var routes = [{
   path: '/responsables',
-  component: _components_Responsables_Responsables_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+  component: _components_Responsables_Responsables_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
 }, {
   path: '/hotlines',
-  component: _components_Hotlines_Hotlines_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+  component: _components_Hotlines_Hotlines_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
 }, {
   path: '/techniciens',
-  component: _components_Techniciens_Techniciens_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
-}, {
-  path: '/products',
-  component: _components_ProductsComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+  component: _components_Techniciens_Techniciens_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
   routes: routes
@@ -43697,28 +43690,6 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
-
-/***/ }),
-
-/***/ "./resources/js/components/AddProductComponent.vue":
-/*!*********************************************************!*\
-  !*** ./resources/js/components/AddProductComponent.vue ***!
-  \*********************************************************/
-/*! exports provided: default */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed (from ./node_modules/vue-loader/lib/index.js):\nError: ENOENT: no such file or directory, open 'C:\\Users\\wacef\\Desktop\\ISET\\Projet de fin d'étude\\Application web\\Cofat\\resources\\js\\components\\AddProductComponent.vue'");
-
-/***/ }),
-
-/***/ "./resources/js/components/EditProductComponent.vue":
-/*!**********************************************************!*\
-  !*** ./resources/js/components/EditProductComponent.vue ***!
-  \**********************************************************/
-/*! exports provided: default */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed (from ./node_modules/vue-loader/lib/index.js):\nError: ENOENT: no such file or directory, open 'C:\\Users\\wacef\\Desktop\\ISET\\Projet de fin d'étude\\Application web\\Cofat\\resources\\js\\components\\EditProductComponent.vue'");
 
 /***/ }),
 
@@ -43926,17 +43897,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Hotlines_vue_vue_type_template_id_46933f34___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
-
-/***/ }),
-
-/***/ "./resources/js/components/ProductsComponent.vue":
-/*!*******************************************************!*\
-  !*** ./resources/js/components/ProductsComponent.vue ***!
-  \*******************************************************/
-/*! exports provided: default */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed (from ./node_modules/vue-loader/lib/index.js):\nError: ENOENT: no such file or directory, open 'C:\\Users\\wacef\\Desktop\\ISET\\Projet de fin d'étude\\Application web\\Cofat\\resources\\js\\components\\ProductsComponent.vue'");
 
 /***/ }),
 

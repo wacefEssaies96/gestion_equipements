@@ -16,8 +16,6 @@
                 </main>
                 @include('footer')
             </div>
-
-            {{-- <router-view></router-view> --}}
         </div>
         @include('scripts')   
     </body>

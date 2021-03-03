@@ -17,9 +17,6 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{url('/techniciens')}}" class="nav-link">Techniciens</a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        {{-- <router-link to="/products" class="nav-link">Products</router-link> --}}
-      </li>
     </ul>
 
     <!-- Right navbar links -->

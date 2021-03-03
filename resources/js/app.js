@@ -7,8 +7,6 @@ Vue.use(Vuelidate)
 Vue.use(VueRouter);
 
 Vue.component('pagination', require('laravel-vue-pagination'));
-Vue.component('add-product', require('./components/AddProductComponent.vue').default);
-Vue.component('edit-product', require('./components/EditProductComponent.vue').default);
 
 //Responsables
 Vue.component('liste-responsable', require('./components/Responsables/Responsables.vue').default);
@@ -23,8 +21,6 @@ Vue.component('liste-technicien', require('./components/Techniciens/Techniciens.
 Vue.component('add-technicien', require('./components/Techniciens/AddTechnicien.vue').default);
 Vue.component('edit-technicien', require('./components/Techniciens/EditTechnicien.vue').default);
 
-
-import products from './components/ProductsComponent.vue';
 import responsables from './components/Responsables/Responsables.vue';
 import hotlines from './components/Hotlines/Hotlines.vue';
 import techniciens from './components/Techniciens/Techniciens.vue';
@@ -33,7 +29,6 @@ const routes = [
     {path : '/responsables',component : responsables},
     {path : '/hotlines',component : hotlines},
     {path : '/techniciens',component : techniciens},
-    {path: '/products', component: products},
 ];
 
 const router = new VueRouter({routes});
