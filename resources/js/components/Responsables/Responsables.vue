@@ -15,28 +15,27 @@
       </div>
     </div>
     <!-- /.card-header -->
-    <!-- @responsable-added="refresh" -->
-  <add-responsable @responsable-added="refresh"></add-responsable>
-    <!-- <button>Ajouter un nouveau responsable</button> -->    
+  <add-responsable @responsable-added="refresh"></add-responsable> 
     <div class="card-body table-responsive p-0">
       <table class="table table-hover text-nowrap">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Nom</th>
             <th>Prenom</th>
             <th>Pseudo</th>
             <th>Email</th>
             <th>Action</th>
+            <th>Téléphone</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="responsable in responsables" :key="responsable.id">
-            <td>{{ responsable.id }}</td>
+            
             <td>{{ responsable.nom }}</td>
             <td>{{ responsable.prenom }}</td>
             <td>{{ responsable.pseudo }}</td>
             <td>{{ responsable.email }}</td>
+            <td>{{ responsable.tel }}</td>
             <td>
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getResponsable(responsable.id)">
               Modifier
