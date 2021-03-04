@@ -15,8 +15,20 @@
         </div>
         <div class="info">
           <a href="#" class="d-block">Alexander Pierce</a>
+          <a class="d-block" href="{{ route('logout') }}"
+           onclick="event.preventDefault();
+                         document.getElementById('logout-form').submit();">
+            {{ __('Logout') }}
+        </a>
+
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
         </div>
       </div>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+        
+    </div>
 
       <!-- SidebarSearch Form -->
       <div class="form-inline">

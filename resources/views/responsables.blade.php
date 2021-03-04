@@ -19,6 +19,6 @@
           </div>
         </div><!-- /.container-fluid -->
       </section>
-      <liste></liste>
+      <liste-responsable></liste-responsable>
   </div>
 @endsection

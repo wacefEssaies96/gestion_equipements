@@ -1,32 +1,39 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 require('./bootstrap');
 
 window.Vue = require('vue');
+import VueRouter from 'vue-router';
+import Vuelidate from 'vuelidate';
+Vue.use(Vuelidate)
+Vue.use(VueRouter);
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+Vue.component('pagination', require('laravel-vue-pagination'));
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+//Responsables
+Vue.component('liste-responsable', require('./components/Responsables/Responsables.vue').default);
+Vue.component('add-responsable', require('./components/Responsables/AddResponsable.vue').default);
+Vue.component('edit-responsable', require('./components/Responsables/EditResponsable.vue').default);
+//Hotlines
+Vue.component('liste-hotline', require('./components/Hotlines/Hotlines.vue').default);
+Vue.component('add-hotline', require('./components/Hotlines/AddHotline.vue').default);
+Vue.component('edit-hotline', require('./components/Hotlines/EditHotline.vue').default);
+//Techniciens
+// Vue.component('liste-technicien', require('./components/Techniciens/Techniciens.vue').default);
+// Vue.component('add-technicien', require('./components/Techniciens/AddTechnicien.vue').default);
+// Vue.component('edit-technicien', require('./components/Techniciens/EditTechnicien.vue').default);
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+import responsables from './components/Responsables/Responsables.vue';
+import hotlines from './components/Hotlines/Hotlines.vue';
+// import techniciens from './components/Techniciens/Techniciens.vue';
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+const routes = [
+    {path : '/responsables',component : responsables},
+    {path : '/hotlines',component : hotlines},
+    // {path : '/techniciens',component : techniciens},
+];
+
+const router = new VueRouter({routes});
 
 const app = new Vue({
     el: '#app',
+    router: router,
 });
