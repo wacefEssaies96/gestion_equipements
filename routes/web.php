@@ -35,6 +35,15 @@ Route::get('/techniciens/edit/{id}', 'TechnicienController@edit');
 Route::patch('/techniciens/edit/{id}', 'TechnicienController@update');
 Route::delete('/techniciens/{id}', 'TechnicienController@destroy');
 
+//Equipement
+Route::get('/equipements', 'EquipementController@index');
+Route::post('/equipements', 'EquipementController@store');
+Route::get('/equipements/liste', 'EquipementController@liste');
+Route::get('/equipements/edit/{id}', 'EquipementController@edit');
+Route::patch('/equipements/edit/{id}', 'EquipementController@update');
+Route::delete('/equipements/{id}', 'EquipementController@destroy');
+
+
 
 Auth::routes();
 

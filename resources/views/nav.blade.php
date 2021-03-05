@@ -17,6 +17,12 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{url('/techniciens')}}" class="nav-link">Techniciens</a>
       </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{url('/equipements')}}" class="nav-link">Equipements</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{url('/codePanne')}}" class="nav-link">Code Panne</a>
+      </li>
     </ul>
 
     <!-- Right navbar links -->
