@@ -16,11 +16,16 @@ class ResponsableController extends Controller
      */
     public function index()
     {
-        return view('responsables');
+        return view('pages.responsables');
     }
+
     public function liste()
     {
         return $this->refresh();
+    }
+    public function verifEmail($value){
+        $responsable = User::where('email','=',$value)->get();
+        return response()->json($responsable);
     }
 
     /**
@@ -86,8 +91,10 @@ class ResponsableController extends Controller
         $responsable->email = request('email');
         $responsable->pseudo = request('pseudo');
         $responsable->tel = request('tel');
-        $password = Hash::make(request('password'));
-        $responsable->password = $password;
+        if(request('password') != ''){
+            $password = Hash::make(request('password'));
+            $responsable->password = $password;
+        }
         $responsable->save();
         return $this->refresh();
     }

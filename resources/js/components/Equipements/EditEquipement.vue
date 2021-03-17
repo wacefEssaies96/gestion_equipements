@@ -18,7 +18,7 @@
               <!-- /.card-header -->
               <!-- form start -->
               <form @submit.prevent="checkEditForm">
-                                        <div class="card-body">
+                <div class="card-body">
                         <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -88,7 +88,8 @@
                                 <span v-if="!$v.zone.required">Veuillez choisir une zone !</span>
                             </div>
                         </div> 
-                    </div>                    <!-- /.card-body -->
+                    </div>                    
+                    <!-- /.card-body -->
 
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">Confirmer</button>
@@ -106,10 +107,10 @@
         </div>
 </template>
 <script>
-import { required, minLength,maxLength} from 'vuelidate/lib/validators';
+    import { required, minLength,maxLength} from 'vuelidate/lib/validators';
     export default {
-      props: ['equipementToEdit'],
-      data: function(){
+        props: ['equipementToEdit'],
+        data: function(){
             return{
                 nom: '',
                 code: '',
@@ -120,29 +121,28 @@ import { required, minLength,maxLength} from 'vuelidate/lib/validators';
             }
         },
         watch:{
-          equipementToEdit(newVal){
-            this.nom = newVal[0].nom;
-            this.code = newVal[0].code;
-            this.designation = newVal[0].designation;
-            this.n_serie = newVal[0].n_serie;
-            this.image = newVal[0].image;
-            this.zone = newVal[0].zone;
-            
-          }
+            equipementToEdit(newVal){
+                this.nom = newVal.nom;
+                this.code = newVal.code;
+                this.designation = newVal.designation;
+                this.n_serie = newVal.n_serie;
+                this.image = newVal.image;
+                this.zone = newVal.zone;
+            }
         },
         methods: {
-          update(){
-              axios.patch('http://localhost:8000/equipements/edit/' + this.equipementToEdit[0].id, {
-                  nom: this.nom,
-                  code: this.code,
-                  designation: this.designation,
-                  n_serie: this.n_serie,
-                  image: this.image,
-                  zone: this.zone
-              })
-              .then(response => this.$emit('equipement-updated',response))
-              .catch(error => console.log(error));
-          },
+            update(){
+                axios.patch('http://localhost:8000/equipements/edit/' + this.equipementToEdit.id, {
+                    nom: this.nom,
+                    code: this.code,
+                    designation: this.designation,
+                    n_serie: this.n_serie,
+                    image: this.image,
+                    zone: this.zone
+                })
+                .then(response => this.$emit('equipement-updated',response))
+                .catch(error => console.log(error));
+            },
           checkEditForm(){
             this.$v.$touch()
             if(!this.$v.$invalid){
@@ -172,13 +172,11 @@ import { required, minLength,maxLength} from 'vuelidate/lib/validators';
 
           },
           image: {
-              required
+            //   required
           },
           zone: {
               required
           },
-          
-
         },
     }
 </script>

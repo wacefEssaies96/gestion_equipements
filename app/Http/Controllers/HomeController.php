@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Technicien;
+use App\Hotline;
+use App\Responsable;
 
 class HomeController extends Controller
 {
@@ -23,6 +26,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard');
+        $nbTech = Technicien::all()->count();
+        $nbHotline = Hotline::all()->count();
+        $nbResp = Responsable::all()->count();
+        return view('pages.dashboard',[
+            'nbTech' => $nbTech,
+            'nbHotline' => $nbHotline,
+            'nbResp' => $nbResp
+        ]);
     }
 }

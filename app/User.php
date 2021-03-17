@@ -34,16 +34,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    public function responsables()
+    public function responsable()
     {
-        return $this->hasMany('App\Responsable');
+        return $this->hasOne('App\Responsable');
     }
-    public function hotlines()
+    public function hotline()
     {
-        return $this->hasMany('App\Hotline');
+        return $this->hasOne('App\Hotline');
     }
-    public function techniciens()
+    public function technicien()
     {
-        return $this->hasMany('App\Technicien');
+        return $this->hasOne('App\Technicien');
     }
 }

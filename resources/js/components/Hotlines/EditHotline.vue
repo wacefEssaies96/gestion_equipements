@@ -23,7 +23,7 @@
                     <div class="col-sm-6">
                       <div class="form-group">
                         <label for="nom">Nom</label>
-                        <input type="text" id="nom" class="form-control" placeholder="Nom" v-model="nom" 
+                        <input type="text" class="form-control" placeholder="Nom" v-model="nom" 
                           :class="{'is-invalid':$v.nom.$invalid,'is-valid':!$v.nom.$invalid}"
                         >
                         <div class="valid-feedback">Nom valide</div>
@@ -35,7 +35,7 @@
                       </div>
                       <div class="form-group">
                         <label for="prenom">Prénom</label>
-                        <input type="text" id="prenom" class="form-control" placeholder="Prénom" v-model="prenom"
+                        <input type="text" class="form-control" placeholder="Prénom" v-model="prenom"
                         :class="{'is-invalid':$v.prenom.$invalid, 'is-valid':!$v.prenom.$invalid}">
                         <div class="valid-feedback">Prénom valide</div>
                         <div class="invalid-feedback">
@@ -48,7 +48,7 @@
                     <div class="col-sm-6">
                       <div class="form-group">
                         <label for="tel">Téléphone</label>
-                        <input type="text" id="tel" class="form-control" placeholder="Numéro de téléphone" v-model="tel"
+                        <input type="text" class="form-control" placeholder="Numéro de téléphone" v-model="tel"
                         :class="{'is-invalid':$v.tel.$invalid, 'is-valid':!$v.tel.$invalid}">
                         <div class="valid-feedback">Numéro de téléphone valide</div>
                         <div class="invalid-feedback">
@@ -60,7 +60,7 @@
                       </div>
                       <div class="form-group">
                         <label for="pseudo">Pseudo</label>
-                        <input type="pseudo" id="pseudo" class="form-control" placeholder="Pseudo" v-model="pseudo"
+                        <input type="pseudo" class="form-control" placeholder="Pseudo" v-model="pseudo"
                         :class="{'is-invalid':$v.pseudo.$invalid, 'is-valid':!$v.pseudo.$invalid}">
                         <div class="valid-feedback">Pseudo valide</div>
                         <div class="invalid-feedback">
@@ -73,7 +73,7 @@
                   </div>
                   <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" class="form-control" placeholder="Email" v-model="email"
+                        <input type="email" class="form-control" placeholder="Email" v-model="email"
                         :class="{'is-invalid':$v.email.$invalid, 'is-valid':!$v.email.$invalid}">
                         <div class="valid-feedback">Email valide</div>
                         <div class="invalid-feedback">
@@ -82,26 +82,28 @@
                         </div>
                       </div>
                   
-                  <div class="form-group">
-                    <label for="mdp">Mot de passe</label>
-                    <input type="password" id="password" class="form-control" placeholder="Mot de passe" v-model="password"
-                    :class="{'is-invalid':$v.password.$invalid, 'is-valid':!$v.password.$invalid}" >
-                    <div class="valid-feedback">Mot de passe valide</div>
-                    <div class="invalid-feedback">
-                      <span v-if="!$v.password.required">Veuillez entrer un mot de passe !</span>
-                      <span v-if="!$v.password.minLength">Veuillez entrer au moins 6 caractères !</span>
-                      <span v-if="!$v.password.maxLength">Maximum 15 caractères !</span>
+                  <a href="#" @click="changermdp('false')">Changer le mot de passe</a>
+                  <template v-if="hidden === 'false'">
+                    <div class="form-group">
+                      <label for="mdp">Mot de passe</label>
+                      <input type="password" class="form-control" placeholder="Mot de passe" v-model="password"
+                      :class="{'is-invalid':$v.password.$invalid}" >
+                      <!-- <div class="valid-feedback">Mot de passe valide</div> -->
+                      <div class="invalid-feedback">
+                        <span v-if="!$v.password.minLength">Veuillez entrer au moins 6 caractères !</span>
+                        <span v-if="!$v.password.maxLength">Maximum 15 caractères !</span>
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="mdp">Répéter le mot de passe</label>
-                    <input type="password" id="repeatPassword" class="form-control" placeholder="Répéter le mot de passe" v-model="repeatPassword"
-                    :class="{'is-invalid':$v.repeatPassword.$invalid, 'is-valid': (password != '') ? !$v.repeatPassword.$invalid : '' }" >
-                    <div class="valid-feedback">Mot de passe identique !</div>
-                    <div class="invalid-feedback">
-                      <span v-if="!$v.repeatPassword.sameAsPassword">Les mots de passes doivent être identique !</span>
+                    <div class="form-group">
+                      <label for="mdp">Répéter le mot de passe</label>
+                      <input type="password" class="form-control" placeholder="Répéter le mot de passe" v-model="repeatPassword"
+                      :class="{'is-invalid':$v.repeatPassword.$invalid, 'is-valid': (password != '') ? !$v.repeatPassword.$invalid : '' }" >
+                      <div class="valid-feedback">Mot de passe identique !</div>
+                      <div class="invalid-feedback">
+                        <span v-if="!$v.repeatPassword.sameAsPassword">Les mots de passes doivent être identique !</span>
+                      </div>
                     </div>
-                  </div>
+                  </template>
                   
                 </div>
                 <!-- /.card-body -->
@@ -113,7 +115,7 @@
             <!-- /.card -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" @click="changermdp('true')" data-dismiss="modal">Close</button>
                 <button hidden id="submitEditHotline" type="submit" class="btn btn-primary" data-dismiss="modal" @click="update">Confirm</button>
             </div>
             </div>
@@ -133,6 +135,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             pseudo: '',
             password: '',
             repeatPassword: '',
+            hidden: 'true'
           }
         },
         watch:{
@@ -189,7 +192,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             }
           },
           password: {
-            required,
+            // required,
             minLength: minLength(6),
             maxLength: maxLength(15),
           },
@@ -198,6 +201,9 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
           }
         },
          methods: {
+            changermdp(status){
+              this.hidden = status;
+            },
             update(){
                 axios.patch('http://localhost:8000/hotlines/edit/' + this.hotlineToEdit.id, {
                     nom: this.nom,
@@ -209,6 +215,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
                 })
                 .then(response => this.$emit('hotline-updated',response))
                 .catch(error => console.log(error));
+                this.changermdp('true');
             },
           checkEditForm(){
             this.$v.$touch()

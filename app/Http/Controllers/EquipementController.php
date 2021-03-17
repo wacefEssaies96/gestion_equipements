@@ -4,56 +4,47 @@ namespace App\Http\Controllers;
 
 use App\Equipement;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class EquipementController extends Controller
 {
     
     public function index()
     {
-        return view('equipements');
+        return view('pages.equipements');
     }
-    public function liste()
+    public function liste(Request $request)
     {
-        return $this->refresh();
+        $equip = Equipement::where('code','like','%'.request('code').'%');
+        if($request->zone != ''){
+            $equip = $equip->where('zone', '=', request('zone'));
+        }
+        if($request->nom != ''){
+            $equip = $equip->where('nom', 'like', '%'.request('nom').'%');
+        }
+        if($request->n_serie != ''){
+            $equip = $equip->where('n_serie', 'like', '%'.request('n_serie').'%');
+        }
+        if($request->designation != ''){
+            $equip = $equip->where('designation', 'like', '%'.request('designation').'%');
+        }
+        $equip = $equip->get();
+        return response()->json($equip);
     }
-
-    
-    public function create()
-    {
-        //
-    }
-
 
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'nom' => 'required',
-            'code' => 'required',
-            'n_serie' => 'required',
-            'designation' => 'required',
-            'image' => 'required',
-            'zone' => 'required'
-        ]);
+        //$imageUrl = $request->image->store('storage/uploads');
         $equipement = new Equipement();
-        $equipement->id = request('id');
         $equipement->nom = request('nom');
         $equipement->code= request('code');
         $equipement->n_serie = request('n_serie');
         $equipement->designation = request('designation');
-        $equipement->image = request('image');
+        // $equipement->image = $imageUrl;
         $equipement->zone = request('zone');
         $equipement->save();
         return $this->refresh();  
         
     }
-
-    
-    public function show(Equipement $equipement)
-    {
-        //
-    }
-
 
     public function edit($id)
     {
@@ -64,21 +55,19 @@ class EquipementController extends Controller
     
     public function update($id)
     {
-        $equipement = new Equipement();
-        $equipement->id = request('id');
+        $equipement = Equipement::find($id);
         $equipement->nom = request('nom');
         $equipement->code= request('code');
         $equipement->n_serie = request('n_serie');
         $equipement->designation = request('designation');
-        $equipement->image = request('image');
+        // $equipement->image = request('image');
         $equipement->zone = request('zone');
         $equipement->save();
         return $this->refresh();  
-        
     }
 
   
-    public function destroy(Equipement $equipement)
+    public function destroy($id)
     {
         $equipement = Equipement::find($id);
         if($equipement->delete()){
@@ -88,7 +77,7 @@ class EquipementController extends Controller
         }
     }
     public function refresh(){
-         $equipement=Equipement::all();
-         return response()->json($equipement);
-     }
+        $equipement=Equipement::all();
+        return response()->json($equipement);
+    }
 }

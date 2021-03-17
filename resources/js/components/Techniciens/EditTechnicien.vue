@@ -130,26 +130,28 @@
                                 <span v-if="!$v.password.required">Veuillez choisir une zone !</span>
                             </div>
                         </div> 
-                        <div class="form-group">
-                            <label for="mdp">Mot de passe</label>
-                            <input type="password" class="form-control" placeholder="Mot de passe" v-model="password"
-                            :class="{'is-invalid':$v.password.$invalid, 'is-valid':!$v.password.$invalid}">
-                            <div class="valid-feedback">Mot de passe valide</div>
-                            <div class="invalid-feedback">
-                                <span v-if="!$v.password.required">Veuillez entrer un mot de passe !</span>
-                                <span v-if="!$v.password.minLength">Veuillez entrer au moins 6 caractères !</span>
-                                <span v-if="!$v.password.maxLength">Maximum 15 caractères !</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                        <label for="mdp">Répéter le mot de passe</label>
-                        <input type="password" class="form-control" placeholder="Répéter le mot de passe" v-model="repeatPassword"
-                        :class="{'is-valid': (password != '') ? !$v.repeatPassword.$invalid : '','is-invalid':$v.repeatPassword.$invalid}" >
-                        <div class="valid-feedback">Mot de passe identique !</div>
-                        <div class="invalid-feedback">
-                            <span v-if="!$v.repeatPassword.sameAsPassword">Les mots de passes doivent être identique !</span>
-                        </div>
-                        </div>
+                      <a href="#" @click="changermdp('false')">Changer le mot de passe</a>
+                  <template v-if="hidden === 'false'">
+                    <div class="form-group">
+                      <label for="mdp">Mot de passe</label>
+                      <input type="password" class="form-control" placeholder="Mot de passe" v-model="password"
+                      :class="{'is-invalid':$v.password.$invalid}" >
+                      <!-- <div class="valid-feedback">Mot de passe valide</div> -->
+                      <div class="invalid-feedback">
+                        <span v-if="!$v.password.minLength">Veuillez entrer au moins 6 caractères !</span>
+                        <span v-if="!$v.password.maxLength">Maximum 15 caractères !</span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="mdp">Répéter le mot de passe</label>
+                      <input type="password" class="form-control" placeholder="Répéter le mot de passe" v-model="repeatPassword"
+                      :class="{'is-invalid':$v.repeatPassword.$invalid, 'is-valid': (password != '') ? !$v.repeatPassword.$invalid : '' }" >
+                      <div class="valid-feedback">Mot de passe identique !</div>
+                      <div class="invalid-feedback">
+                        <span v-if="!$v.repeatPassword.sameAsPassword">Les mots de passes doivent être identique !</span>
+                      </div>
+                    </div>
+                  </template>
                     </div>
                     <!-- /.card-body -->
 
@@ -161,7 +163,7 @@
             <!-- /.card -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-secondary" @click="changermdp('true')" data-dismiss="modal">Fermer</button>
                 <button hidden id="submitEditTech" type="submit" class="btn btn-primary" data-dismiss="modal" @click="update"></button>
             </div>
             </div>
@@ -185,6 +187,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
                 h_fin_service: '',
                 password: '',
                 repeatPassword: '',
+                hidden: 'true'
             }
         },
         watch:{
@@ -203,6 +206,9 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
           }
         },
         methods: {
+           changermdp(status){
+              this.hidden = status;
+           },
           update(){
               axios.patch('http://localhost:8000/techniciens/edit/' + this.technicienToEdit[0].id, {
                   nom: this.nom,
@@ -218,6 +224,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
               })
               .then(response => this.$emit('technicien-updated',response))
               .catch(error => console.log(error));
+              this.changermdp('true');
           },
           checkEditForm(){
             this.$v.$touch()
@@ -286,7 +293,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             }
           },
           password: {
-            required,
+            // required,
             minLength: minLength(6),
             maxLength: maxLength(15),
           },

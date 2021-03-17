@@ -21,7 +21,6 @@ class CreateEquipementsTable extends Migration
             $table->string('n_serie');
             $table->string('image')->nullable();
             $table->enum('zone', ['Sertissage', 'Assemblage','Coupe','Préparation','Controle éléctrique'])->nullable();
-            $table->rememberToken();
             $table->timestamps();
         });
     }

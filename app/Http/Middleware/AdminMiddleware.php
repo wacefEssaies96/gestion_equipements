@@ -18,25 +18,17 @@ class AdminMiddleware
     {
         if(Auth::user()->role == 'ADMIN')
         {
-            // return redirect()->route('admin.dashboard');
             return $next($request);
+        }
+        if(Auth::user()->role == 'HOTLINE'){
+            return redirect('/historiques');
+        }
+        if(Auth::user()->role == 'TECHNICIEN'){
+            return redirect('/historiques');
         }
         else
         {
             return redirect('/home');
         }
-        // if(Auth::user()->role == 'ADMIN')
-        // {
-        //     return 'dashboard';
-        // }
-        // else if(Auth::user()->role == 'TECHNICIEN')
-        // {
-        //     return redirect('/technicien');
-        // }
-        // else
-        // {
-        //     return redirect('/home');
-        // }
-        
     }
 }

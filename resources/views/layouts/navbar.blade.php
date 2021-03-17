@@ -18,10 +18,13 @@
         <a href="{{url('/techniciens')}}" class="nav-link">Techniciens</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{url('/equipements')}}" class="nav-link">Equipements</a>
+        <a href="{{url('/historiques')}}" class="nav-link">Historiques</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{url('/codePanne')}}" class="nav-link">Code Panne</a>
+        <a href="{{url('/code_pannes')}}" class="nav-link">Codes pannes</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{url('/equipements')}}" class="nav-link">Equipements</a>
       </li>
     </ul>
 

@@ -1,5 +1,50 @@
 <template>
     <div class="card">
+            <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <div class="from-group">
+                <label>Nom</label>
+                <input @keyup="search" type="text" v-model="qNom" class="form-control" placeholder="Nom Machine">
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label>Code Machine</label>
+                <input @keyup="search" type="text" v-model="qCodeMachine" class="form-control" placeholder="Code Machine">
+              </div>
+            </div>
+            <div class="col">
+              <div class="from-group">
+                <label>Zone</label>
+                <select @change="search" class="form-control" v-model="qZone">
+                    <option value="" selected>Vide</option>
+                    <option value="Assemblage">Assemblage</option>
+                    <option value="Sertissage">Sertissage</option>
+                    <option value="Préparation">Préparation</option>
+                    <option value="Coupe">Coupe</option>
+                    <option value="Controle éléctrique">Controle éléctrique</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="from-group">
+                <label>Désignation</label>
+                  <input @keyup="search" type="text" v-model="qDesignation" class="form-control" placeholder="Désignation">
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+              <label>N° serie</label>
+                <input @keyup="search" type="text" v-model="qNserie" class="form-control" placeholder="N° serie">
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
     <div class="card-header">
       <h3 class="card-title">Liste de tous les equipements</h3>
       <div class="card-tools">
@@ -36,9 +81,7 @@
             <td>{{ equipement.designation }}</td>
             <td>{{ equipement.n_serie }}</td>
             <td>{{ equipement.image }}</td>
-            <template v-for="equi in equipement.equipements">
-              <td :key=equi.zone>{{ equi.zone }}</td>
-            </template>
+            <td>{{ equipement.zone }}</td>
             <td>
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getEquipement(equipement.id)">
               Modifier
@@ -49,49 +92,55 @@
           </tr>
         </tbody>
       </table>
-      <!-- <pagination :data="equipements" @pagination-change-page="getResults"></pagination> -->
     </div>
     <!-- /.card-body -->
   </div>
 </template>
 <script>
-import AddEquipement from './AddEquipement.vue';
-    export default {
-  components: { AddEquipement },
-      data(){
-        return{
-          equipements: {},
-          equipementToEdit: '',
-        }
-      },
-      created(){
-        axios.get("http://localhost:8000/equipements/liste")
+  export default {
+    data(){
+      return{
+        equipements: {},
+        equipementToEdit: '',
+        q: new FormData(),
+        qDesignation: '',
+        qZone: '',
+        qNserie: '',
+        qNom: '',
+        qCodeMachine: ''
+      }
+    },
+    created(){
+      axios.post("http://localhost:8000/equipements/liste")
+      .then(response => this.equipements = response.data)
+      .catch(error => console.log(error))
+    },
+    methods:{
+      search(){
+        this.q.append('nom', this.qNom);
+        this.q.append('zone', this.qZone);
+        this.q.append('designation', this.qDesignation);
+        this.q.append('n_serie', this.qNserie);
+        this.q.append('code', this.qCodeMachine);
+
+        axios.post("http://localhost:8000/equipements/liste", this.q)
         .then(response => this.equipements = response.data)
         .catch(error => console.log(error))
+
       },
-      methods:{
-        refresh(equipements){
-          this.equipements = equipements.data; 
-        },
-        getResults(page = 1) {
-          axios.get('http://localhost:8000/equipements?page=' + page)
-              .then(response => {
-                  this.equipements = response.data;
-          });
-        },
-        getEquipement(id){
-            axios.get('http://localhost:8000/equipements/edit/' + id)
-            .then(response => this.equipementToEdit = response.data)
-            .catch(error => console.log(error));
-        },
-        deleteEquipement(id){
-            axios.delete('http://localhost:8000/equipements/' + id)
-            .then(response => this.equipements = response.data)
-            .catch(error => console.log(error));               
-        },
+      refresh(equipements){
+        this.equipements = equipements.data; 
       },
-      mounted() {
-        console.log('Component mounted.')
-      }
+      getEquipement(id){
+        axios.get('http://localhost:8000/equipements/edit/' + id)
+        .then(response => this.equipementToEdit = response.data)
+        .catch(error => console.log(error));
+      },
+      deleteEquipement(id){
+        axios.delete('http://localhost:8000/equipements/' + id)
+        .then(response => this.equipements = response.data)
+        .catch(error => console.log(error));               
+      },
     }
+  }
 </script>

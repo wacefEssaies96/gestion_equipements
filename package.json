@@ -27,7 +27,9 @@
     "dependencies": {
         "laravel-vue-pagination": "^2.3.1",
         "vue": "^2.6.11",
+        "vue-multiselect": "^2.1.6",
         "vue-router": "^3.3.4",
+        "vue-select": "^3.11.2",
         "vuelidate": "^0.7.6",
         "vuetify": "^2.3.4"
     }
