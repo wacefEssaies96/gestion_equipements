@@ -84,6 +84,7 @@
                         <div class="invalid-feedback">
                           <span v-if="!$v.email.required">Veuillez entrer un email !</span>
                           <span v-if="!$v.email.isUnique">Veuillez entrer un email valide !</span>
+                          <span v-if="!$v.email.isValid">Email déja existant !</span>
                         </div>
                       </div>
                   
@@ -166,6 +167,12 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
                   resolve(email_regex.test(value))
                 },350+Math.random()*300)
               })
+            },
+            async isValid(value){
+                if(value==='') return true;
+                const response = await axios.get('http://localhost:8000/responsables/verifemail/'+value)
+                .catch(error => console.log(error));
+                if(response.data.length == 0) return true;
             }
           },
           tel: {
@@ -211,7 +218,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
                   password: this.password,
                   role : this.role
               })
-              .then(response => this.$emit('responsable-added',response))//this.$emit('responsable-added',response)
+              .then(response => this.$emit('responsable-added',response))
               .catch(error => console.log(error));
           }
         }

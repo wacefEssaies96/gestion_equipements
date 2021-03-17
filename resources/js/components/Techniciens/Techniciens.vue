@@ -25,10 +25,7 @@
             <th>Pseudo</th>
             <th>Téléphone</th>
             <th>Email</th>
-            <!-- <th>Qualification</th> -->
             <th>Zone</th>
-            <!-- <th>Heures de début de services</th>
-            <th>Heures de fin de services</th> -->
             <th>Action</th>
           </tr>
         </thead>
@@ -39,9 +36,7 @@
             <td>{{ technicien.pseudo }}</td>
             <td>{{ technicien.tel }}</td>
             <td>{{ technicien.email }}</td>
-            <template v-for="tech in technicien.techniciens">
-              <td :key=tech.zone>{{ tech.zone }}</td>
-            </template>
+            <td>{{ technicien.technicien.zone }}</td>
             <td>
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getTechnicien(technicien.id)">
               Modifier

@@ -3,15 +3,32 @@
 use Illuminate\Support\Facades\Route;
 
 
-//Authentification
+//Admin Authentification
 Route::group(['middleware' => ['auth' , 'ADMIN']],function() {
-    Route::get('/', function(){
-        return view('dashboard');
-    });
-  
+    Route::get('/', 'HomeController@index')->name('home');
 });
 
+
+//HitoriqueTech
+Route::get('/hist/tech/liste', 'HistoriqueController@listeTech');
+Route::patch('/histtech/edit/{id}', 'HistoriqueController@updatefortech');
+Route::get('/historiques/tech/zone/{zone}', 'HistoriqueController@getEquipements');
+Route::get('/historiques/tech/equip/{zone}', 'HistoriqueController@getCodePannes');
+
+//Historique /historiques/tech
+Route::get('/historiques/ht','HistoriqueController@getUserId');
+Route::get('/historiques/tech/{zone}', 'HistoriqueController@getTechniciens');
+Route::get('/historiques', 'HistoriqueController@index');
+Route::post('/historiques', 'HistoriqueController@store');
+// Route::get('/historiques/liste/{q?}', 'HistoriqueController@liste');
+Route::get('/historiques/techs', 'HistoriqueController@getAllTechs');
+Route::post('/historiques/liste', 'HistoriqueController@liste');
+Route::get('/historiques/edit/{id}', 'HistoriqueController@edit');
+Route::patch('/historiques/edit/{id}', 'HistoriqueController@update');
+Route::delete('/historiques/{id}', 'HistoriqueController@destroy');
+
 //Responsable
+Route::get('/responsables/verifemail/{value}', 'ResponsableController@verifEmail');
 Route::get('/responsables', 'ResponsableController@index');
 Route::post('/responsables', 'ResponsableController@store');
 Route::get('/responsables/liste', 'ResponsableController@liste');
@@ -35,6 +52,23 @@ Route::get('/techniciens/edit/{id}', 'TechnicienController@edit');
 Route::patch('/techniciens/edit/{id}', 'TechnicienController@update');
 Route::delete('/techniciens/{id}', 'TechnicienController@destroy');
 
+//Equipement
+Route::get('/equipements', 'EquipementController@index');
+Route::post('/equipements', 'EquipementController@store');
+Route::post('/equipements/liste', 'EquipementController@liste');
+Route::get('/equipements/edit/{id}', 'EquipementController@edit');
+Route::patch('/equipements/edit/{id}', 'EquipementController@update');
+Route::delete('/equipements/{id}', 'EquipementController@destroy');
+
+//Code Panne
+Route::get('/code_pannes', 'CodePanneController@index');
+Route::post('/code_pannes', 'CodePanneController@store');
+Route::post('/code_pannes/liste', 'CodePanneController@liste');
+Route::get('/code_pannes/edit/{id}', 'CodePanneController@edit');
+Route::patch('/code_pannes/edit/{id}', 'CodePanneController@update');
+Route::delete('/code_pannes/{id}', 'CodePanneController@destroy');
+//getCodePanneByCode
+Route::get('/code_pannes/{value}', 'CodePanneController@getCodePanneByCode');
 
 Auth::routes();
 

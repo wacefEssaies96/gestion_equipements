@@ -84,6 +84,7 @@
                             <div class="invalid-feedback">
                                 <span v-if="!$v.email.required">Veuillez entrer un email !</span>
                                 <span v-if="!$v.email.isUnique">Veuillez entrer un email valide !</span>
+                                <span v-if="!$v.email.isValid">Email déja existant !</span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -133,7 +134,7 @@
                             </select>
                             <div class="valid-feedback">Zone validé</div>
                             <div class="invalid-feedback">
-                                <span v-if="!$v.password.required">Veuillez choisir une zone !</span>
+                                <span v-if="!$v.zone.required">Veuillez choisir une zone !</span>
                             </div>
                         </div> 
                         <div class="form-group">
@@ -233,6 +234,12 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
                   resolve(email_regex.test(value))
                 },350+Math.random()*300)
               })
+            },
+            async isValid(value){
+                if(value==='') return true;
+                const response = await axios.get('http://localhost:8000/responsables/verifemail/'+value)
+                .catch(error => console.log(error));
+                if(response.data.length == 0) return true;
             }
           },
           tel: {

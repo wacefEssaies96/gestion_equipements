@@ -4,19 +4,19 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>COFAT</title>
-        @include('links')
+        @include('layouts.links')
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div id="app">
             <div class="wrapper">
-                @include('nav')
-                @include('sidebar')
+                @include('layouts.navbar')
+                @include('layouts.sidebar')
                 <main>
                     @yield('content')
                 </main>
-                @include('footer')
+                @include('layouts.footer')
             </div>
         </div>
-        @include('scripts')   
+        @include('layouts.scripts')   
     </body>
 </html>

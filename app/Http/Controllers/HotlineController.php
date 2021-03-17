@@ -17,7 +17,7 @@ class HotlineController extends Controller
      */
     public function index()
     {
-        return view('hotlines');
+        return view('pages.hotlines');
     }
     public function liste()
     {
@@ -100,8 +100,10 @@ class HotlineController extends Controller
         $hotline->email = request('email');
         $hotline->pseudo = request('pseudo');
         $hotline->tel = request('tel');
-        $password = Hash::make(request('password'));
-        $hotline->password = $password;
+        if(request('password') != ''){
+            $password = Hash::make(request('password'));
+            $hotline->password = $password;
+        }
         $hotline->save();
         return $this->refresh();
     }

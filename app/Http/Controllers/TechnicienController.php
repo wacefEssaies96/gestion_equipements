@@ -12,7 +12,7 @@ class TechnicienController extends Controller
 
     public function index()
     {
-        return view('techniciens');
+        return view('pages.techniciens');
     }
     public function liste()
     {
@@ -77,8 +77,10 @@ class TechnicienController extends Controller
         $user->email = request('email');
         $user->pseudo = request('pseudo');
         $user->tel = request('tel');
-        $password = Hash::make(request('password'));
-        $user->password = $password;
+        if(request('password') != ''){
+            $password = Hash::make(request('password'));
+            $user->password = $password;
+        }
         $user->save();
 
         $technicien = Technicien::where('user_id','=',$id)->first();
@@ -100,7 +102,7 @@ class TechnicienController extends Controller
     }
 
     public function refresh(){
-       $technicien =  User::with('techniciens')->where('role','=','TECHNICIEN')->get();
+       $technicien =  User::with('technicien')->where('role','=','TECHNICIEN')->get();
         return response()->json($technicien);
     }
 }
