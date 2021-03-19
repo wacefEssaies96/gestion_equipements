@@ -31,24 +31,11 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
-        if(Auth::user()->role == 'ADMIN')
+        if(Auth::user()->role != 'ADMIN')
         {
-            return 'dashboard';
+            return'historiques';
         }
-        else {
-            return 'home';
-        }
-        /* if(Auth::user()->role == 'ADMIN')
-        {
-            return 'dashboard';
-        }
-        else  if(Auth::user()->role == 'TECHNICIEN'){
-            return 'technicien';
-        }
-        else
-        {
-            return 'home';
-        } */
+       
     }
 
     /**
