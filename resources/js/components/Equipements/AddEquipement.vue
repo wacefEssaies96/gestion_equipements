@@ -78,6 +78,7 @@
                                     </div>
                                 </div>
                             </div>  
+                           
                             <div class="form-group">
                                 <label for="zone">Zone</label>
                                 <select class="form-control" v-model="zone"
@@ -146,7 +147,7 @@ export default {
         },
 
         image: {
-            // required
+             required
         },
     
         zone: {
@@ -167,6 +168,7 @@ export default {
             }
             
           },
+         
           checkAddForm(){
             this.$v.$touch()
             if(!this.$v.$invalid){
@@ -182,9 +184,10 @@ export default {
             form.append('code', this.code);
             form.append('designation', this.designation);
             form.append('n_serie', this.n_serie);
-            form.append('image', this.imageFile);
+            form.append('image', this.image);
             form.append('zone', this.zone);
-              axios.post('http://localhost:8000/equipements',form)
+            const config= {headers:{'Content-Type': 'multipart/form-data'}}
+              axios.post('http://localhost:8000/equipements',form, config)
               .then(response => this.$emit('equipement-added',response))
               .catch(error => console.log(error));
           }

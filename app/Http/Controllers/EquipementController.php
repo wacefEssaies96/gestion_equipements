@@ -33,16 +33,31 @@ class EquipementController extends Controller
 
     public function store(Request $request)
     {
-        //$imageUrl = $request->image->store('storage/uploads');
+        /**
+         * Début enregistrement de l'image.
+         * Todo: Changer l'approche d'upload et utiliser les objets
+         * file de laravel.
+         * bug qui bloque: Laravel reçoit l'image envoyé par axios dans la variable
+         * $_POST et non dans $_FILES, ce qui fait que les accès comme $request->file('image')
+         * ou $request->image retourne null.
+         */
+        $imageArr = explode(',',$_POST['image']);
+        $extension  = ".png";
+        if(str_contains($imageArr[0], 'jpeg')) $extension = ".jpg";
+        $filename = "uploads/" . time() . '_'. request('nom') . '_'. rand(1000, 100000) . $extension;
+        $image = fopen($filename, "wb");
+        fwrite($image, base64_decode($imageArr[1]));
+        fclose($image);
+     
         $equipement = new Equipement();
         $equipement->nom = request('nom');
         $equipement->code= request('code');
         $equipement->n_serie = request('n_serie');
         $equipement->designation = request('designation');
-        // $equipement->image = $imageUrl;
+        $equipement->image = $filename;
         $equipement->zone = request('zone');
         $equipement->save();
-        return $this->refresh();  
+        return $this->refresh();
         
     }
 

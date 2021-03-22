@@ -2569,6 +2569,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2597,7 +2598,8 @@ __webpack_require__.r(__webpack_exports__);
     n_serie: {
       required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
     },
-    image: {// required
+    image: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
     },
     zone: {
       required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
@@ -2636,9 +2638,14 @@ __webpack_require__.r(__webpack_exports__);
       form.append('code', this.code);
       form.append('designation', this.designation);
       form.append('n_serie', this.n_serie);
-      form.append('image', this.imageFile);
+      form.append('image', this.image);
       form.append('zone', this.zone);
-      axios.post('http://localhost:8000/equipements', form).then(function (response) {
+      var config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
+      axios.post('http://localhost:8000/equipements', form, config).then(function (response) {
         return _this2.$emit('equipement-added', response);
       })["catch"](function (error) {
         return console.log(error);
@@ -46297,7 +46304,12 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(equipement.n_serie))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(equipement.image))]),
+                _c("td", [
+                  _c("img", {
+                    staticStyle: { width: "50px", height: "50px" },
+                    attrs: { src: equipement.image }
+                  })
+                ]),
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(equipement.zone))]),
                 _vm._v(" "),

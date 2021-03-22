@@ -80,7 +80,7 @@
             <td>{{ equipement.code }}</td>
             <td>{{ equipement.designation }}</td>
             <td>{{ equipement.n_serie }}</td>
-            <td>{{ equipement.image }}</td>
+            <td><img :src="equipement.image" style="width:50px; height:50px"></td>
             <td>{{ equipement.zone }}</td>
             <td>
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getEquipement(equipement.id)">
