@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Technicien;
 use App\Hotline;
 use App\Responsable;
+use App\TokenStore\TokenCache;
+use Microsoft\Graph\Graph;
+use Microsoft\Graph\Model;
 
 class HomeController extends Controller
 {
@@ -29,10 +32,17 @@ class HomeController extends Controller
         $nbTech = Technicien::all()->count();
         $nbHotline = Hotline::all()->count();
         $nbResp = Responsable::all()->count();
-        return view('pages.dashboard',[
+        // return response()->json('test');
+        return view('app',[
             'nbTech' => $nbTech,
             'nbHotline' => $nbHotline,
             'nbResp' => $nbResp
         ]);
+    }
+    public function welcome()
+    {
+        $viewData = $this->loadViewData();
+
+        return response()->json($viewData);
     }
 }

@@ -109,7 +109,7 @@ class ResponsableController extends Controller
     }
 
     public function refresh(){
-        $responsable =  \DB::table('users')->where('role','=','RESPONSABLE')->get();
+        $responsable =  \DB::table('users')->where('role','=','RESPONSABLE')->paginate(1);
         return response()->json($responsable);
     }
 }

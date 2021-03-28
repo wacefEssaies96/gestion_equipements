@@ -15,7 +15,7 @@ class CreateHistSertissagesTable extends Migration
     {
         Schema::create('hist_sertissages', function (Blueprint $table) {
             $table->id();
-            $table->string('type_travaille')->nullable();
+            $table->enum('type_travaille',['C', 'P','PH','S'])->nullable();
             $table->bigInteger('hist_id')->unsigned();
             $table->foreign('hist_id')->references('id')->on('historiques')->onDelete('cascade');
             $table->timestamps();

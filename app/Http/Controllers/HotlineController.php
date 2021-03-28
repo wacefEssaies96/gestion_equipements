@@ -10,36 +10,17 @@ use Illuminate\Support\Facades\Hash;
 
 class HotlineController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         return view('pages.hotlines');
     }
+    
     public function liste()
     {
         return $this->refresh();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->validate($request,[
@@ -69,23 +50,6 @@ class HotlineController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Hotline  $hotline
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Hotline $hotline)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Hotline  $hotline
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $hotline = User::find($id);
@@ -120,7 +84,7 @@ class HotlineController extends Controller
     }
 
     public function refresh(){
-        $hotline =  \DB::table('users')->where('role','=','HOTLINE')->get();
+        $hotline =  \DB::table('users')->where('role','=','HOTLINE')->paginate(10);
         return response()->json($hotline);
     }
 }

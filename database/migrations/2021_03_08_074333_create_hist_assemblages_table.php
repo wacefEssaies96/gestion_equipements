@@ -16,8 +16,8 @@ class CreateHistAssemblagesTable extends Migration
         Schema::create('hist_assemblages', function (Blueprint $table) {
             $table->id();
             $table->string('num_planche')->nullable();
-            $table->bigInteger('hist_id')->unsigned();
-            $table->foreign('hist_id')->references('id')->on('historiques')->onDelete('cascade');
+            $table->bigInteger('historique_id')->unsigned();
+            $table->foreign('historique_id')->references('id')->on('historiques')->onDelete('cascade');
             $table->timestamps();
         });
     }

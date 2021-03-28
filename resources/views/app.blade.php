@@ -12,7 +12,7 @@
                 @include('layouts.navbar')
                 @include('layouts.sidebar')
                 <main>
-                    @yield('content')
+                    <router-view :user="{{Auth::user()}}"></router-view>
                 </main>
                 @include('layouts.footer')
             </div>

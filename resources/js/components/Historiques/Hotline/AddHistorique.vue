@@ -122,7 +122,7 @@ import { required } from 'vuelidate/lib/validators';
     methods:{
       getTechniciens(zone){
           this.tech_id = '';
-          axios.get("http://localhost:8000/historiques/tech/"+zone)
+          axios.get("http://localhost:8000/historiques/techniciens/"+zone)
           .then(response => this.techniciens=response.data) 
           .catch(error => console.log(error))
       },

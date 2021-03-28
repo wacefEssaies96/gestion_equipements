@@ -114,11 +114,11 @@
     },
     watch:{
       historiqueToEdit(newVal){
-        this.num_bt = newVal.num_bt;
-        this.heure_demande = newVal.heure_demande;
-        this.jour = newVal.jour;
-        this.zone = newVal.zone;
-        this.tech_id = newVal.tech_id;
+        this.num_bt = newVal[0].num_bt;
+        this.heure_demande = newVal[0].heure_demande;
+        this.jour = newVal[0].jour;
+        this.zone = newVal[0].zone;
+        this.tech_id = newVal[0].tech_id;
       },
       tech(newVal){
         this.techniciens = newVal;
@@ -127,12 +127,12 @@
     methods: {
       getTechniciens(zone){
         this.tech_id = '';
-        axios.get("http://localhost:8000/historiques/tech/"+zone)
+        axios.get("http://localhost:8000/historiques/techniciens/"+zone)
         .then(response => this.techniciens=response.data) 
         .catch(error => console.log(error))
       },
       update(){
-        axios.patch('http://localhost:8000/historiques/edit/' + this.historiqueToEdit.id, {
+        axios.patch('http://localhost:8000/historiques/edit/' + this.historiqueToEdit[0].id, {
             num_bt: this.num_bt,
             heure_demande: this.heure_demande,
             jour: this.jour,

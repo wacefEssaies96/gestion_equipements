@@ -85,8 +85,8 @@
                     <div class="form-group">
                       <label for="mdp">Mot de passe</label>
                       <input type="password" class="form-control" placeholder="Mot de passe" v-model="password"
-                      :class="{'is-invalid':$v.password.$invalid}" >
-                      <!-- <div class="valid-feedback">Mot de passe valide</div> -->
+                      :class="{'is-invalid':$v.password.$invalid, 'is-valid':(password != '') ? !$v.password.$invalid:''}" >
+                      <div class="valid-feedback">Mot de passe valide</div>
                       <div class="invalid-feedback">
                         <span v-if="!$v.password.minLength">Veuillez entrer au moins 6 caractères !</span>
                         <span v-if="!$v.password.maxLength">Maximum 15 caractères !</span>
@@ -216,7 +216,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             }
           },
           password: {
-            // required,
+            //required,
             minLength: minLength(6),
             maxLength: maxLength(15),
           },

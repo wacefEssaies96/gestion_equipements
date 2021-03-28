@@ -19,13 +19,6 @@ class TechnicienController extends Controller
         return $this->refresh();
     }
 
-
-    public function create()
-    {
-        //
-    }
-
-   
     public function store(Request $request)
     {
         $this->validate($request,[
@@ -53,15 +46,11 @@ class TechnicienController extends Controller
         $technicien->h_debut_service = request('h_debut_service');
         $technicien->h_fin_service = request('h_fin_service');
         $technicien->zone = request('zone');
+        $technicien->status = 'DISPONIBLE';
         $technicien->save();
         if($user){
             return $this->refresh();  
         }
-    }
-
-    public function show(Technicien $technicien)
-    {
-        //
     }
 
     public function edit($id)
@@ -102,7 +91,8 @@ class TechnicienController extends Controller
     }
 
     public function refresh(){
-       $technicien =  User::with('technicien')->where('role','=','TECHNICIEN')->get();
+        $technicien =  User::join('techniciens','users.id','=','techniciens.user_id')
+        ->where('role','=','TECHNICIEN')->paginate(10);
         return response()->json($technicien);
     }
 }
