@@ -18,7 +18,7 @@ class CreateCodePanneInHistsTable extends Migration
             $table->bigInteger('hist')->unsigned()->nullable();
             $table->bigInteger('code_panne')->unsigned()->nullable();
             $table->foreign('code_panne')->references('id')->on('code_pannes');
-            $table->foreign('hist')->references('id')->on('historiques');
+            $table->foreign('hist')->references('id')->on('historiques')->onDelete('cascade');
             $table->timestamps();
         });
     }

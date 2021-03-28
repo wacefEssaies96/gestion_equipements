@@ -57,52 +57,79 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{url('/responsables')}}" class="nav-link">
-                  <i class="fas fa-user-tie"></i>
-                    <p>Responsable</p>
-                  </a>
+              <router-link to='/responsables' class="nav-link">
+                <i class="fas fa-user-tie"></i>
+                <p>Responsables</p>
+              </router-link>
                 </li>
                 <li class="nav-item">
-                    <a href="{{url('/hotlines')}}" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    <p>Hotline</p>
-                  </a>
+                  <router-link to='/hotlines' class="nav-link">
+                    <i class="fas fa-user"></i> 
+                    <p>Hotlines</p>
+                  </router-link>
                 </li>
                 <li class="nav-item">
-                  <a href="{{url('/techniciens')}}" class="nav-link">
+                  <router-link to='/techniciens' class="nav-link">
                     <i class="fas fa-user"></i>
-                    <p>Technicien</p>
-                  </a>
+                    <p>Techniciens</p>
+                  </router-link>
                 </li>
               </ul>
             </li>
+
             <li class="nav-item">
-              <a href="{{url('/equipements')}}" class="nav-link">
+              <router-link to='/equipements' class="nav-link">
                 <i class="nav-icon fas fa-cogs"></i>
                 <p>
                   Equipements
                 </p>
-              </a>
+              </router-link>
             </li>  
             <li class="nav-item">
-              <a href="{{url('/code_pannes')}}" class="nav-link">
-                <i class="fas fa-file-code"></i>
+              <router-link to='/code_pannes' class="nav-link">
+                <i class="nav-icon fas fa-file-code"></i>
                 <p>
                   Code pannes
                 </p>
-              </a>
+              </router-link>
             </li> 
+            <li class="nav-item">
+              <router-link to='/onedrive' class="nav-link">
+                <i class="nav-icon fas fa-cloud"></i>
+                <p>
+                  One drive
+                </p>
+              </a>
+            </li>       
+            <li class="nav-item">
+              <router-link to="/hist-admin" class="nav-link">
+                <i class="nav-icon fas fa-history"></i>
+                <p>
+                  Historiques
+                </p>
+              </router-link>
+            </li>
           @endif
-            
+          @if (Auth::user()->role == "HOTLINE")
           <li class="nav-item">
-            <a href="{{url('/historiques')}}" class="nav-link">
+            <router-link to="/hist-hotline" class="nav-link">
               <i class="nav-icon fas fa-history"></i>
               <p>
                 Historiques
               </p>
-            </a>
+            </router-link>
           </li>
-          
+          @endif
+          @if (Auth::user()->role == "TECHNICIEN")
+          <li class="nav-item">
+            <router-link to="/hist-technicien" class="nav-link">
+              <i class="nav-icon fas fa-history"></i>
+              <p>
+                Historiques
+              </p>
+            </router-link>
+          </li>
+          @endif
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

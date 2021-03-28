@@ -1,16 +1,16 @@
 <template>
-     <!-- Modal -->
-        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalTitle">Modifier un technicien</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- general form elements -->
+  <!-- Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="editModalTitle">Modifier un technicien</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+            <!-- general form elements -->
             <div class="card card-primary">
               <div class="card-header">
                 <h3 class="card-title">Formulaire</h3>
@@ -82,7 +82,7 @@
                         </div>
                         <div class="form-group">
                             <label for="qualification">Qualification</label>
-                            <textarea id="qualification" class="form-control" placeholder="qualification" v-model="qualification"
+                            <textarea class="form-control" placeholder="qualification" v-model="qualification"
                             :class="{'is-invalid':$v.qualification.$invalid, 'is-valid':!$v.qualification.$invalid}"></textarea>
                             <div class="valid-feedback">Validé</div>
                             <div class="invalid-feedback">
@@ -113,7 +113,7 @@
                                     <span v-if="!$v.h_fin_service.required">Veuillez remplir ce champs !</span>
                                 </div>
                             </div>
-                           </div>
+                            </div>
                         </div>  
                         <div class="form-group">
                             <label for="zone">Zone</label>
@@ -135,8 +135,8 @@
                     <div class="form-group">
                       <label for="mdp">Mot de passe</label>
                       <input type="password" class="form-control" placeholder="Mot de passe" v-model="password"
-                      :class="{'is-invalid':$v.password.$invalid}" >
-                      <!-- <div class="valid-feedback">Mot de passe valide</div> -->
+                      :class="{'is-invalid':$v.password.$invalid, 'is-valid':(password != '') ? !$v.password.$invalid:''}" >
+                      <div class="valid-feedback">Mot de passe valide</div>
                       <div class="invalid-feedback">
                         <span v-if="!$v.password.minLength">Veuillez entrer au moins 6 caractères !</span>
                         <span v-if="!$v.password.maxLength">Maximum 15 caractères !</span>
@@ -158,37 +158,37 @@
                     <div class="card-footer">
                         <button type="submit" class="btn btn-primary">Confirmer</button>
                     </div>
-                    </form>
+              </form>
             </div>
             <!-- /.card -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @click="changermdp('true')" data-dismiss="modal">Fermer</button>
-                <button hidden id="submitEditTech" type="submit" class="btn btn-primary" data-dismiss="modal" @click="update"></button>
-            </div>
-            </div>
+          </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="changermdp('true')" data-dismiss="modal">Fermer</button>
+            <button hidden id="submitEditTech" type="submit" class="btn btn-primary" data-dismiss="modal" @click="update"></button>
         </div>
         </div>
+    </div>
+  </div>
 </template>
 <script>
 import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators';
     export default {
       props: ['technicienToEdit'],
       data: function(){
-            return{
-                nom: '',
-                prenom: '',
-                email: '',
-                tel: '',
-                zone: '',
-                pseudo: '',
-                qualification: '',
-                h_debut_service: '',
-                h_fin_service: '',
-                password: '',
-                repeatPassword: '',
-                hidden: 'true'
-            }
+          return{
+              nom: '',
+              prenom: '',
+              email: '',
+              tel: '',
+              zone: '',
+              pseudo: '',
+              qualification: '',
+              h_debut_service: '',
+              h_fin_service: '',
+              password: '',
+              repeatPassword: '',
+              hidden: 'true'
+          }
         },
         watch:{
           technicienToEdit(newVal){
@@ -210,21 +210,21 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
               this.hidden = status;
            },
           update(){
-              axios.patch('http://localhost:8000/techniciens/edit/' + this.technicienToEdit[0].id, {
-                  nom: this.nom,
-                  prenom: this.prenom,
-                  tel: this.tel,
-                  email: this.email,
-                  pseudo: this.pseudo,
-                  password: this.password,
-                  h_debut_service: this.h_debut_service,
-                  h_fin_service: this.h_fin_service,
-                  zone: this.zone,
-                  qualification: this.qualification
-              })
-              .then(response => this.$emit('technicien-updated',response))
-              .catch(error => console.log(error));
-              this.changermdp('true');
+            axios.patch('http://localhost:8000/techniciens/edit/' + this.technicienToEdit[0].id, {
+              nom: this.nom,
+              prenom: this.prenom,
+              tel: this.tel,
+              email: this.email,
+              pseudo: this.pseudo,
+              password: this.password,
+              h_debut_service: this.h_debut_service,
+              h_fin_service: this.h_fin_service,
+              zone: this.zone,
+              qualification: this.qualification
+            })
+            .then(response => this.$emit('technicien-updated',response))
+            .catch(error => console.log(error));
+            this.changermdp('true');
           },
           checkEditForm(){
             this.$v.$touch()
@@ -293,7 +293,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             }
           },
           password: {
-            // required,
             minLength: minLength(6),
             maxLength: maxLength(15),
           },

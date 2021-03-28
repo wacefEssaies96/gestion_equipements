@@ -17,5 +17,8 @@ class Historique extends Model
     public function histAssemblage(){
         return $this->hasMany('App\HistAssemblage');
     }
+    public function codePannes(){
+        return $this->hasMany('App\CodePanneInHist');
+    }
     
 }

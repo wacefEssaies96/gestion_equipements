@@ -68,8 +68,8 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="image">Image</label>
-                                    <input type="image" class="form-control" placeholder="iamge">
+                                    <img style="width:100px; height:100px" :src="image" alt="Image">
+                                    <input type="file" class="form-control" placeholder="iamge" @change="GetImage">
                                 </div>
                             </div>
                         </div>  
@@ -116,7 +116,8 @@
                 code: '',
                 designation: '',
                 n_serie: '',
-                image: '',
+                image: null,
+                imageFile:null,
                 zone: '',
             }
         },
@@ -131,6 +132,18 @@
             }
         },
         methods: {
+            GetImage(e) {
+                //   this.GetImage=e.traget.files[0]
+                let img = e.target.files[0]
+                let reader = new FileReader();
+                this.imageFile = e.img;
+                reader.readAsDataURL(img);
+                reader.onload = e => {
+                    // console.log(e)
+                    this.image = e.target.result
+                }
+            
+            },
             update(){
                 axios.patch('http://localhost:8000/equipements/edit/' + this.equipementToEdit.id, {
                     nom: this.nom,

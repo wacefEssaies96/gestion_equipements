@@ -16,9 +16,13 @@ class AdminMiddleware
      */
     public function handle(\Illuminate\Http\Request $request, Closure $next)
     {
-        if(Auth::user()->role != 'ADMIN')
-            return redirect('/historiques');
-
-        return $next($request);
+        // if(Auth::user()->role != 'ADMIN')
+            return redirect('/home');
+            // return view('./js/components/Historiques/Hotline/Historiques');
+            // return redirect('/historiques');
+        
+        // return $next($request);
+        
+        abort(403);
     }
 }

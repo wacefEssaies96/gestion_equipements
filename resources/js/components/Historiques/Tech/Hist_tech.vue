@@ -1,21 +1,31 @@
 <template>
-<div>
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Historiques</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
+              <li class="breadcrumb-item active">Historiques</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
   <template v-if="hidden == 'false'"><button @click="viewAll('true')">Afficher tous les historiques</button></template>
   <template v-if="hidden == 'true'"><button @click="viewAll('false')">Afficher les historiques du technicien</button></template>
     <template v-if="hidden == 'false'">
-      <div class="card">
+      <div class="card m-lg-4">
       <div class="card-header">
         <h3 class="card-title">Liste de tous les historiques du technicien</h3>
         <div class="card-tools">
-          <div class="input-group input-group-sm" style="width: 150px;">
-            <input type="text" name="table_search" class="form-control float-right" placeholder="Recherche">
-
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-default">
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
-          </div>
+          
+          
         </div>
       </div>
       <!-- /.card-header -->
@@ -37,8 +47,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="historique in historiques" :key="historique.id">
-              <template v-if="historique.tech_id == techId && historique.valide == false">
+            <tr v-for="historique in histsTech.data" :key="historique.id">
                 <td>{{ historique.num_bt }}</td>
                 <td>{{ historique.heure_demande }}</td>
                 <td>{{ historique.jour }}</td>
@@ -57,10 +66,9 @@
                     v-bind:id="historique"
                     v-bind:equipements="equipements"
                     v-bind:codePannes="codePannes" 
-                    @historique-updated="refresh">
+                    @historique-updated="refreshEdited">
                   </edit-hist-tech> 
                 </td>
-              </template>
             </tr> 
           </tbody>
         </table>
@@ -69,19 +77,11 @@
       </div>
     </template>
     <template v-if="hidden == 'true'">
-      <div class="card">
+      <div class="card m-lg-4">
       <div class="card-header">
         <h3 class="card-title">Liste de tous les historiques</h3>
         <div class="card-tools">
-          <div class="input-group input-group-sm" style="width: 150px;">
-            <input type="text" name="table_search" class="form-control float-right" placeholder="Recherche">
-
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-default">
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
-          </div>
+          
         </div>
       </div>
       <!-- /.card-header -->
@@ -102,7 +102,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="historique in historiques" :key="historique.id">
+            <tr v-for="historique in historiques.data" :key="historique.id">
               <td>{{ historique.num_bt }}</td>
               <td>{{ historique.heure_demande }}</td>
               <td>{{ historique.jour }}</td>
@@ -116,6 +116,7 @@
             </tr> 
           </tbody>
         </table>
+        <pagination class="m-auto" :data="historiques" @pagination-change-page="getResults"></pagination>
       </div>
       <!-- /.card-body -->
       </div>
@@ -124,25 +125,55 @@
 </template>
 <script>
   export default {
+    props:['user'],
     data(){
       return{
         historiques: {},
+        histsTech: {},
         id: '',
-        techId: '',
         equipements: '',
         codePannes: '',
         hidden: 'false'
       }
     },
     created(){
+      if(this.user.role != 'TECHNICIEN'){
+          this.$router.push('/');
+        }
       axios.post("http://localhost:8000/historiques/liste")
       .then(response => this.historiques = response.data)
       .catch(error => console.log(error))
-      axios.get("http://localhost:8000/historiques/ht")
-      .then(response => this.techId = response.data)
+      axios.get("http://localhost:8000/hist/tech/liste")
+      .then(response => this.histsTech = response.data)
       .catch(error => console.log(error))
+
     },
     methods:{
+      toast(value) {
+        this.$swal.fire({
+          icon: "success",
+          title: value,
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 5000,
+        });
+      },
+      setId(id) {
+        this.id = id;
+      },
+      refreshEdited(historiques) {
+        var value = "Historique a été modifié avec succées";
+        this.histsTech = historiques.data;
+        this.toast(value);
+      },
+      getResults(page = 1) {
+        axios.post('http://localhost:8000/historiques/liste?page=' + page)
+        .then(response => {
+          this.historiques = response.data;
+        })
+        .catch(error => console.log(error));
+      },
       viewAll(status){
         this.hidden = status;
       },
@@ -150,13 +181,13 @@
         this.historiques = historiques.data; 
       },
       getEquipements(zone){
-        axios.get('http://localhost:8000/historiques/tech/zone/' + zone)
+        axios.get('http://localhost:8000/historiques/equipement/zone/' + zone)
         .then(response =>this.equipements =  response.data)
         .catch(error => console.log(error));
         this.getCodePannes(zone);
       },
       getCodePannes(zone){
-        axios.get("http://localhost:8000/historiques/tech/equip/"+zone)
+        axios.get("http://localhost:8000/historiques/code-panne/"+zone)
         .then(response => this.codePannes = response.data)
         .catch(error => console.log(error))
       },

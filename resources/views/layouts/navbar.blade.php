@@ -6,51 +6,12 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{url('/')}}" class="nav-link">Acceuil</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{url('/responsables')}}" class="nav-link">Responsables</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{url('/hotlines')}}" class="nav-link">Hotlines</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{url('/techniciens')}}" class="nav-link">Techniciens</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{url('/historiques')}}" class="nav-link">Historiques</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{url('/code_pannes')}}" class="nav-link">Codes pannes</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{url('/equipements')}}" class="nav-link">Equipements</a>
+        <router-link to='/' class="nav-link">Dashboard</router-link>
       </li>
     </ul>
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      <!-- Navbar Search -->
-      <li class="nav-item">
-        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-          <i class="fas fa-search"></i>
-        </a>
-        <div class="navbar-search-block">
-          <form class="form-inline">
-            <div class="input-group input-group-sm">
-              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-              <div class="input-group-append">
-                <button class="btn btn-navbar" type="submit">
-                  <i class="fas fa-search"></i>
-                </button>
-                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      </li>
       <!-- Messages Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -139,11 +100,6 @@
       <li class="nav-item">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-          <i class="fas fa-th-large"></i>
         </a>
       </li>
     </ul>

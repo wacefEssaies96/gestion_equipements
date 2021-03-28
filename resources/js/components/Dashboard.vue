@@ -1,6 +1,5 @@
-@extends('app')
-@section('content')
-  <!-- Content Wrapper. Contains page content -->
+<template>
+   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -28,7 +27,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>{{$nbTech}}</h3>
+                <!-- <h3>{{$nbTech}}</h3> -->
                 <p>Nombre des techniciens</p>
               </div>
               <div class="icon">
@@ -42,7 +41,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>{{$nbHotline}}</h3>
+                <!-- <h3>{{$nbHotline}}</h3> -->
 
                 <p>Nombre des hotlines</p>
               </div>
@@ -57,7 +56,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>{{$nbResp}}</h3>
+                <!-- <h3>{{$nbResp}}</h3> -->
 
                 <p>Nombre des responsables</p>
               </div>
@@ -603,4 +602,23 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-@endsection
+</template>
+
+<script>
+    export default {
+      props:['user'],
+        data(){
+        return{
+          test:''
+        }
+      },
+      created(){
+        if(this.user.role == 'TECHNICIEN'){
+          this.$router.push('/hist-technicien');
+        }
+        if(this.user.role == 'HOTLINE'){
+          this.$router.push('/hist-hotline');
+        }
+      },
+    }
+</script>

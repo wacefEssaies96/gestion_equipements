@@ -92,12 +92,19 @@
                             </template>
                             <template v-if="id.zone == 'Sertissage'">
                                 <label for="type_travaille">Type de travaille</label>
-                                <input type="text" class="form-control" v-model="type_travaille"
-                                :class="{'is-invalid':$v.type_travaille.$invalid, 'is-valid':!$v.type_travaille.$invalid}">
+                                    <select v-model="type_travaille" class="form-control"
+                                    :class="{'is-invalid':$v.type_travaille.$invalid, 'is-valid':!$v.type_travaille.$invalid}">
+                                        <option value="">Choisir le type de travaille</option>
+                                        <option value="C">C</option>
+                                        <option value="P">P</option>
+                                        <option value="PH">PH</option>
+                                        <option value="S">S</option>
+                                    </select>
                                 <div class="valid-feedback">Validé</div>
                                 <div class="invalid-feedback">
-                                <span v-if="!$v.type_travaille.required">Veuillez remplir ce champs !</span>
+                                    <span v-if="!$v.type_travaille.required">Veuillez remplir ce champs !</span>
                                 </div>
+                               
                             </template>
                             <template v-if="id.zone == 'Electrique'">
                                 <label for="nom_support">Nom Support</label>
@@ -149,7 +156,9 @@
             num_planche: '',
             options:[],
             type_travaille: '',
-            nom_support:''
+            nom_support:'',
+            hist: this.id,
+
         }
     },
     watch:{
@@ -159,11 +168,11 @@
         codePannes(newVal){
             this.c = newVal;
             this.options = this.c;
-        }
+        },
     },
     methods: {
       update(){
-        axios.patch('http://localhost:8000/histtech/edit/' + this.id.id, {
+        axios.patch('http://localhost:8000/histtech/edit/' + this.hist.id, {
             heure_fin: this.heure_fin,
             travaille: this.travaille,
             piece_rechange: this.piece_rechange,

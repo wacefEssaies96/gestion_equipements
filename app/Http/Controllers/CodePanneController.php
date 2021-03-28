@@ -21,7 +21,7 @@ class CodePanneController extends Controller
         if($request->designation != ''){
             $cp = $cp->where('designation', 'like', '%'.request('designation').'%');
         }
-        $cp = $cp->get();
+        $cp = $cp->paginate(10);
         return response()->json($cp);
     }
 
@@ -68,7 +68,7 @@ class CodePanneController extends Controller
         }
     }
     public function refresh(){
-        $code_panne = CodePanne::all();
+        $code_panne = CodePanne::paginate(10);
         return response()->json($code_panne );
     }
     public function getCodePanneByCode($value){

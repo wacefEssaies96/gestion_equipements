@@ -29,13 +29,11 @@ class CreateHistoriquesTable extends Migration
             $table->string('travaille')->nullable();
             $table->string('piece_rechange')->nullable();
             $table->string('commentaire')->nullable();
-            $table->bigInteger('code_panne')->unsigned()->nullable();
             $table->bigInteger('code_equip')->unsigned()->nullable();
 
             $table->bigInteger('hotline_id')->unsigned();
             $table->foreign('hotline_id')->references('id')->on('users');
             $table->foreign('tech_id')->references('id')->on('users');
-            $table->foreign('code_panne')->references('id')->on('code_pannes');
             $table->foreign('code_equip')->references('id')->on('equipements');
             $table->timestamps();
         });

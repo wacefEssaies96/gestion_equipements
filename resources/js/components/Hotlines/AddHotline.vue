@@ -29,7 +29,7 @@
                       <div class="form-group">
                         <label for="nom">Nom</label>
                         <input type="text" class="form-control" placeholder="Nom" v-model="nom" 
-                          :class="{'is-invalid':$v.nom.$invalid,'is-valid':!$v.nom.$invalid}"
+                          :class="{'is-invalid':(nom != '') ? $v.nom.$invalid:'','is-valid':!$v.nom.$invalid}"
                         >
                         <div class="valid-feedback">Nom valide</div>
                         <div class="invalid-feedback">
@@ -41,7 +41,7 @@
                       <div class="form-group">
                         <label for="prenom">Prénom</label>
                         <input type="text" class="form-control" placeholder="Prénom" v-model="prenom"
-                        :class="{'is-invalid':$v.prenom.$invalid, 'is-valid':!$v.prenom.$invalid}">
+                        :class="{'is-invalid':(prenom != '') ?$v.prenom.$invalid:'', 'is-valid':!$v.prenom.$invalid}">
                         <div class="valid-feedback">Prénom valide</div>
                         <div class="invalid-feedback">
                           <span v-if="!$v.prenom.required">Veuillez entrer un prénom !</span>
@@ -54,7 +54,7 @@
                       <div class="form-group">
                         <label for="tel">Téléphone</label>
                         <input type="text" class="form-control" placeholder="Numéro de téléphone" v-model="tel"
-                        :class="{'is-invalid':$v.tel.$invalid, 'is-valid':!$v.tel.$invalid}">
+                        :class="{'is-invalid':(tel != '') ?$v.tel.$invalid:'', 'is-valid':!$v.tel.$invalid}">
                         <div class="valid-feedback">Numéro de téléphone valide</div>
                         <div class="invalid-feedback">
                           <span v-if="!$v.tel.required">Veuillez entrer un numéro de téléphone !</span>
@@ -66,7 +66,7 @@
                       <div class="form-group">
                         <label for="pseudo">Pseudo</label>
                         <input type="pseudo" class="form-control" placeholder="Pseudo" v-model="pseudo"
-                        :class="{'is-invalid':$v.pseudo.$invalid, 'is-valid':!$v.pseudo.$invalid}">
+                        :class="{'is-invalid':(pseudo != '') ?$v.pseudo.$invalid:'', 'is-valid':!$v.pseudo.$invalid}">
                         <div class="valid-feedback">Pseudo valide</div>
                         <div class="invalid-feedback">
                           <span v-if="!$v.pseudo.required">Veuillez entrer un pseudo valide !</span>
@@ -79,7 +79,7 @@
                   <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" class="form-control" placeholder="Email" v-model="email"
-                        :class="{'is-invalid':$v.email.$invalid, 'is-valid':!$v.email.$invalid}">
+                        :class="{'is-invalid':(email != '') ? $v.email.$invalid:'', 'is-valid':!$v.email.$invalid}">
                         <div class="valid-feedback">Email valide</div>
                         <div class="invalid-feedback">
                           <span v-if="!$v.email.required">Veuillez entrer un email !</span>
@@ -91,7 +91,7 @@
                   <div class="form-group">
                     <label for="mdp">Mot de passe</label>
                     <input type="password" class="form-control" placeholder="Mot de passe" v-model="password"
-                    :class="{'is-invalid':$v.password.$invalid, 'is-valid':!$v.password.$invalid}" >
+                    :class="{'is-invalid':(password != '') ? $v.password.$invalid:'', 'is-valid':!$v.password.$invalid}" >
                     <div class="valid-feedback">Mot de passe valide</div>
                     <div class="invalid-feedback">
                       <span v-if="!$v.password.required">Veuillez entrer un mot de passe !</span>
