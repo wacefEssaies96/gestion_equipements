@@ -76,6 +76,10 @@
       <div class="card-header">
         <h3 class="card-title">Liste de tous les techniciens</h3>
         <div class="card-tools">
+          <!-- Button trigger modal -->
+          <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
+          Ajouter un nouveau technicien
+          </button>
           <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>
         </div>
       </div>

@@ -29,15 +29,13 @@ class HomeController extends Controller
      */
     public function index()
     {
+        return view('app');
+    }
+    public function getCount(){
         $nbTech = Technicien::all()->count();
         $nbHotline = Hotline::all()->count();
         $nbResp = Responsable::all()->count();
-        // return response()->json('test');
-        return view('app',[
-            'nbTech' => $nbTech,
-            'nbHotline' => $nbHotline,
-            'nbResp' => $nbResp
-        ]);
+        return response()->json([$nbHotline,$nbResp,$nbTech]);
     }
     public function welcome()
     {

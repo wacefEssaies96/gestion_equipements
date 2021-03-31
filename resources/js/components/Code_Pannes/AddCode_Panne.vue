@@ -1,9 +1,6 @@
 <template>
     <div>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-        Ajouter un nouveau code panne
-        </button>
+
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -24,30 +21,25 @@
                         <!-- form start -->
                         <form @submit.prevent="checkAddForm">
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="code">Code Panne</label>
-                                            <input type="text" class="form-control" placeholder="Code Panne" v-model="code"
-                                                :class="{'is-invalid':(code != '') ? $v.code.$invalid:'', 'is-valid':!$v.code.$invalid}">
-                                            <div class="valid-feedback">Code Panne valide</div>
-                                            <div class="invalid-feedback">
-                                                <span v-if="!$v.code.required">Veuillez entrer un code !</span>
-                                                <span v-if="!$v.code.isUnique">Code déja existant!</span>   
-                                            </div>
-                                        </div>
-                                    <div class="form-group">
-                                        <label for="designation">Designation</label>
-                                        <input type="text" class="form-control" placeholder="Designation" v-model="designation"
-                                        :class="{'is-invalid':(designation != '') ? $v.designation.$invalid:'', 'is-valid':!$v.designation.$invalid}">
-                                        <div class="valid-feedback">Designation valide</div>
-                                        <div class="invalid-feedback">
-                                            <span v-if="!$v.designation.required">Veuillez entrer un designation !</span>
-                                        </div>
+                                <div class="form-group">
+                                    <label for="code">Code Panne</label>
+                                    <input type="text" class="form-control" placeholder="Code Panne" v-model="code"
+                                        :class="{'is-invalid':(code != '') ? $v.code.$invalid:'', 'is-valid':!$v.code.$invalid}">
+                                    <div class="valid-feedback">Code Panne valide</div>
+                                    <div class="invalid-feedback">
+                                        <span v-if="!$v.code.required">Veuillez entrer un code !</span>
+                                        <span v-if="!$v.code.isUnique">Code déja existant!</span>   
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="designation">Designation</label>
+                                    <input type="text" class="form-control" placeholder="Designation" v-model="designation"
+                                    :class="{'is-invalid':(designation != '') ? $v.designation.$invalid:'', 'is-valid':!$v.designation.$invalid}">
+                                    <div class="valid-feedback">Designation valide</div>
+                                    <div class="invalid-feedback">
+                                        <span v-if="!$v.designation.required">Veuillez entrer un designation !</span>
+                                    </div>
                                 </div>
-                            
                                 <div class="form-group">
                                     <label for="zone">Zone</label>
                                     <select class="form-control" v-model="zone"
@@ -63,7 +55,6 @@
                                         <span v-if="!$v.zone.required">Veuillez choisir une zone !</span>
                                     </div>
                                 </div> 
-                                
                             </div>
                         <!-- /.card-body -->
                             <div class="card-footer">
@@ -127,6 +118,12 @@ export default {
             axios.post('http://localhost:8000/code_pannes',form)
             .then(response => this.$emit('codePanne-added',response))
             .catch(error => console.log(error));
+            this.refreshData();
+        },
+        refreshData(){
+            this.code = '';
+            this.designation = '';
+            this.zone = '';
         }
     }
   }

@@ -1,9 +1,6 @@
 <template>
     <div>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-        Ajouter un nouveau technicien
-        </button>
+        
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -179,118 +176,132 @@
 <script>
 import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators';
   export default {
-         data(){
-            return{
-                nom: '',
-                prenom: '',
-                email: '',
-                tel: '',
-                zone: '',
-                pseudo: '',
-                qualification: '',
-                h_debut_service: '',
-                h_fin_service: '',
-                password: '',
-                repeatPassword: '',
-            }
+    data(){
+        return{
+            nom: '',
+            prenom: '',
+            email: '',
+            tel: '',
+            zone: '',
+            pseudo: '',
+            qualification: '',
+            h_debut_service: '',
+            h_fin_service: '',
+            password: '',
+            repeatPassword: '',
+        }
+    },
+    validations: {
+        nom: {
+        required,
+        minLength: minLength('3'),
+        maxLength: maxLength('15')
         },
-        validations: {
-          nom: {
-            required,
-            minLength: minLength('3'),
-            maxLength: maxLength('15')
-          },
-          prenom: {
-            required,
-            minLength: minLength('3'),
-            maxLength: maxLength('15')
-          },
-          pseudo: {
-            required,
-            minLength: minLength('3'),
-            maxLength: maxLength('15')
-          },
-          qualification:{
-            required,
-            minLength: minLength('3'),
-            maxLength: maxLength('190')
-          },
-          zone: {
-              required
-          },
-          h_debut_service: {
-              required
-          },
-          h_fin_service: {
-              required
-          },
-          email: {
-            required,
-            isUnique(value){
-              if(value === '') return true;
-              var email_regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-              return new Promise((resolve)=>{
-                setTimeout(()=>{
-                  resolve(email_regex.test(value))
-                },350+Math.random()*300)
-              })
-            },
-            async isValid(value){
-                if(value==='') return true;
-                const response = await axios.get('http://localhost:8000/responsables/verifemail/'+value)
-                .catch(error => console.log(error));
-                if(response.data.length == 0) return true;
-            }
-          },
-          tel: {
-            required,
-            minLength: minLength('8'),
-            maxLength: maxLength('8'),
-            isUnique(value){
-              if(value==='') return true;
-              var tel_regex = /^[0-9]+$/;
-              return new Promise((resolve)=>{
-                setTimeout(()=>{
-                  resolve(tel_regex.test(value))
-                },350+Math.random()*300)
-              })
-            }
-          },
-          password: {
-            required,
-            minLength: minLength(6),
-            maxLength: maxLength(15),
-          },
-          repeatPassword: {
-            sameAsPassword: sameAs('password')
-          }
+        prenom: {
+        required,
+        minLength: minLength('3'),
+        maxLength: maxLength('15')
         },
-        methods:{
-          checkAddForm(){
+        pseudo: {
+        required,
+        minLength: minLength('3'),
+        maxLength: maxLength('15')
+        },
+        qualification:{
+        required,
+        minLength: minLength('3'),
+        maxLength: maxLength('190')
+        },
+        zone: {
+            required
+        },
+        h_debut_service: {
+            required
+        },
+        h_fin_service: {
+            required
+        },
+        email: {
+        required,
+        isUnique(value){
+            if(value === '') return true;
+            var email_regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return new Promise((resolve)=>{
+            setTimeout(()=>{
+                resolve(email_regex.test(value))
+            },350+Math.random()*300)
+            })
+        },
+        async isValid(value){
+            if(value==='') return true;
+            const response = await axios.get('http://localhost:8000/responsables/verifemail/'+value)
+            .catch(error => console.log(error));
+            if(response.data.length == 0) return true;
+        }
+        },
+        tel: {
+        required,
+        minLength: minLength('8'),
+        maxLength: maxLength('8'),
+        isUnique(value){
+            if(value==='') return true;
+            var tel_regex = /^[0-9]+$/;
+            return new Promise((resolve)=>{
+            setTimeout(()=>{
+                resolve(tel_regex.test(value))
+            },350+Math.random()*300)
+            })
+        }
+        },
+        password: {
+        required,
+        minLength: minLength(6),
+        maxLength: maxLength(15),
+        },
+        repeatPassword: {
+        sameAsPassword: sameAs('password')
+        }
+    },
+    methods:{
+        checkAddForm(){
             this.$v.$touch()
             if(!this.$v.$invalid){
-              var submitForm = document.getElementById('submitAddTech');
-              submitForm.click();
+                var submitForm = document.getElementById('submitAddTech');
+                submitForm.click();
             }else{
                 alert("Veuillez remplir les champs correctement !");
             }
-          },
-          technicienStore(){
-              axios.post('http://localhost:8000/techniciens',{
-                  nom: this.nom,
-                  prenom: this.prenom,
-                  email: this.email,
-                  tel: this.tel,
-                  pseudo: this.pseudo,
-                  password: this.password,
-                  h_debut_service: this.h_debut_service,
-                  h_fin_service: this.h_fin_service,
-                  zone: this.zone,
-                  qualification: this.qualification
-              })
-              .then(response => this.$emit('technicien-added',response))
-              .catch(error => console.log(error));
-          }
+        },
+        technicienStore(){
+            axios.post('http://localhost:8000/techniciens',{
+                nom: this.nom,
+                prenom: this.prenom,
+                email: this.email,
+                tel: this.tel,
+                pseudo: this.pseudo,
+                password: this.password,
+                h_debut_service: this.h_debut_service,
+                h_fin_service: this.h_fin_service,
+                zone: this.zone,
+                qualification: this.qualification
+            })
+            .then(response => this.$emit('technicien-added',response))
+            .catch(error => console.log(error));
+            this.refreshData();
+        },
+        refreshData(){
+            this.nom = '';
+            this.prenom = '';
+            this.email = '';
+            this.tel= '';
+            this.pseudo= '';
+            this.password= '';
+            this.repeatPassword= '';
+            this.h_debut_service = '';
+            this.h_fin_service = '';
+            this.zone = '';
+            this.qualification = '';
         }
+    }
   }
 </script>

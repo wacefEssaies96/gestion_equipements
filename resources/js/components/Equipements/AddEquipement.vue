@@ -1,9 +1,5 @@
 <template>
     <div>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-        Ajouter un nouveau equipement
-        </button>
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -154,29 +150,27 @@ export default {
         },
         
     },
-        methods:{
-           GetImage(e) {
-            //   this.GetImage=e.traget.files[0]
-            let img = e.target.files[0]
-            let reader = new FileReader();
-            this.imageFile = e.img;
-            reader.readAsDataURL(img);
-            reader.onload = e => {
-                // console.log(e)
-                this.image = e.target.result
-            }
-            
-          },
-          checkAddForm(){
+    methods:{
+        GetImage(e) {
+        let img = e.target.files[0]
+        let reader = new FileReader();
+        this.imageFile = e.img;
+        reader.readAsDataURL(img);
+        reader.onload = e => {
+            this.image = e.target.result
+        }
+        
+        },
+        checkAddForm(){
             this.$v.$touch()
             if(!this.$v.$invalid){
-              var submitForm = document.getElementById('submitAddEqui');
-              submitForm.click();
+                var submitForm = document.getElementById('submitAddEqui');
+                submitForm.click();
             }else{
                 alert("Veuillez remplir les champs correctement !");
             }
-          },
-          equipementStore(){
+        },
+        equipementStore(){
             let form = new FormData();
             form.append('nom', this.nom);
             form.append('code', this.code);
@@ -185,10 +179,20 @@ export default {
             form.append('image', this.image);
             form.append('zone', this.zone);
             const config= {headers:{'Content-Type': 'multipart/form-data'}};
-              axios.post('http://localhost:8000/equipements',form,config)
-              .then(response => this.$emit('equipement-added',response))
-              .catch(error => console.log(error));
-          }
+            axios.post('http://localhost:8000/equipements',form,config)
+            .then(response => this.$emit('equipement-added',response))
+            .catch(error => console.log(error));
+            this.refreshData();
+        },
+        refreshData(){
+            this.nom = '';
+            this.code = '';
+            this.designation = '';
+            this.n_serie= '';
+            this.image= '';
+            this.imageFile= '';
+            this.zone= '';
         }
-  }
+    }
+}
 </script>
