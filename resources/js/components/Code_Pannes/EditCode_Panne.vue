@@ -19,45 +19,39 @@
               <!-- form start -->
               <form @submit.prevent="checkEditForm">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="code">Code panne</label>
-                                    <input type="text" class="form-control" placeholder="Code Panne" v-model="code"
-                                    :class="{'is-invalid':$v.code.$invalid, 'is-valid':!$v.code.$invalid}">
-                                    <div class="valid-feedback">Code Panne valide</div>
-                                    <div class="invalid-feedback">
-                                        <span v-if="!$v.code.required">Veuillez entrer un code !</span> 
-                                    </div>
-                                </div>
-                        
-                                <div class="form-group">
-                                    <label for="designation">Designation</label>
-                                    <input type="text" class="form-control" placeholder="Designation" v-model="designation"
-                                    :class="{'is-invalid':$v.designation.$invalid, 'is-valid':!$v.designation.$invalid}">
-                                    <div class="valid-feedback">Designation valide</div>
-                                    <div class="invalid-feedback">
-                                        <span v-if="!$v.designation.required">Veuillez entrer un designation !</span>
-                                    </div>
-                                </div>
-                        
-                                <div class="form-group">
-                                    <label for="zone">Zone</label>
-                                    <select class="form-control" v-model="zone"
-                                    :class="{'is-invalid':$v.zone.$invalid, 'is-valid':!$v.zone.$invalid}">
-                                        <option value="Assemblage">Assemblage</option>
-                                        <option value="Sertissage">Sertissage</option>
-                                        <option value="Préparation">Préparation</option>
-                                        <option value="Coupe">Coupe</option>
-                                        <option value="Controle éléctrique">Controle éléctrique</option>
-                                    </select>
-                                    <div class="valid-feedback">Zone validé</div>
-                                    <div class="invalid-feedback">
-                                        <span v-if="!$v.zone.required">Veuillez choisir une zone !</span>
-                                    </div>
-                                </div> 
+                        <div class="form-group">
+                            <label for="code">Code panne</label>
+                            <input type="text" class="form-control" placeholder="Code Panne" v-model="code"
+                            :class="{'is-invalid':$v.code.$invalid, 'is-valid':!$v.code.$invalid}">
+                            <div class="valid-feedback">Code Panne valide</div>
+                            <div class="invalid-feedback">
+                                <span v-if="!$v.code.required">Veuillez entrer un code !</span> 
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="designation">Designation</label>
+                            <input type="text" class="form-control" placeholder="Designation" v-model="designation"
+                            :class="{'is-invalid':$v.designation.$invalid, 'is-valid':!$v.designation.$invalid}">
+                            <div class="valid-feedback">Designation valide</div>
+                            <div class="invalid-feedback">
+                                <span v-if="!$v.designation.required">Veuillez entrer un designation !</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="zone">Zone</label>
+                            <select class="form-control" v-model="zone"
+                            :class="{'is-invalid':$v.zone.$invalid, 'is-valid':!$v.zone.$invalid}">
+                                <option value="Assemblage">Assemblage</option>
+                                <option value="Sertissage">Sertissage</option>
+                                <option value="Préparation">Préparation</option>
+                                <option value="Coupe">Coupe</option>
+                                <option value="Controle éléctrique">Controle éléctrique</option>
+                            </select>
+                            <div class="valid-feedback">Zone validé</div>
+                            <div class="invalid-feedback">
+                                <span v-if="!$v.zone.required">Veuillez choisir une zone !</span>
+                            </div>
+                        </div> 
                     </div>
                      <!-- /.card-body -->
                     <div class="card-footer">

@@ -241,7 +241,24 @@ import { required } from 'vuelidate/lib/validators';
         })
         .then(response => this.$emit('historique-added',response))
         .catch(error => console.log(error));
+        this.refreshData();
       },
+      refreshData(){
+        this.num_bt = '';
+        this.heure_demande= '';
+        this.jour= '';
+        this.zone= '';
+        this.tech_id= '';
+        this.heure_fin= '';
+        this.travaille= '';
+        this.piece_rechange= '';
+        this.commentaire= '';
+        this.code_panne= '';
+        this.code_machine= '';
+        this.num_planche= '';
+        this.type_travaille= '';
+        this.nom_support= '';
+      }
     },
     validations: {
       num_bt: {

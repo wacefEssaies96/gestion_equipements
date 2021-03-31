@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 // Admin Authentification
 // Route::group(['middleware' => ['auth' , 'ADMIN']],function() {
+    
     Route::get('/', 'HomeController@index');
+    Route::get('/getCount', 'HomeController@getCount');
     //onedrive
     // Route::get('/onedrive', function(){
     //     return redirect('/')
@@ -25,7 +27,6 @@ use Illuminate\Support\Facades\Route;
     
     //Responsable
     Route::get('/responsables/verifemail/{value}', 'ResponsableController@verifEmail');
-    // Route::get('/responsables', 'ResponsableController@index');
     Route::post('/responsables', 'ResponsableController@store');
     Route::get('/responsables/liste', 'ResponsableController@liste');
     Route::get('/responsables/edit/{id}', 'ResponsableController@edit');
@@ -34,7 +35,6 @@ use Illuminate\Support\Facades\Route;
 
     //Hotline
     Route::post('/users/search', 'UserController@searchuser');
-    // Route::get('/hotlines', 'HotlineController@index');
     Route::post('/hotlines', 'HotlineController@store');
     Route::get('/hotlines/liste', 'HotlineController@liste');
     Route::get('/hotlines/edit/{id}', 'HotlineController@edit');
@@ -42,7 +42,6 @@ use Illuminate\Support\Facades\Route;
     Route::delete('/hotlines/{id}', 'HotlineController@destroy');
 
     //Technicien
-    // Route::get('/techniciens', 'TechnicienController@index');
     Route::post('/techniciens', 'TechnicienController@store');
     Route::get('/techniciens/liste', 'TechnicienController@liste');
     Route::get('/techniciens/edit/{id}', 'TechnicienController@edit');
@@ -50,7 +49,6 @@ use Illuminate\Support\Facades\Route;
     Route::delete('/techniciens/{id}', 'TechnicienController@destroy');
 
     //Equipement
-    // Route::get('/equipements', 'EquipementController@index');
     Route::post('/equipements', 'EquipementController@store');
     Route::post('/equipements/liste', 'EquipementController@liste');
     Route::get('/equipements/edit/{id}', 'EquipementController@edit');
@@ -59,7 +57,6 @@ use Illuminate\Support\Facades\Route;
     Route::get('/equipements/{value}', 'EquipementController@getEquipementByCode');
 
     //Code Panne
-    // Route::get('/code_pannes', 'CodePanneController@index');
     Route::post('/code_pannes', 'CodePanneController@store');
     Route::post('/code_pannes/liste', 'CodePanneController@liste');
     Route::get('/code_pannes/edit/{id}', 'CodePanneController@edit');
@@ -81,8 +78,6 @@ use Illuminate\Support\Facades\Route;
     Route::get('/historiques/techs', 'HistoriqueController@getAllTechs');
     Route::get('/historiques/hotline', 'HistoriqueController@getHotlineHistoriques');
 
-
-    // Route::get('/historiques', 'HistoriqueController@index');
     Route::post('/historiques', 'HistoriqueController@store');
     Route::post('/historiques/liste', 'HistoriqueController@liste');
     Route::get('/historiques/edit/{id}', 'HistoriqueController@edit');

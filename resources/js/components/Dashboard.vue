@@ -27,7 +27,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <!-- <h3>{{$nbTech}}</h3> -->
+                <h3>{{data[2]}}</h3>
                 <p>Nombre des techniciens</p>
               </div>
               <div class="icon">
@@ -41,7 +41,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <!-- <h3>{{$nbHotline}}</h3> -->
+                <h3>{{data[0]}}</h3>
 
                 <p>Nombre des hotlines</p>
               </div>
@@ -56,7 +56,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <!-- <h3>{{$nbResp}}</h3> -->
+                <h3>{{data[1]}}</h3>
 
                 <p>Nombre des responsables</p>
               </div>
@@ -609,7 +609,7 @@
       props:['user'],
         data(){
         return{
-          test:''
+          data:''
         }
       },
       created(){
@@ -619,6 +619,9 @@
         if(this.user.role == 'HOTLINE'){
           this.$router.push('/hist-hotline');
         }
+        axios.get('http://localhost:8000/getCount')
+          .then(response =>  this.data = response.data)
+          .catch(error => console.log(error));
       },
     }
 </script>

@@ -73,6 +73,10 @@
         <h3 class="card-title">Liste de tous les equipements</h3>
         <div class="card-tools">
           <router-link class="btn btn-outline-info" to="/onedrive">Ajouter via Onedrive</router-link>
+                  <!-- Button trigger modal -->
+        <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
+        Ajouter un nouveau equipement
+        </button>
           <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>
         </div>
       </div>
