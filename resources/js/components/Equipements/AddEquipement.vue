@@ -178,7 +178,6 @@ export default {
             filePath:'',
             typeDocument:'',
             documents:[],
-            baseUrl:process.env.MIX_URL,
         }
     },
     watch:{
@@ -219,7 +218,7 @@ export default {
         deleteData(){
             if(this.documents.length > 0){
                 var json_arr = JSON.stringify(this.documents);
-                axios.post(this.baseUrl+'/equipements/doc/delete',{
+                axios.post('/equipements/doc/delete',{
                     documents:json_arr
                 })
                 .then(response => console.log(response.data))
@@ -272,7 +271,7 @@ export default {
             form.append('zone', this.zone);
             form.append('documents', json_arr);
             const config= {headers:{'Content-Type': 'multipart/form-data'}};
-            axios.post(this.baseUrl+'/equipements',form ,config)
+            axios.post('/equipements',form ,config)
             .then(response => this.$emit('equipement-added',response))
             .catch(error => console.log(error));
             this.refreshData();

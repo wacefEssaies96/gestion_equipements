@@ -120,7 +120,6 @@ export default {
       tel: '',
       password: '',
       repeatPassword: '',
-      baseUrl:process.env.MIX_URL,
     }
   },
   validations: {
@@ -148,7 +147,7 @@ export default {
       },
       async isValid(value){
         if(value==='') return true;
-        const response = await axios.get(this.baseUrl+'/responsables/verifemail/'+value)
+        const response = await axios.get('/responsables/verifemail/'+value)
         .catch(error => console.log(error));
         if(response.data.length == 0) return true;
       }
@@ -187,7 +186,7 @@ export default {
       }
     },
     responsableStore(){
-        axios.post(this.baseUrl+'/responsables',{
+        axios.post('/responsables',{
             nom: this.nom,
             prenom: this.prenom,
             email: this.email,

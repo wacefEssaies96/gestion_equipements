@@ -106,13 +106,12 @@ import { required } from 'vuelidate/lib/validators';
           jour: '',
           zone: '',
           tech_id: '',
-          baseUrl:process.env.MIX_URL,
         }
     },
     methods:{
       getTechniciens(zone){
           this.tech_id = '';
-          axios.get(this.baseUrl+"/historiques/techniciens/"+zone)
+          axios.get("/historiques/techniciens/"+zone)
           .then(response => this.techniciens=response.data) 
           .catch(error => console.log(error))
       },
@@ -126,7 +125,7 @@ import { required } from 'vuelidate/lib/validators';
         }
       },
       historiqueStore(){
-        axios.post(this.baseUrl+'/historiques',{
+        axios.post('/historiques',{
             heure_demande: this.heure_demande,
             jour: this.jour,
             zone: this.zone,

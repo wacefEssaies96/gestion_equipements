@@ -124,7 +124,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
         tel: '',
         password: '',
         repeatPassword: '',
-        baseUrl:process.env.MIX_URL,
       }
     },
     validations: {
@@ -190,7 +189,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
         }
       },
       productionStore(){
-        axios.post(this.baseUrl+'/productions',{
+        axios.post('/productions',{
             nom: this.nom,
             prenom: this.prenom,
             email: this.email,

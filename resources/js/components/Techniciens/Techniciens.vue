@@ -109,7 +109,7 @@
                 <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getTechnicien(technicien.user_id)">
                 <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(technicien.user_id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger">Supprimer</button>
+                <button @click="setId(technicien.user_id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt" title="Supprimer"/></button>
                 <DeleteTechnicien v-bind:id="id" @technicien-deleted="refreshDeleted"></DeleteTechnicien>
                 <EditTechnicien v-bind:technicienToEdit="technicienToEdit" @technicien-updated="refreshEdited"></EditTechnicien>
               </td>
@@ -146,14 +146,13 @@
           hidden:'true',
           id:'',
           loading:true,
-          baseUrl:process.env.MIX_URL,
         }
       },
       created(){
         if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-        axios.get(this.baseUrl+"/techniciens/liste")
+        axios.get("/techniciens/liste")
         .then(response => {
           this.techniciens = response.data;
           this.loading = false;
@@ -207,7 +206,7 @@
           this.q.append('email', this.qEmail);
           this.q.append('zone', this.qZone);
 
-          axios.post(this.baseUrl+"/users/search", this.q)
+          axios.post("/users/search", this.q)
           .then(response => this.techniciens = response.data)
           .catch(error => console.log(error))
 
@@ -216,13 +215,13 @@
           this.techniciens = techniciens.data; 
         },
         getResults(page = 1) {
-          axios.get(this.baseUrl+'/techniciens/liste?page=' + page)
+          axios.get('/techniciens/liste?page=' + page)
               .then(response => {
                   this.techniciens = response.data;
           });
         },
         getTechnicien(id){
-            axios.get(this.baseUrl+'/techniciens/edit/' + id)
+            axios.get('/techniciens/edit/' + id)
             .then(response => this.technicienToEdit = response.data)
             .catch(error => console.log(error));
         },

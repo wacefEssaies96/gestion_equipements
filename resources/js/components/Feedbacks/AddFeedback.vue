@@ -104,7 +104,6 @@ import { required} from 'vuelidate/lib/validators';
         equipement: '',
         commentaire: '',
         e:{},
-        baseUrl:process.env.MIX_URL,
       }
     },
     validations: {
@@ -135,7 +134,7 @@ import { required} from 'vuelidate/lib/validators';
       },
       feedbackStore(){
         this.equipement = '';
-        axios.post(this.baseUrl+'/feedbacks',{
+        axios.post('/feedbacks',{
             jour: this.jour,
             zone: this.zone,
             equipement: this.equipement,
@@ -149,7 +148,7 @@ import { required} from 'vuelidate/lib/validators';
       },
       getEquipements(zone){
         this.equipement = '';
-        axios.get(this.baseUrl+'/historiques/equipement/zone/' + zone)
+        axios.get('/historiques/equipement/zone/' + zone)
         .then(response =>this.e =  response.data)
         .catch(error => console.log(error));
         
@@ -163,7 +162,7 @@ import { required} from 'vuelidate/lib/validators';
       },
       getEquipById(id){
         this.equipement = '';
-        axios.get(this.baseUrl+'/equipements/equipement/nom/' + id)
+        axios.get('/equipements/equipement/nom/' + id)
         .then(response =>this.e =  response.data)
         .catch(error => console.log(error));
       }

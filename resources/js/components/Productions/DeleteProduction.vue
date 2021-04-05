@@ -25,14 +25,9 @@
 <script>
 export default {
     props:['id'],
-        data(){
-        return{
-          baseUrl:process.env.MIX_URL,
-        }
-      },
     methods:{
         deleteProduction(id){
-            axios.delete(this.baseUrl+'/productions/' + id)
+            axios.delete('/productions/' + id)
             .then(response => this.$emit('production-deleted',response))
             .catch(error => console.log(error));               
         },

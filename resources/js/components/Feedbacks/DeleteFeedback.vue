@@ -25,14 +25,9 @@
 <script>
 export default {
     props:['id'],
-        data(){
-        return{
-          baseUrl:process.env.MIX_URL,
-        }
-      },
     methods:{
         deleteFeedback(id){
-            axios.delete(this.baseUrl+'/feedbacks/' + id)
+            axios.delete('/feedbacks/' + id)
             .then(response => this.$emit('feedback-deleted',response))
             .catch(error => console.log(error));               
         },

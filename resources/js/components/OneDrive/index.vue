@@ -70,17 +70,16 @@ export default {
         files: '',
         file:'',
         accessData: '',
-        baseUrl:process.env.MIX_URL,
       }
     },
     created(){
-      axios.get(this.baseUrl+"/getAccessData")
+      axios.get("/getAccessData")
       .then(response => this.accessData = JSON.parse(response.request.response))
       .catch(error => console.log(error))
       
       setTimeout(()=>{
         if(this.accessData.userName != null){
-          axios.get(this.baseUrl+"/getalldata")
+          axios.get("/getalldata")
           .then(response => this.files = response.data)
           .catch(error => console.log(error))
         }
@@ -88,18 +87,18 @@ export default {
     },
     methods:{
       getDataById(id){
-        axios.get(this.baseUrl+"/getdatabyid/"+id)
+        axios.get("/getdatabyid/"+id)
         .then(response => this.files = response.data)
         .catch(error => console.log(error))
       },
       downloadData(id){
-        axios.get(this.baseUrl+"/download/data/"+id)
+        axios.get("/download/data/"+id)
         .then(response => this.file = response.data)
         .catch(error => console.log(error))
         this.equipementStore();
       },
       equipementStore(){
-        axios.post(this.baseUrl+'/importDataFromExcel',{
+        axios.post('/importDataFromExcel',{
             file : this.file
         })
         .then(response => this.checkStatus(response.data))

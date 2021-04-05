@@ -125,7 +125,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             password: '',
             repeatPassword: '',
             hidden: 'true',
-            baseUrl:process.env.MIX_URL,
           }
         },
         watch:{
@@ -189,7 +188,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
               this.hidden = status;
             },
             update(){
-                axios.patch(this.baseUrl+'/productions/edit/' + this.productionToEdit.id, {
+                axios.patch('/productions/edit/' + this.productionToEdit.id, {
                     nom: this.nom,
                     prenom: this.prenom,
                     tel: this.tel,

@@ -136,7 +136,6 @@
             type_travaille: '',
             nom_support:'',
             hist: this.id,
-            baseUrl:process.env.MIX_URL,
         }
     },
     watch:{
@@ -150,7 +149,7 @@
     },
     methods: {
       update(){
-        axios.patch(this.baseUrl+'/histtech/edit/' + this.hist.id, {
+        axios.patch('/histtech/edit/' + this.hist.id, {
             travaille: this.travaille,
             piece_rechange: this.piece_rechange,
             commentaire: this.commentaire,

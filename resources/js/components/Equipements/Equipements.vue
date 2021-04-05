@@ -188,17 +188,16 @@
         accessData:'',
         document:'',
         loading:true,
-        baseUrl:process.env.MIX_URL,
       }
     },
     async created(){
       if(this.user.role != 'ADMIN'){
         this.$router.push('/');
       }
-      await axios.get(this.baseUrl+"/getAccessData")
+      await axios.get("/getAccessData")
       .then(response => this.accessData = JSON.parse(response.request.response))
       .catch(error => console.log(error))
-      await axios.post(this.baseUrl+"/equipements/liste")
+      await axios.post("/equipements/liste")
       .then(response => {
         this.equipements = response.data;
         this.loading = false;
@@ -213,14 +212,14 @@
     },
     methods:{
       getDocuments(id,type){
-        axios.get(this.baseUrl+'/equipements/document/'+id+'/'+type)
+        axios.get('/equipements/document/'+id+'/'+type)
         .then(response => {
           this.document = response.data
           })
         .catch(error => console.log(error))
       },
       getResults(page = 1) {
-        axios.post(this.baseUrl+'/equipements/liste?page=' + page)
+        axios.post('/equipements/liste?page=' + page)
         .then(response => {
           this.equipements = response.data;
         })
@@ -271,7 +270,7 @@
         this.q.append('n_serie', this.qNserie);
         this.q.append('code', this.qCodeMachine);
 
-        axios.post(this.baseUrl+"/equipements/liste", this.q)
+        axios.post("/equipements/liste", this.q)
         .then(response => this.equipements = response.data)
         .catch(error => console.log(error))
 
@@ -280,7 +279,7 @@
         this.equipements = equipements.data; 
       },
       getEquipement(id){
-        axios.get(this.baseUrl+'/equipements/edit/' + id)
+        axios.get('/equipements/edit/' + id)
         .then(response => this.equipementToEdit = response.data)
         .catch(error => console.log(error));
       },

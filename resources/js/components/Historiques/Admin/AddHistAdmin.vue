@@ -178,27 +178,26 @@ import { required } from 'vuelidate/lib/validators';
           nom_support:'',
           e:{},
           c:[],
-          baseUrl:process.env.MIX_URL,
         }
     },
     methods:{
       getTechniciens(zone){
           this.tech_id = '';
-          axios.get(this.baseUrl+"/historiques/techniciens/"+zone)
+          axios.get("/historiques/techniciens/"+zone)
           .then(response => this.techniciens=response.data) 
           .catch(error => console.log(error));
           this.getEquipements(zone);
       },
       getEquipements(zone){
         this.code_machine = '';
-        axios.get(this.baseUrl+'/historiques/equipement/zone/' + zone)
+        axios.get('/historiques/equipement/zone/' + zone)
         .then(response =>this.e =  response.data)
         .catch(error => console.log(error));
         this.getCodePannes(zone);
       },
       getCodePannes(zone){
         this.code_panne = ''
-        axios.get(this.baseUrl+"/historiques/code-panne/"+zone)
+        axios.get("/historiques/code-panne/"+zone)
         .then(response => this.c = response.data)
         .catch(error => console.log(error))
       },
@@ -212,7 +211,7 @@ import { required } from 'vuelidate/lib/validators';
         }
       },
       historiqueStore(){
-        axios.post(this.baseUrl+'/historiques',{
+        axios.post('/historiques',{
             heure_demande: this.heure_demande,
             jour: this.jour,
             zone: this.zone,

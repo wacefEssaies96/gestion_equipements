@@ -176,7 +176,6 @@
                 filePath:'',
                 typeDocument:'',
                 documents:[],
-                baseUrl:process.env.MIX_URL,
             }
         },
         watch:{
@@ -218,7 +217,7 @@
             },
             update(){
                 var json_arr = JSON.stringify(this.documents);
-                axios.patch(this.baseUrl+'/equipements/edit/' + this.equipementToEdit.id, {
+                axios.patch('/equipements/edit/' + this.equipementToEdit.id, {
                     nom: this.nom,
                     code: this.code,
                     designation: this.designation,

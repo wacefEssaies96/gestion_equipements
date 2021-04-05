@@ -177,7 +177,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             h_fin_service: '',
             password: '',
             repeatPassword: '',
-            baseUrl:process.env.MIX_URL,
         }
     },
     validations: {
@@ -218,7 +217,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
         },
         async isValid(value){
             if(value==='') return true;
-            const response = await axios.get(this.baseUrl+'/responsables/verifemail/'+value)
+            const response = await axios.get('/responsables/verifemail/'+value)
             .catch(error => console.log(error));
             if(response.data.length == 0) return true;
         }
@@ -257,7 +256,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             }
         },
         technicienStore(){
-            axios.post(this.baseUrl+'/techniciens',{
+            axios.post('/techniciens',{
                 nom: this.nom,
                 prenom: this.prenom,
                 email: this.email,

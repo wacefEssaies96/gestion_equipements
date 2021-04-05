@@ -610,7 +610,6 @@
         data(){
         return{
           data:'',
-          baseUrl:process.env.MIX_URL
         }
       },
       created(){
@@ -620,7 +619,7 @@
         if(this.user.role == 'HOTLINE'){
           this.$router.push('/hist-hotline');
         }
-        axios.get(this.baseUrl+'/getCount')
+        axios.get('/getCount')
           .then(response =>  this.data = response.data)
           .catch(error => console.log(error));
       },

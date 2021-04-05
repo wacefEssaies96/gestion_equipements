@@ -124,14 +124,13 @@
           qEmail:'',
           hidden:'true',
           loading:true,
-          baseUrl:process.env.MIX_URL,
         }
       },
       created(){
         if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-        axios.get(this.baseUrl+"/responsables/liste")
+        axios.get("/responsables/liste")
         .then(response => {
           this.responsables = response.data;
           this.loading = false;
@@ -140,7 +139,7 @@
       },
       methods:{
         getResults(page = 1) {
-          axios.get(this.baseUrl+'/responsables/liste?page=' + page)
+          axios.get('/responsables/liste?page=' + page)
           .then(response => {
             this.responsables = response.data;
           })
@@ -197,7 +196,7 @@
           this.toast(value);
         },
         getResponsable(id){
-          axios.get(this.baseUrl+'/responsables/edit/' + id)
+          axios.get('/responsables/edit/' + id)
           .then(response => this.responsableToEdit = response.data)
           .catch(error => console.log(error));
         },

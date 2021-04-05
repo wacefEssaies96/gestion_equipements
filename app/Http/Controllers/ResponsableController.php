@@ -21,19 +21,10 @@ class ResponsableController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'nom' => 'required',
-            'prenom' => 'required',
-            'pseudo' => 'required|unique:users',
-            'password' => 'required:min:6',
-            'email' => 'required|email|unique:users',
-            'tel' => 'required'
-        ]);
         $user = new User();
         $user->nom = request('nom');
         $user->prenom = request('prenom');
         $user->email = request('email');
-        $user->pseudo = request('pseudo');
         $password = Hash::make($request['password']);
         $user->password = $password;
         $user->tel = request('tel');
@@ -59,7 +50,6 @@ class ResponsableController extends Controller
         $responsable->nom = request('nom');
         $responsable->prenom = request('prenom');
         $responsable->email = request('email');
-        $responsable->pseudo = request('pseudo');
         $responsable->tel = request('tel');
         if(request('password') != ''){
             $password = Hash::make(request('password'));

@@ -173,17 +173,17 @@ export default {
         codePannes: '',
         hidden:'true',
         loading:true,
-        baseUrl:process.env.MIX_URL,
+        
       }
     },
     async created(){
       if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-      await axios.post(this.baseUrl+"/historiques/liste")
+      await axios.post("/historiques/liste")
       .then(response => this.historiques = response.data)
       .catch(error => console.log(error))
-      await axios.get(this.baseUrl+"/historiques/techs")
+      await axios.get("/historiques/techs")
       .then(response => {
         this.techs = response.data
         this.loading = false;
@@ -192,7 +192,7 @@ export default {
     },
     methods:{
       getResults(page = 1) {
-        axios.post(this.baseUrl+'/historiques/liste?page=' + page)
+        axios.post('/historiques/liste?page=' + page)
         .then(response => {
           this.historiques = response.data;
         })
@@ -244,31 +244,31 @@ export default {
         this.q.append('appelle', this.qAppelle);
         this.q.append('tech_id', this.qTech);
 
-        axios.post(this.baseUrl+"/historiques/liste", this.q)
+        axios.post("/historiques/liste", this.q)
         .then(response => this.historiques = response.data)
         .catch(error => console.log(error))
 
       },
       getHistorique(id){
-        axios.get(this.baseUrl+'/historiques/edit/' + id)
+        axios.get('/historiques/edit/' + id)
         .then(response => this.historiqueToEdit = response.data)
         .catch(error => console.log(error));  
         setTimeout(() => this.getTech(this.historiqueToEdit[0].zone), 2000);
         setTimeout(() => this.getEquipements(this.historiqueToEdit[0].zone), 2000);
       },
       getTech(zone){
-        axios.get(this.baseUrl+"/historiques/techniciens/" + zone)
+        axios.get("/historiques/techniciens/" + zone)
         .then(response => this.tech = (response.data)) 
         .catch(error => console.log(error))
       },        
       getEquipements(zone){
-        axios.get(this.baseUrl+'/historiques/equipement/zone/' + zone)
+        axios.get('/historiques/equipement/zone/' + zone)
         .then(response =>this.equipements =  response.data)
         .catch(error => console.log(error));
         this.getCodePannes(zone);
       },
       getCodePannes(zone){
-        axios.get(this.baseUrl+"/historiques/code-panne/"+zone)
+        axios.get("/historiques/code-panne/"+zone)
         .then(response => this.codePannes = response.data)
         .catch(error => console.log(error))
       },
