@@ -3,7 +3,7 @@
   <div class="content-wrapper">
 
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -66,7 +66,7 @@
         </div>
       </div>
       <!-- /.card-header -->
-      <add-production @production-added="refreshAdded"></add-production>  
+      <AddProduction @production-added="refreshAdded"></AddProduction>  
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -85,14 +85,14 @@
               <td>{{ production.email }}</td>
               <td>{{ production.tel }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getProduction(production.id)">
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getProduction(production.id)">
                   <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(production.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">
+                <button @click="setId(production.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger">
                   <i class="fas fa-trash-alt" title="Supprimer"/>
                 </button>
-                <delete-production v-bind:id="id" @production-deleted="refreshDeleted"></delete-production>
-                <edit-production v-bind:productionToEdit="productionToEdit" @production-updated="refreshEdited"></edit-production>
+                <DeleteProduction v-bind:id="id" @production-deleted="refreshDeleted"></DeleteProduction>
+                <EditProduction v-bind:productionToEdit="productionToEdit" @production-updated="refreshEdited"></EditProduction>
               </td>
             </tr>
           </tbody>
@@ -127,6 +127,7 @@
           hidden:'true',
           id:'',
           baseUrl:process.env.MIX_URL,
+          loading:true
         }
       },
       created(){
@@ -134,7 +135,10 @@
           this.$router.push('/');
         }
         axios.get(this.baseUrl+"/productions/liste")
-        .then(response => this.productions = response.data)
+        .then(response => {
+          this.productions = response.data
+          this.loading = false;
+        })
         .catch(error => console.log(error))
       },
       methods:{

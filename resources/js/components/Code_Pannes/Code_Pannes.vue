@@ -3,7 +3,7 @@
   <div class="content-wrapper">
 
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -66,7 +66,7 @@
         </div>
       </div>
       <!-- /.card-header -->
-    <AddCode_Panne @codePanne-added="refreshAdded"></AddCode_Panne>   
+    <AddCodePanne @codePanne-added="refreshAdded"></AddCodePanne>   
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -83,15 +83,14 @@
               <td>{{ code_panne.designation }}</td>
               <td>{{ code_panne.zone }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getCode_Panne(code_panne.id)">
-                 <i class="fas fa-edit" title="Modifier"/>
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getCode_Panne(code_panne.id)">
+                  <i class="fas fa-edit" title="Modifier"/>
                 </button>              
-                <button @click="setId(code_panne.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">
-                  <i class="fas fa-trash-alt" title="Supprimer"/>
+                <button @click="setId(code_panne.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger">
+                   <i class="fas fa-trash-alt" title="Supprimer"/>
                   </button>
-                <DeleteCode_Panne v-bind:id="id" @codePanne-deleted="refreshDeleted"></DeleteCode_Panne>
-                <EditCode_Panne v-bind:codePanneToEdit="codePanneToEdit" @codePanne-updated="refreshEdited">
-                </EditCode_Panne>
+                <DeleteCodePanne v-bind:id="id" @codePanne-deleted="refreshDeleted"></DeleteCodePanne>
+                <EditCodePanne v-bind:codePanneToEdit="codePanneToEdit" @codePanne-updated="refreshEdited"></EditCodePanne>
               </td>
             </tr>
           </tbody>
@@ -103,16 +102,16 @@
   </div>
 </template>
 <script>
-  import AddCode_Panne from './AddCode_Panne';
-  import EditCode_Panne from './EditCode_Panne';
-  import DeleteCode_Panne from './DeleteCode_Panne';
+  import AddCodePanne from './AddCode_Panne';
+  import EditCodePanne from './EditCode_Panne';
+  import DeleteCodePanne from './DeleteCode_Panne';
     export default {
-      components:{
-          AddCode_Panne,
-          EditCode_Panne,
-          DeleteCode_Panne,
+        components:{
+          AddCodePanne,
+          EditCodePanne,
+          DeleteCodePanne,
       },
-      props:['user'], 
+      props:['user'],
       data(){
         return{
           code_pannes: {},
@@ -123,6 +122,7 @@
           q: new FormData(),
           hidden: 'true',
           id:'',
+          loading:true,
           baseUrl:process.env.MIX_URL,
         }
       },
@@ -131,7 +131,10 @@
           this.$router.push('/');
         }
         axios.post(this.baseUrl+"/code_pannes/liste")
-        .then(response => this.code_pannes = response.data)
+        .then(response => {
+          this.code_pannes = response.data;
+          this.loading = false;
+          })
         .catch(error => console.log(error))
       },
       methods:{

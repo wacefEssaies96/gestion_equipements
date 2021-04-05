@@ -64,12 +64,7 @@
   </div>
 </template>
 <script>
- import index from './index';
- 
 export default {
-   components:{
-          index,
-      },
     data(){
       return{
         files: '',
@@ -82,9 +77,14 @@ export default {
       axios.get(this.baseUrl+"/getAccessData")
       .then(response => this.accessData = JSON.parse(response.request.response))
       .catch(error => console.log(error))
-      axios.get(this.baseUrl+"/getalldata")
-      .then(response => this.files = response.data)
-      .catch(error => console.log(error))
+      
+      setTimeout(()=>{
+        if(this.accessData.userName != null){
+          axios.get(this.baseUrl+"/getalldata")
+          .then(response => this.files = response.data)
+          .catch(error => console.log(error))
+        }
+      },1000);
     },
     methods:{
       getDataById(id){

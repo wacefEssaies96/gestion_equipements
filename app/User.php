@@ -46,4 +46,7 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Technicien');
     }
+    public function production(){
+        return $this->hasOne('App\Production');
+    }
 }

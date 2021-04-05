@@ -1,9 +1,9 @@
 <template>
 <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" >
 
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -66,7 +66,7 @@
         </div>
       </div>
       <!-- /.card-header -->
-      <add-hotline @hotline-added="refreshAdded"></add-hotline>  
+      <AddHotline @hotline-added="refreshAdded"></AddHotline>  
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -85,14 +85,12 @@
               <td>{{ hotline.email }}</td>
               <td>{{ hotline.tel }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getHotline(hotline.id)">
-                  <i class="fas fa-edit" title="Modifier"/>
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getHotline(hotline.id)">
+                <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(hotline.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">
-                  <i class="fas fa-trash-alt" title="Supprimer"/>
-                </button>
-                <delete-hotline v-bind:id="id" @hotline-deleted="refreshDeleted"></delete-hotline>
-                <edit-hotline v-bind:hotlineToEdit="hotlineToEdit" @hotline-updated="refreshEdited"></edit-hotline>
+                <button @click="setId(hotline.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt" title="Supprimer"/></button>
+                <DeleteHotline v-bind:id="id" @hotline-deleted="refreshDeleted"></DeleteHotline>
+                <EditHotline v-bind:hotlineToEdit="hotlineToEdit" @hotline-updated="refreshEdited"></EditHotline>
               </td>
             </tr>
           </tbody>
@@ -107,12 +105,11 @@
   import AddHotline from './AddHotline';
   import EditHotline from './EditHotline';
   import DeleteHotline from './DeleteHotline';
-  
     export default {
       components:{
-          AddHotline,
-          EditHotline,
-          DeleteHotline
+        AddHotline,
+        EditHotline,
+        DeleteHotline
       },
       props:['user'],
       data(){
@@ -126,6 +123,7 @@
           qEmail:'',
           hidden:'true',
           id:'',
+          loading:true,
           baseUrl:process.env.MIX_URL,
         }
       },
@@ -134,7 +132,10 @@
           this.$router.push('/');
         }
         axios.get(this.baseUrl+"/hotlines/liste")
-        .then(response => this.hotlines = response.data)
+        .then(response => {
+          this.hotlines = response.data;
+          this.loading = false;
+          })
         .catch(error => console.log(error))
       },
       methods:{
@@ -199,13 +200,10 @@
           this.hotlines = hotlines.data; 
         },
         getHotline(id){
-            axios.get(this.baseUrl+'/hotlines/edit/' + id)
-            .then(response => this.hotlineToEdit = response.data)
-            .catch(error => console.log(error));
+          axios.get(this.baseUrl+'/hotlines/edit/' + id)
+          .then(response => this.hotlineToEdit = response.data)
+          .catch(error => console.log(error));
         },
-      },
-      mounted() {
-        console.log('Component mounted.')
       }
     }
 </script>

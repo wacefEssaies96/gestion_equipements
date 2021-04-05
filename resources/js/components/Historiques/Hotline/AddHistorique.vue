@@ -27,19 +27,23 @@
                   <div class="row">
                     <div class="col-sm-6">
                       <div class="form-group">
-                        <label for="num_bt">Num Bt</label>
-                        <input type="text" class="form-control" placeholder="Num Bt" v-model="num_bt" 
-                          :class="{'is-invalid':$v.num_bt.$invalid,'is-valid':!$v.num_bt.$invalid}"
-                        >
-                        <div class="valid-feedback">Num valide</div>
-                        <div class="invalid-feedback">
-                          <span v-if="!$v.num_bt.required">Veuillez entrer un Num Bt !</span>
-                        </div>
+                    <label for="tech">Techniciens</label>
+                      <select id="selectTech" class="form-control" v-model="tech_id"
+                      :class="{'is-invalid':(tech_id != '') ? $v.tech_id.$invalid:'', 'is-valid':!$v.tech_id.$invalid}"
+                      >
+                          <option v-for="technicien in techniciens" :key="technicien.user_id" :value="technicien.user_id">
+                              {{technicien.user.nom}} {{technicien.user.prenom}}
+                          </option>
+                      </select>
+                      <div class="valid-feedback">Technicien validé</div>
+                      <div class="invalid-feedback">
+                          <span v-if="!$v.tech_id.required">Veuillez choisir une option !</span>
                       </div>
+                  </div>
                       <div class="form-group">
                         <label for="heure_demande">Heure de demande</label>
                         <input type="time" class="form-control" placeholder="Heure de demande" v-model="heure_demande"
-                        :class="{'is-invalid':$v.heure_demande.$invalid, 'is-valid':!$v.heure_demande.$invalid}">
+                        :class="{ 'is-invalid':(heure_demande != '') ? $v.heure_demande.$invalid: '', 'is-valid':!$v.heure_demande.$invalid}">
                         <div class="valid-feedback">Heure de demande valide</div>
                         <div class="invalid-feedback">
                           <span v-if="!$v.heure_demande.required">Veuillez mettre une date !</span>
@@ -50,7 +54,7 @@
                       <div class="form-group">
                         <label for="jour">Jour</label>
                         <input type="date" class="form-control" placeholder="Jour" v-model="jour"
-                        :class="{'is-invalid':$v.jour.$invalid, 'is-valid':!$v.jour.$invalid}">
+                        :class="{'is-invalid':(jour != '') ? $v.jour.$invalid:'', 'is-valid':!$v.jour.$invalid}">
                         <div class="valid-feedback">Jour validé</div>
                         <div class="invalid-feedback">
                           <span v-if="!$v.jour.required">Veuillez remplir ce champs !</span>
@@ -59,7 +63,7 @@
                       <div class="form-group">
                         <label for="zone">Zone</label>
                             <select class="form-control" v-model="zone"
-                            :class="{'is-invalid':$v.zone.$invalid, 'is-valid':!$v.zone.$invalid}" @change="getTechniciens(zone)">
+                            :class="{'is-invalid':(zone != '') ? $v.zone.$invalid:'', 'is-valid':!$v.zone.$invalid}" @change="getTechniciens(zone)">
                                 <option value="Assemblage">Assemblage</option>
                                 <option value="Sertissage">Sertissage</option>
                                 <option value="Préparation">Préparation</option>
@@ -72,20 +76,6 @@
                             </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label for="tech">Techniciens</label>
-                      <select id="selectTech" class="form-control" v-model="tech_id"
-                      :class="{'is-invalid':$v.tech_id.$invalid, 'is-valid':!$v.tech_id.$invalid}"
-                      >
-                          <option v-for="technicien in techniciens" :key="technicien.user_id" :value="technicien.user_id">
-                              {{technicien.user.nom}} {{technicien.user.prenom}}
-                          </option>
-                      </select>
-                      <div class="valid-feedback">Technicien validé</div>
-                      <div class="invalid-feedback">
-                          <span v-if="!$v.tech_id.required">Veuillez choisir une option !</span>
-                      </div>
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -112,7 +102,6 @@ import { required } from 'vuelidate/lib/validators';
       data(){
         return{
           techniciens: {},
-          num_bt: '',
           heure_demande: '',
           jour: '',
           zone: '',
@@ -138,7 +127,6 @@ import { required } from 'vuelidate/lib/validators';
       },
       historiqueStore(){
         axios.post(this.baseUrl+'/historiques',{
-            num_bt: this.num_bt,
             heure_demande: this.heure_demande,
             jour: this.jour,
             zone: this.zone,
@@ -149,9 +137,6 @@ import { required } from 'vuelidate/lib/validators';
       },
     },
     validations: {
-      num_bt: {
-        required,
-      },
       heure_demande: {
         required,
       },

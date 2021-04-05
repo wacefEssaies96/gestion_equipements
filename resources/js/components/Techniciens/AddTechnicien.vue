@@ -60,7 +60,6 @@
                                 <span v-if="!$v.tel.maxLength">Veuillez entrer 8 chiffre ! (********)</span>
                             </div>
                             </div>
-                            
                         </div>
                         </div>
                         <div class="form-group">

@@ -167,6 +167,7 @@
                                         <option value="P">P</option>
                                         <option value="PH">PH</option>
                                         <option value="S">S</option>
+                                        <option value="PS">PS</option>
                                     </select>
                                 <div class="valid-feedback">Validé</div>
                                 <div class="invalid-feedback">

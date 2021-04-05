@@ -9,15 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class ResponsableController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('pages.responsables');
-    }
 
     public function liste()
     {
@@ -28,22 +19,6 @@ class ResponsableController extends Controller
         return response()->json($responsable);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $this->validate($request,[
@@ -69,11 +44,6 @@ class ResponsableController extends Controller
         if($user){
             return $this->refresh();  
         }
-    }
-
-    public function show(Responsable $responsable)
-    {
-        //
     }
 
     public function edit($id)
@@ -106,7 +76,7 @@ class ResponsableController extends Controller
     }
 
     public function refresh(){
-        $responsable =  \DB::table('users')->where('role','=','RESPONSABLE')->paginate(1);
+        $responsable =  \DB::table('users')->where('role','=','RESPONSABLE')->paginate(10);
         return response()->json($responsable);
     }
 }

@@ -142,7 +142,7 @@ import { required} from 'vuelidate/lib/validators';
             commentaire: this.commentaire,
            
         })
-        .then(response => console.log(response.data) ) //this.$emit('feedback-added',response)
+        .then(response => this.$emit('feedback-added',response)) 
         .catch(error => console.log(error));
         this.refreshData();
         
@@ -161,9 +161,9 @@ import { required} from 'vuelidate/lib/validators';
         this.commentaire= '';
         
       },
-      getEquipById($id){
+      getEquipById(id){
         this.equipement = '';
-        axios.get(this.baseUrl+'/equipements/equipement/nom/' + nom)
+        axios.get(this.baseUrl+'/equipements/equipement/nom/' + id)
         .then(response =>this.e =  response.data)
         .catch(error => console.log(error));
       }

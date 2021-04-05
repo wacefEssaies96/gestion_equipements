@@ -22,31 +22,25 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="heure_fin">Heure de fin de travaille</label>
-                                    <input type="time" class="form-control" placeholder="Heure de fin de travaille" v-model="heure_fin" 
-                                    :class="{'is-invalid':$v.heure_fin.$invalid,'is-valid':!$v.heure_fin.$invalid}"
-                                    >
+                                    <label for="code_panne">Code panne</label>
+                                    <v-select v-model="code_panne" :multiple="true" 
+                                        :options="options" 
+                                        :get-option-label='option => option.code'
+                                        :reduce='option => option.id'
+                                        :class="{'is-invalid':(code_panne != '') ? $v.code_panne.$invalid:'', 'is-valid':!$v.code_panne.$invalid}"
+                                        ></v-select>
                                     <div class="valid-feedback">Validé</div>
                                     <div class="invalid-feedback">
-                                        <span v-if="!$v.heure_fin.required">Veuillez remplir ce champs !</span>
+                                        <span v-if="!$v.code_panne.required">Veuillez choisir une option !</span>
                                     </div>
                                 </div>
-                            <div class="form-group">
-                                <label for="piece_rechange">Pièce de rechange</label>
-                                <input type="text" class="form-control" placeholder="Pièce de rechange" v-model="piece_rechange"
-                                :class="{'is-invalid':$v.piece_rechange.$invalid, 'is-valid':!$v.piece_rechange.$invalid}">
-                                <div class="valid-feedback">Validé</div>
-                                <div class="invalid-feedback">
-                                    <span v-if="!$v.piece_rechange.required">Veuillez remplir ce champs !</span>
-                                </div>
-                            </div>
                                     
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="code_machine">Code machine</label>
                                     <select class="form-control" v-model="code_machine"
-                                    :class="{'is-invalid':$v.code_machine.$invalid, 'is-valid':!$v.code_machine.$invalid}">
+                                    :class="{'is-invalid':(code_machine != '') ? $v.code_machine.$invalid:'', 'is-valid':!$v.code_machine.$invalid}">
                                         <option v-for="equipement in e" :key="equipement.id" :value="equipement.id">
                                             {{equipement.code}}
                                         </option>
@@ -56,25 +50,22 @@
                                         <span v-if="!$v.code_machine.required">Veuillez choisir une option !</span>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="code_panne">Code panne</label>
-                                    <v-select v-model="code_panne" :multiple="true" 
-                                        :options="options" 
-                                        :get-option-label='option => option.code'
-                                        :reduce='option => option.id'
-                                        :class="{'is-invalid':$v.code_panne.$invalid, 'is-valid':!$v.code_panne.$invalid}"
-                                        ></v-select>
-                                    <div class="valid-feedback">Validé</div>
-                                    <div class="invalid-feedback">
-                                        <span v-if="!$v.code_panne.required">Veuillez choisir une option !</span>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
+                           <div class="form-group">
+                                    <label for="piece_rechange">Pièce de rechange</label>
+                                    <input type="text" class="form-control" placeholder="Pièce de rechange" v-model="piece_rechange"
+                                    :class="{'is-invalid':(piece_rechange != '') ? $v.piece_rechange.$invalid : '', 'is-valid':!$v.piece_rechange.$invalid}">
+                                    <div class="valid-feedback">Validé</div>
+                                    <div class="invalid-feedback">
+                                        <span v-if="!$v.piece_rechange.required">Veuillez remplir ce champs !</span>
+                                    </div>
+                                </div>
                         <div class="form-group">
                             <label for="travaille">Travaille effectué</label>
                             <textarea class="form-control" placeholder="Travaille éffectué" v-model="travaille"
-                            :class="{'is-invalid':$v.travaille.$invalid, 'is-valid':!$v.travaille.$invalid}"></textarea>
+                            :class="{'is-invalid':(travaille != '') ? $v.travaille.$invalid : '', 'is-valid':!$v.travaille.$invalid}"></textarea>
                             <div class="valid-feedback">Validé</div>
                             <div class="invalid-feedback">
                             <span v-if="!$v.travaille.required">Veuillez remplir ce champs !</span>
@@ -83,37 +74,25 @@
                         <div class="form-group">
                             <template v-if="id.zone == 'Assemblage'">
                                 <label for="num_planche">Num Planche</label>
-                                <input type="text" class="form-control" v-model="num_planche"
-                                :class="{'is-invalid':$v.num_planche.$invalid, 'is-valid':!$v.num_planche.$invalid}">
-                                <div class="valid-feedback">Validé</div>
-                                <div class="invalid-feedback">
-                                <span v-if="!$v.num_planche.required">Veuillez remplir ce champs !</span>
-                                </div>
+                                <input type="text" class="form-control" v-model="num_planche">
                             </template>
                             <template v-if="id.zone == 'Sertissage'">
                                 <label for="type_travaille">Type de travaille</label>
-                                    <select v-model="type_travaille" class="form-control"
-                                    :class="{'is-invalid':$v.type_travaille.$invalid, 'is-valid':!$v.type_travaille.$invalid}">
+                                    <select v-model="type_travaille" class="form-control">
                                         <option value="">Choisir le type de travaille</option>
                                         <option value="C">C</option>
                                         <option value="P">P</option>
                                         <option value="PH">PH</option>
                                         <option value="S">S</option>
+                                        <option value="PS">PS</option>
                                     </select>
-                                <div class="valid-feedback">Validé</div>
-                                <div class="invalid-feedback">
-                                    <span v-if="!$v.type_travaille.required">Veuillez remplir ce champs !</span>
-                                </div>
+                               
                                
                             </template>
                             <template v-if="id.zone == 'Electrique'">
                                 <label for="nom_support">Nom Support</label>
-                                <input type="text" class="form-control" v-model="nom_support"
-                                :class="{'is-invalid':$v.nom_support.$invalid, 'is-valid':!$v.nom_support.$invalid}">
-                                <div class="valid-feedback">Validé</div>
-                                <div class="invalid-feedback">
-                                <span v-if="!$v.nom_support.required">Veuillez remplir ce champs !</span>
-                                </div>
+                                <input type="text" class="form-control" v-model="nom_support">
+                                
                             </template>
                         </div>
                         <div class="form-group">
@@ -147,7 +126,6 @@
         return{
             e: {},
             c:[],
-            heure_fin: '',
             travaille: '',
             commentaire: '',
             piece_rechange: '',
@@ -159,7 +137,6 @@
             nom_support:'',
             hist: this.id,
             baseUrl:process.env.MIX_URL,
-
         }
     },
     watch:{
@@ -174,7 +151,6 @@
     methods: {
       update(){
         axios.patch(this.baseUrl+'/histtech/edit/' + this.hist.id, {
-            heure_fin: this.heure_fin,
             travaille: this.travaille,
             piece_rechange: this.piece_rechange,
             commentaire: this.commentaire,
@@ -199,9 +175,7 @@
       },
     },
     validations: {
-        heure_fin:{
-            required
-        },
+
         travaille: {
             required
         },
@@ -216,15 +190,6 @@
         },
         code_panne: {
             required
-        },
-        num_planche: {
-           
-        },
-        type_travaille:{
-            
-        },
-        nom_support:{
-           
         }
     },
   }

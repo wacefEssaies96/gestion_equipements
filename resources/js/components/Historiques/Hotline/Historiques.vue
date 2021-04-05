@@ -2,7 +2,7 @@
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -117,18 +117,20 @@
             </div>
           </div>
           <!-- /.card-header -->
-          <add-historique @historique-added="refreshAdded"></add-historique>
+          <AddHistorique @historique-added="refreshAdded"></AddHistorique>
           <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap">
               <thead>
                 <tr>
                   <th>Num Bt</th>
                   <th>Heure de demande</th>
+                  <th>Heure de début</th>
+                  <th>Heure de fin</th>
+                  <th>Heure d'attente</th>
+                  <th>Heure d'arret</th>
                   <th>Jour</th>
                   <th>Zone</th>
                   <th>Appelle</th>
-                  <th>Heure de début</th>
-                  <th>Heure de fin</th>
                   <th>Travaille éffectué</th>
                   <th>Pièce de rechange</th>
                   <th>Commentaire</th>
@@ -140,20 +142,22 @@
                   v-for="histHotline in histsHotline.data"
                   :key="histHotline.id"
                 >
-                  <td>{{ histHotline.num_bt }}</td>
+                  <td>{{ histHotline.id }}</td>
                   <td>{{ histHotline.heure_demande }}</td>
+                  <td>{{ histHotline.heure_debut }}</td>
+                  <td>{{ histHotline.heure_fin }}</td>
+                  <td>{{ histHotline.heure_attente }}</td>
+                  <td>{{ histHotline.heure_arret }}</td>
                   <td>{{ histHotline.jour }}</td>
                   <td>{{ histHotline.zone }}</td>
                   <td>{{ histHotline.appelle }}</td>
-                  <td>{{ histHotline.heure_debut }}</td>
-                  <td>{{ histHotline.heure_fin }}</td>
                   <td>{{ histHotline.travaille }}</td>
                   <td>{{ histHotline.piece_rechange }}</td>
                   <td>{{ histHotline.commentaire }}</td>
                   <td>
                     <button
                       type="button"
-                      class="btn btn-primary"
+                      class="btn btn-outline-info"
                       data-toggle="modal"
                       data-target="#editModal"
                       @click="getHistorique(histHotline.id)"
@@ -165,20 +169,21 @@
                       data-toggle="modal"
                       data-target="#modal-danger"
                       type="button"
-                      class="btn btn-danger"
+                      class="btn btn-outline-danger"
                     >
                       <i class="fas fa-trash-alt" title="Supprimer"/>
                     </button>
-                    <delete-historique
+                    <DeleteHist
                       v-bind:id="id"
                       @historique-deleted="refreshDeleted"
-                    ></delete-historique>
-                    <edit-historique
+                    ></DeleteHist>
+                    <EditHistorique
                       v-bind:historiqueToEdit="historiqueToEdit"
                       v-bind:tech="tech"
+                      v-bind:histSertissage="histSertissage"
                       @historique-updated="refreshEdited"
                     >
-                    </edit-historique>
+                    </EditHistorique>
                   </td>
                 </tr>
               </tbody>
@@ -288,11 +293,13 @@
                 <tr>
                   <th>Num Bt</th>
                   <th>Heure de demande</th>
+                  <th>Heure de début</th>
+                  <th>Heure de fin</th>
+                  <th>Heure d'attente</th>
+                  <th>Heure d'arret</th>
                   <th>Jour</th>
                   <th>Zone</th>
                   <th>Appelle</th>
-                  <th>Heure de début</th>
-                  <th>Heure de fin</th>
                   <th>Travaille éffectué</th>
                   <th>Pièce de rechange</th>
                   <th>Commentaire</th>
@@ -300,13 +307,15 @@
               </thead>
               <tbody>
                 <tr v-for="historique in historiques.data" :key="historique.id">
-                  <td>{{ historique.num_bt }}</td>
+                  <td>{{ historique.id }}</td>
                   <td>{{ historique.heure_demande }}</td>
+                  <td>{{ historique.heure_debut }}</td>
+                  <td>{{ historique.heure_fin }}</td>
+                  <td>{{ historique.heure_attente }}</td>
+                  <td>{{ historique.heure_arret }}</td>
                   <td>{{ historique.jour }}</td>
                   <td>{{ historique.zone }}</td>
                   <td>{{ historique.appelle }}</td>
-                  <td>{{ historique.heure_debut }}</td>
-                  <td>{{ historique.heure_fin }}</td>
                   <td>{{ historique.travaille }}</td>
                   <td>{{ historique.piece_rechange }}</td>
                   <td>{{ historique.commentaire }}</td>
@@ -326,13 +335,16 @@
   </div>
 </template>
 <script>
+import DeleteHist from '../DeleteHistoriques';
 import AddHistorique from './AddHistorique';
-import EditHistorique from './EditHistorique';   
+import EditHistorique from './EditHistorique';
 export default {
-   components:{
-         AddHistorique,
-         EditHistorique,
-      },
+    components:{
+        AddHistorique,
+        EditHistorique,
+        DeleteHist,
+        baseUrl:process.env.MIX_URL,
+    },
   props:['user'],
   data() {
     return {
@@ -350,6 +362,8 @@ export default {
       qTech: "",
       q: new FormData(),
       id: "",
+      histSertissage: "",
+      loading:true,
       baseUrl:process.env.MIX_URL,
     };
   },
@@ -434,7 +448,10 @@ export default {
         .get(this.baseUrl+"/historiques/edit/" + id)
         .then((response) => (this.historiqueToEdit = response.data))
         .catch((error) => console.log(error));
-      setTimeout(() => this.getTech(this.historiqueToEdit[0].zone), 2000);
+        setTimeout(()=>{
+          this.getTech(this.historiqueToEdit[0].zone)
+          if(this.historiqueToEdit[0].zone == 'Sertissage') this.getHistSertissage(id);
+        },2000);
     },
     getTech(zone) {
       axios
@@ -442,22 +459,31 @@ export default {
         .then((response) => (this.tech = response.data))
         .catch((error) => console.log(error));
     },
+    getHistSertissage(id){
+      axios
+      .get(this.baseUrl+"/hist-sertissage/" + id)
+        .then((response) => (this.histSertissage = response.data))
+        .catch((error) => console.log(error));
+    }
   },
-  created() {
+  async created() {
     if(this.user.role != 'HOTLINE'){
           this.$router.push('/');
         }
-    axios
+    await axios
       .post(this.baseUrl+"/historiques/liste")
       .then((response) => (this.historiques = response.data))
       .catch((error) => console.log(error));
-    axios
+    await axios
       .get(this.baseUrl+"/historiques/techs")
       .then((response) => (this.techs = response.data))
       .catch((error) => console.log(error));
-    axios
+    await axios
       .get(this.baseUrl+"/historiques/hotline")
-      .then((response) => (this.histsHotline = response.data))
+      .then(response => {
+        this.histsHotline = response.data;
+        this.loading = false;
+      })
       .catch((error) => console.log(error));
   },
 };

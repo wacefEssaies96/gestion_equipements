@@ -610,7 +610,7 @@
         data(){
         return{
           data:'',
-          baseUrl:process.env.MIX_URL,
+          baseUrl:process.env.MIX_URL
         }
       },
       created(){

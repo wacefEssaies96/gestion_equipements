@@ -23,18 +23,13 @@
     <!-- /.modal -->
 </template>
 <script>
-import DeleteHistoriques from './DeleteHistoriques';
-
 export default {
-    components:{
-         DeleteHistoriques,
-      },
     props:['id'],
-        data(){
+    data(){
         return{
-          baseUrl:process.env.MIX_URL,
+            baseUrl:process.env.MIX_URL,
         }
-      },
+    },
     methods:{
         deleteHistorique(id){
             axios.delete(this.baseUrl+'/historiques/' + id)

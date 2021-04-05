@@ -6,7 +6,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalCenterTitle">Ajouter un nouveau equipement</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="deleteData">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -16,6 +16,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">Formulaire</h3>
                             </div>
+                            <AddFile @file-added="setFile" v-bind:typeDocument="typeDocument"></AddFile>
                             <!-- /.card-header -->
                             <!-- form start -->
                             <form @submit.prevent="checkAddForm">
@@ -88,7 +89,55 @@
                                         <div class="invalid-feedback">
                                             <span v-if="!$v.zone.required">Veuillez choisir une zone !</span>
                                         </div>
-                                    </div> 
+                                    </div>
+                                    <label>Ajouter des documents via OneDrive</label>
+                                    <template v-if="connected == false">
+                                        <p class="text text-danger">Vous devez être connecté à OneDrive !</p>
+                                    </template> 
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-outline-info" 
+                                            data-toggle="modal" 
+                                            data-target="#addInstructionsEquip"
+                                            :class="{'disabled' : !connected}"
+                                            @click="setType('liste_pr')"
+                                            >
+                                            liste PR
+                                            </a>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-outline-info" 
+                                            data-toggle="modal" 
+                                            data-target="#addInstructionsEquip"
+                                            :class="{'disabled' : !connected}"
+                                            @click="setType('ins_p')"     
+                                            >
+                                            Ins.M.Préventive
+                                            </a>
+
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-outline-info" 
+                                            data-toggle="modal" 
+                                            data-target="#addInstructionsEquip"
+                                            :class="{'disabled' : !connected}"
+                                            @click="setType('dossier_technique')"     
+                                            >
+                                            Dossier Technique
+                                            </a>
+
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <a href="#" class="btn btn-outline-info" 
+                                            data-toggle="modal" 
+                                            data-target="#addInstructionsEquip"
+                                            :class="{'disabled' : !connected}"
+                                            @click="setType('ins_c')"    
+                                            >
+                                            Ins.M.1ér niveau
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">
@@ -99,7 +148,7 @@
                     <!-- /.card -->
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-secondary" @click="deleteData" data-dismiss="modal">Fermer</button>
                         <button hidden type="submit" id="submitAddEqui" class="btn btn-primary" @click="equipementStore" data-dismiss="modal"></button>
                     </div>
                 </div>
@@ -109,7 +158,13 @@
 </template>
 <script>
 import { required, minLength,maxLength } from 'vuelidate/lib/validators';
+import AddFile from '../OneDrive/AddFile';
+
 export default {
+    components:{
+        AddFile
+    },
+    props:['isConnected'],
     data(){
         return{
             nom: '',
@@ -119,7 +174,16 @@ export default {
             image:null,
             imageFile: null,
             zone: '',
+            connected : '',
+            filePath:'',
+            typeDocument:'',
+            documents:[],
             baseUrl:process.env.MIX_URL,
+        }
+    },
+    watch:{
+        isConnected(newVal){
+            this.connected = newVal;
         }
     },
     validations: {
@@ -132,7 +196,7 @@ export default {
             required,
             async isUnique(value){
                 if(value==='') return true;
-                const response = await axios.get(this.baseUrl+'/equipements/'+value)
+                const response = await axios.get('http://localhost:8000/equipements/'+value)
                 .catch(error => console.log(error));
                 if(response.data.length == 0) return true;
             }
@@ -152,15 +216,41 @@ export default {
         
     },
     methods:{
+        deleteData(){
+            if(this.documents.length > 0){
+                var json_arr = JSON.stringify(this.documents);
+                axios.post(this.baseUrl+'/equipements/doc/delete',{
+                    documents:json_arr
+                })
+                .then(response => console.log(response.data))
+                .catch(error => console.log(error));
+                this.documents = [];
+            }else{
+                console.log(this.documents);
+            }
+        },
+        setType(type){
+            this.typeDocument = type; 
+        },
+        setFile(response){
+            this.filePath = response;
+            this.setDocument();
+        },
+        setDocument(){
+            this.filePath = this.filePath.split('public/')[1];
+            let object = new Object();
+            object.filePath = this.filePath;
+            object.type = this.typeDocument;
+            this.documents.push(object);
+        },
         GetImage(e) {
-        let img = e.target.files[0]
-        let reader = new FileReader();
-        this.imageFile = e.img;
-        reader.readAsDataURL(img);
-        reader.onload = e => {
-            this.image = e.target.result
-        }
-        
+            let img = e.target.files[0]
+            let reader = new FileReader();
+            this.imageFile = e.img;
+            reader.readAsDataURL(img);
+            reader.onload = e => {
+                this.image = e.target.result
+            }
         },
         checkAddForm(){
             this.$v.$touch()
@@ -172,6 +262,7 @@ export default {
             }
         },
         equipementStore(){
+            var json_arr = JSON.stringify(this.documents);
             let form = new FormData();
             form.append('nom', this.nom);
             form.append('code', this.code);
@@ -179,8 +270,9 @@ export default {
             form.append('n_serie', this.n_serie);
             form.append('image', this.image);
             form.append('zone', this.zone);
+            form.append('documents', json_arr);
             const config= {headers:{'Content-Type': 'multipart/form-data'}};
-            axios.post(this.baseUrl+'/equipements',form,config)
+            axios.post(this.baseUrl+'/equipements',form ,config)
             .then(response => this.$emit('equipement-added',response))
             .catch(error => console.log(error));
             this.refreshData();

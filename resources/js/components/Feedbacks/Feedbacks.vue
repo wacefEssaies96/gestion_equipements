@@ -3,7 +3,7 @@
   <div class="content-wrapper">
 
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -70,7 +70,7 @@
         </div>
       </div>
       <!-- /.card-header -->
-      <add-feedback @feedback-added="refreshAdded"></add-feedback>  
+      <AddFeedback @feedback-added="refreshAdded"></AddFeedback>  
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -89,18 +89,18 @@
               <td>{{ feedback.nom }}</td>
               <td>{{ feedback.commentaire }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getFeedback(feedback.id)">
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getFeedback(feedback.id)">
                   <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(feedback.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">
+                <button @click="setId(feedback.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger">
                   <i class="fas fa-trash-alt" title="Supprimer"/></button>
-                <delete-feedback v-bind:id="id" @feedback-deleted="refreshDeleted"></delete-feedback>
-                <edit-feedback
+                <DeleteFeedback v-bind:id="id" @feedback-deleted="refreshDeleted"></DeleteFeedback>
+                <EditFeedback
                  v-bind:feedbackToEdit="feedbackToEdit"
                  v-bind:equipements="equipements"
                  @feedback-updated="refreshEdited">
                   
-                </edit-feedback>
+                </EditFeedback>
               </td>
             </tr>
           </tbody>
@@ -135,15 +135,18 @@
           id:'',
           equipements:'',
           baseUrl:process.env.MIX_URL,
-         
+          loading : true
         }
       },
       created(){
-        if(this.user.role != 'ADMIN'){
+        if(this.user.role != 'PRODUCTION'){
           this.$router.push('/');
         }
         axios.get(this.baseUrl+"/feedbacks/liste")
-        .then(response => this.feedbacks = response.data)
+        .then(response => {
+          this.feedbacks = response.data
+          this.loading = false;
+          })
         .catch(error => console.log(error))
       },
       methods:{

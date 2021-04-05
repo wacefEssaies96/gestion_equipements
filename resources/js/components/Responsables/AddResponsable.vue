@@ -57,7 +57,6 @@
                       <span v-if="!$v.tel.maxLength">Veuillez entrer 8 chiffre ! (********)</span>
                     </div>
                   </div>
-                  
                 </div>
               </div>
               <div class="form-group">
@@ -135,6 +134,7 @@ export default {
       minLength: minLength('3'),
       maxLength: maxLength('15')
     },
+
     email: {
       required,
       isUnique(value){

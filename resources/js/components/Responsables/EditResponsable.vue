@@ -57,7 +57,6 @@
                           <span v-if="!$v.tel.maxLength">Veuillez entrer 8 chiffre ! (********)</span>
                         </div>
                       </div>
-                      
                     </div>
                   </div>
                   <div class="form-group">
@@ -172,7 +171,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             minLength: minLength('3'),
             maxLength: maxLength('15')
           },
-          
           email: {
             required,
             isUnique(value){
@@ -200,7 +198,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             }
           },
           password: {
-            //required,
             minLength: minLength(6),
             maxLength: maxLength(15),
           },

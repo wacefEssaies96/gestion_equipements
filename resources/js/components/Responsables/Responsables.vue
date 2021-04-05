@@ -2,7 +2,7 @@
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -65,7 +65,7 @@
         </div>
       </div>
     <!-- /.card-header -->
-      <add-responsable @responsable-added="refresh"></add-responsable> 
+      <AddResponsable @responsable-added="refresh"></AddResponsable> 
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -84,13 +84,12 @@
               <td>{{ responsable.email }}</td>
               <td>{{ responsable.tel }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getResponsable(responsable.id)">
-                  <i class="fas fa-edit" title="Modifier"/>
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getResponsable(responsable.id)">
+                <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(responsable.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">
-                  <i class="fas fa-trash-alt" title="Supprimer"/></button>
-                <delete-responsable v-bind:id="id" @responsable-deleted="refreshDeleted"></delete-responsable>
-                <edit-responsable v-bind:responsableToEdit="responsableToEdit" @responsable-updated="refreshEdited"></edit-responsable>
+                <button @click="setId(responsable.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt" title="Supprimer"/></button>
+                <DeleteResponsable v-bind:id="id" @responsable-deleted="refreshDeleted"></DeleteResponsable>
+                <EditResponsable v-bind:responsableToEdit="responsableToEdit" @responsable-updated="refreshEdited"></EditResponsable>
               </td>
             </tr>
           </tbody>
@@ -105,14 +104,13 @@
   import AddResponsable from './AddResponsable';
   import EditResponsable from './EditResponsable';
   import DeleteResponsable from './DeleteResponsable';
-  
-    
-    export default {
-    components:{
+    export default {    
+      components:{
       AddResponsable,
       EditResponsable,
       DeleteResponsable
     },
+      
       props:['user'],
       data(){
         return{
@@ -125,6 +123,7 @@
           qTel:'',
           qEmail:'',
           hidden:'true',
+          loading:true,
           baseUrl:process.env.MIX_URL,
         }
       },
@@ -133,7 +132,10 @@
           this.$router.push('/');
         }
         axios.get(this.baseUrl+"/responsables/liste")
-        .then(response => this.responsables = response.data)
+        .then(response => {
+          this.responsables = response.data;
+          this.loading = false;
+        })
         .catch(error => console.log(error))
       },
       methods:{
@@ -161,7 +163,7 @@
           this.q.append('tel', this.qTel);
           this.q.append('email', this.qEmail);
 
-          axios.post(this.baseUrl+"/users/search", this.q)
+          axios.post("http://localhost:8000/users/search", this.q)
           .then(response => this.responsables = response.data)
           .catch(error => console.log(error))
 

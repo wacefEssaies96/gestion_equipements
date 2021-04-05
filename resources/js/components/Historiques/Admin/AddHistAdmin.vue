@@ -1,9 +1,6 @@
 <template>
 <div>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-        Ajouter un nouveau historique
-        </button>
+
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
@@ -26,16 +23,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm-4">
-                      <div class="form-group">
-                        <label for="num_bt">Num Bt</label>
-                        <input type="text" class="form-control" placeholder="Num Bt" v-model="num_bt" 
-                          :class="{'is-invalid':(num_bt != '') ? $v.num_bt.$invalid:'','is-valid':!$v.num_bt.$invalid}"
-                        >
-                        <div class="valid-feedback">Num valide</div>
-                        <div class="invalid-feedback">
-                          <span v-if="!$v.num_bt.required">Veuillez entrer un Num Bt !</span>
-                        </div>
-                      </div>
+                    
                       <div class="form-group">
                         <label for="heure_demande">Heure de demande</label>
                         <input type="time" class="form-control" placeholder="Heure de demande" v-model="heure_demande"
@@ -59,7 +47,7 @@
                       <div class="form-group">
                         <label for="zone">Zone</label>
                             <select class="form-control" v-model="zone"
-                            :class="{'is-invalid':(zone != '') ?$v.zone.$invalid:'', 'is-valid':!$v.zone.$invalid}" @change="getTechniciens(zone)">
+                            :class="{'is-invalid':(zone != '') ? $v.zone.$invalid:'', 'is-valid':!$v.zone.$invalid}" @change="getTechniciens(zone)">
                                 <option value="Assemblage">Assemblage</option>
                                 <option value="Sertissage">Sertissage</option>
                                 <option value="Préparation">Préparation</option>
@@ -136,6 +124,7 @@
                                 <option value="P">P</option>
                                 <option value="PH">PH</option>
                                 <option value="S">S</option>
+                                <option value="PS">PS</option>
                             </select>
                         </template>
                         <template v-if="zone == 'Controle éléctrique'">
@@ -171,7 +160,6 @@ import { required } from 'vuelidate/lib/validators';
       data(){
         return{
           techniciens: {},
-          num_bt: '',
           heure_demande: '',
           jour: '',
           zone: '',
@@ -225,7 +213,6 @@ import { required } from 'vuelidate/lib/validators';
       },
       historiqueStore(){
         axios.post(this.baseUrl+'/historiques',{
-            num_bt: this.num_bt,
             heure_demande: this.heure_demande,
             jour: this.jour,
             zone: this.zone,
@@ -245,7 +232,6 @@ import { required } from 'vuelidate/lib/validators';
         this.refreshData();
       },
       refreshData(){
-        this.num_bt = '';
         this.heure_demande= '';
         this.jour= '';
         this.zone= '';
@@ -262,9 +248,6 @@ import { required } from 'vuelidate/lib/validators';
       }
     },
     validations: {
-      num_bt: {
-        required,
-      },
       heure_demande: {
         required,
       },

@@ -43,7 +43,7 @@
                                 <div class="form-group">
                                     <label for="zone">Zone</label>
                                     <select class="form-control" v-model="zone"
-                                    :class="{'is-invalid':(code != '') ?$v.zone.$invalid:'', 'is-valid':!$v.zone.$invalid}">
+                                    :class="{'is-invalid':(zone != '') ?$v.zone.$invalid:'', 'is-valid':!$v.zone.$invalid}">
                                         <option value="Assemblage">Assemblage</option>
                                         <option value="Sertissage">Sertissage</option>
                                         <option value="Préparation">Préparation</option>

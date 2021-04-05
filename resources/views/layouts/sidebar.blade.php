@@ -57,16 +57,10 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <router-link to='/responsables' class="nav-link">
-                    <i class="fas fa-user-tie"></i>
-                    <p>Responsables</p>
-                  </router-link>
-                </li>
-                <li class="nav-item">
-                  <router-link to='/productions' class="nav-link">
-                    <i class="fas fa-user-tie"></i>
-                    <p>Productions</p>
-                  </router-link>
+              <router-link to='/responsables' class="nav-link">
+                <i class="fas fa-user-tie"></i>
+                <p>Responsables</p>
+              </router-link>
                 </li>
                 <li class="nav-item">
                   <router-link to='/hotlines' class="nav-link">
@@ -78,6 +72,12 @@
                   <router-link to='/techniciens' class="nav-link">
                     <i class="fas fa-user"></i>
                     <p>Techniciens</p>
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to='/productions' class="nav-link">
+                    <i class="fas fa-user-tie"></i>
+                    <p>Productions</p>
                   </router-link>
                 </li>
               </ul>
@@ -98,23 +98,7 @@
                   Code pannes
                 </p>
               </router-link>
-            </li> 
-            <li class="nav-item">
-              <router-link to='/onedrive' class="nav-link">
-                <i class="nav-icon fas fa-cloud"></i>
-                <p>
-                  One drive
-                </p>
-              </a>
-            </li>  
-            <li class="nav-item">
-              <router-link to='/feedbacks' class="nav-link">
-              <i class="nav-icon far fa-comment-alt"></i>
-                <p>
-                  Feedback
-                </p>
-              </a>
-            </li>            
+            </li>        
             <li class="nav-item">
               <router-link to="/hist-admin" class="nav-link">
                 <i class="nav-icon fas fa-history"></i>
@@ -144,18 +128,18 @@
             </router-link>
           </li>
           @endif
-            
           @if (Auth::user()->role == "PRODUCTION")
           <li class="nav-item">
-            <router-link to="/feedback-production" class="nav-link">
-              <i class="nav-icon fas fa-history"></i>
+            <router-link to='/feedbacks' class="nav-link">
+            <i class="nav-icon far fa-comment-alt"></i>
               <p>
-                feedback Production
+                Feedback
               </p>
-            </router-link>
-          </li>
+            </a>
+          </li> 
           @endif
         </ul>
+        
       </nav>
       <!-- /.sidebar-menu -->
     </div>

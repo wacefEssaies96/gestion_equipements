@@ -27,9 +27,9 @@ export default {
     props:['id'],
     data(){
         return{
-          baseUrl:process.env.MIX_URL,
+            baseUrl:process.env.MIX_URL,
         }
-      },
+    },
     methods:{
         deleteCodePanne(id){
             axios.delete(this.baseUrl+'/code_pannes/' + id)

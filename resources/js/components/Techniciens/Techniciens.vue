@@ -3,7 +3,7 @@
   <div class="content-wrapper">
 
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -38,7 +38,7 @@
                   <input @keyup="search" type="text" v-model="qPrenom" class="form-control" placeholder="Prenom">
                 </div>
               </div>
-             
+              
               <div class="col">
                 <div class="from-group">
                   <label>Tel</label>
@@ -51,25 +51,6 @@
                   <input @keyup="search" type="text" v-model="qEmail" class="form-control" placeholder="Email">
                 </div>
               </div>
-              <div class="col">
-                <div class="from-group">
-                  <label>Qualification</label>
-                  <input @keyup="search" type="textarea" v-model="qQualification" class="form-control" placeholder="Qualification">
-                </div>
-              </div>
-              <div class="col">
-                <div class="from-group">
-                  <label>Heure de début de service</label>
-                  <input @keyup="search" type="time" v-model="qH_debut_service" class="form-control" placeholder="Heure de début de service">
-                </div>
-              </div>
-              <div class="col">
-                <div class="from-group">
-                  <label>Heure de fin de service</label>
-                  <input @keyup="search" type="time" v-model="qH_debut_service" class="form-control" placeholder="Heure de fin de service">
-                </div>
-              </div>
-              
               <div class="col">
                 <div class="from-group">
                   <label>Zone</label>
@@ -98,7 +79,7 @@
         </div>
       </div>
     <!-- /.card-header -->
-      <add-technicien @technicien-added="refreshAdded"></add-technicien>   
+      <AddTechnicien @technicien-added="refreshAdded"></AddTechnicien>   
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -125,14 +106,12 @@
               <td>{{ technicien.h_fin_service }}</td>
               <td>{{ technicien.zone }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getTechnicien(technicien.user_id)">
-                  <i class="fas fa-edit" title="Modifier"/>
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getTechnicien(technicien.user_id)">
+                <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(technicien.user_id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">
-                  <i class="fas fa-trash-alt" title="Supprimer"/>
-                  </button>
-                <delete-technicien v-bind:id="id" @technicien-deleted="refreshDeleted"></delete-technicien>
-                <edit-technicien v-bind:technicienToEdit="technicienToEdit" @technicien-updated="refreshEdited"></edit-technicien>
+                <button @click="setId(technicien.user_id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger">Supprimer</button>
+                <DeleteTechnicien v-bind:id="id" @technicien-deleted="refreshDeleted"></DeleteTechnicien>
+                <EditTechnicien v-bind:technicienToEdit="technicienToEdit" @technicien-updated="refreshEdited"></EditTechnicien>
               </td>
             </tr>
           </tbody>
@@ -147,9 +126,8 @@
   import AddTechnicien from './AddTechnicien';
   import EditTechnicien from './EditTechnicien';
   import DeleteTechnicien from './DeleteTechnicien';
-  
     export default {
-      components:{
+    components:{
       AddTechnicien,
       EditTechnicien,
       DeleteTechnicien
@@ -164,12 +142,10 @@
           qPrenom:'',
           qTel:'',
           qEmail:'',
-          qQualification:'',
-          qH_debut_service:'',
-          qH_fin_service:'',
           qZone:'',
           hidden:'true',
           id:'',
+          loading:true,
           baseUrl:process.env.MIX_URL,
         }
       },
@@ -178,7 +154,10 @@
           this.$router.push('/');
         }
         axios.get(this.baseUrl+"/techniciens/liste")
-        .then(response => this.techniciens = response.data)
+        .then(response => {
+          this.techniciens = response.data;
+          this.loading = false;
+        })
         .catch(error => console.log(error))
       },
       methods:{
@@ -226,9 +205,6 @@
           this.q.append('prenom', this.qPrenom);
           this.q.append('tel', this.qTel);
           this.q.append('email', this.qEmail);
-          this.q.append('email', this.qQualification);
-          this.q.append('email', this.qH_debut_service);
-          this.q.append('email', this.qH_fin_service);
           this.q.append('zone', this.qZone);
 
           axios.post(this.baseUrl+"/users/search", this.q)
