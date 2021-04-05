@@ -98,7 +98,6 @@ import { required } from 'vuelidate/lib/validators';
             zone: '',
             equipement: '',
             commentaire: '',
-            baseUrl:process.env.MIX_URL,
           }
         },
         watch:{
@@ -127,7 +126,7 @@ import { required } from 'vuelidate/lib/validators';
     },
          methods: {
             update(){
-                axios.patch(this.baseUrl+'/feedbacks/edit/' + this.feedbackToEdit.id, {
+                axios.patch('/feedbacks/edit/' + this.feedbackToEdit.id, {
                     jour: this.jour,
                     zone: this.zone,
                     equipement: this.equipement,

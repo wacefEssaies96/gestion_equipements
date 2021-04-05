@@ -80,7 +80,6 @@ export default {
         counter:0,
         type: '',
         l:false,
-        baseUrl:process.env.MIX_URL,
       }
     },
     watch:{
@@ -89,12 +88,12 @@ export default {
       }
     },  
     async created(){
-     await axios.get("http://localhost:8000/getAccessData")
+     await axios.get("/getAccessData")
       .then(response => this.accessData = JSON.parse(response.request.response))
       .catch(error => console.log(error))
       
       if(this.accessData.userName != null){
-        await axios.get("http://localhost:8000/getalldata")
+        await axios.get("/getalldata")
         .then(response => this.files = response.data)
         .catch(error => console.log(error)) 
       }
@@ -107,7 +106,7 @@ export default {
       goBack(){
         this.l = true;
         if (this.counter == 1){
-          axios.get("http://localhost:8000/getalldata")
+          axios.get("/getalldata")
           .then(response => {
             this.files = response.data  
             this.l = false;
@@ -117,7 +116,7 @@ export default {
           this.counter = 0;
         }
         if(this.counter > 1){
-          axios.get("http://localhost:8000/getdatabyid/"+this.previous[this.previous.length - this.counter])
+          axios.get("/getdatabyid/"+this.previous[this.previous.length - this.counter])
           .then(response => {
             this.files = response.data
             this.l = false;  
@@ -131,7 +130,7 @@ export default {
         this.l = true;
         this.counter++;
         this.previous.push(id);
-        axios.get("http://localhost:8000/getdatabyid/"+id)
+        axios.get("/getdatabyid/"+id)
         .then(response => {
           this.files = response.data
           this.l = false
@@ -140,7 +139,7 @@ export default {
       },
       downloadData(id){
         this.l = true;
-        axios.get("http://localhost:8000/download/file/"+id)
+        axios.get("/download/file/"+id)
         .then(response => {
           this.$emit('file-added',response.data);
           document.getElementById('close').click();

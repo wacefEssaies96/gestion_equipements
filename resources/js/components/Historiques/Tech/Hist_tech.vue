@@ -152,30 +152,29 @@
         equipements: '',
         codePannes: '',
         hidden: 'false',
-        baseUrl:process.env.MIX_URL,
       }
     },
     created(){
       if(this.user.role != 'TECHNICIEN'){
         this.$router.push('/');
       }
-      axios.post(this.baseUrl+"/historiques/liste")
+      axios.post("/historiques/liste")
       .then(response => this.historiques = response.data)
       .catch(error => console.log(error))
-      axios.get(this.baseUrl+"/hist/tech/liste")
+      axios.get("/hist/tech/liste")
       .then(response => this.histsTech = response.data)
       .catch(error => console.log(error))
 
     },
     methods:{
       confirmAppelle(id){
-        axios.get(this.baseUrl+"/histtech/confirmAppelle/" + id)
+        axios.get("/histtech/confirmAppelle/" + id)
         .then(response => {
             if(response.data == 'erreur'){
               this.toast("Une erreur a été produite !"); 
             }
             else{
-              axios.post(this.baseUrl+"/historiques/liste")
+              axios.post("/historiques/liste")
               .then(response => this.historiques = response.data)
               .catch(error => console.log(error))
               this.histsTech = response.data;
@@ -205,7 +204,7 @@
         this.toast(value);
       },
       getResults(page = 1) {
-        axios.post(this.baseUrl+'/historiques/liste?page=' + page)
+        axios.post('/historiques/liste?page=' + page)
         .then(response => {
           this.historiques = response.data;
         })
@@ -218,13 +217,13 @@
         this.historiques = historiques.data; 
       },
       getEquipements(zone){
-        axios.get(this.baseUrl+'/historiques/equipement/zone/' + zone)
+        axios.get('/historiques/equipement/zone/' + zone)
         .then(response =>this.equipements =  response.data)
         .catch(error => console.log(error));
         this.getCodePannes(zone);
       },
       getCodePannes(zone){
-        axios.get(this.baseUrl+"/historiques/code-panne/"+zone)
+        axios.get("/historiques/code-panne/"+zone)
         .then(response => this.codePannes = response.data)
         .catch(error => console.log(error))
       },

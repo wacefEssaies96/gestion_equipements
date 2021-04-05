@@ -124,14 +124,13 @@
           hidden:'true',
           id:'',
           loading:true,
-          baseUrl:process.env.MIX_URL,
         }
       },
       created(){
         if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-        axios.get(this.baseUrl+"/hotlines/liste")
+        axios.get("/hotlines/liste")
         .then(response => {
           this.hotlines = response.data;
           this.loading = false;
@@ -140,7 +139,7 @@
       },
       methods:{
         getResults(page = 1) {
-          axios.get(this.baseUrl+'/hotlines/liste?page=' + page)
+          axios.get('/hotlines/liste?page=' + page)
           .then(response => {
             this.hotlines = response.data;
           })
@@ -191,7 +190,7 @@
           this.q.append('tel', this.qTel);
           this.q.append('email', this.qEmail);
 
-          axios.post(this.baseUrl+"/users/search", this.q)
+          axios.post("/users/search", this.q)
           .then(response => this.hotlines = response.data)
           .catch(error => console.log(error))
 
@@ -200,7 +199,7 @@
           this.hotlines = hotlines.data; 
         },
         getHotline(id){
-          axios.get(this.baseUrl+'/hotlines/edit/' + id)
+          axios.get('/hotlines/edit/' + id)
           .then(response => this.hotlineToEdit = response.data)
           .catch(error => console.log(error));
         },

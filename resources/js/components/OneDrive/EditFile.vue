@@ -76,7 +76,6 @@ export default {
         previous:[],
         counter:0,
         type: '',
-        baseUrl:process.env.MIX_URL,
       }
     },
     watch:{
@@ -85,12 +84,12 @@ export default {
       }
     },  
     async created(){
-     await axios.get(this.baseUrl+"/getAccessData")
+     await axios.get("/getAccessData")
       .then(response => this.accessData = JSON.parse(response.request.response))
       .catch(error => console.log(error))
       
       if(this.accessData.userName != null){
-        await axios.get(this.baseUrl+"/getalldata")
+        await axios.get("/getalldata")
         .then(response => this.files = response.data)
         .catch(error => console.log(error)) 
       }
@@ -102,14 +101,14 @@ export default {
       },
       goBack(){
         if (this.counter == 1){
-          axios.get(this.baseUrl+"/getalldata")
+          axios.get("/getalldata")
           .then(response => this.files = response.data)
           .catch(error => console.log(error))
           this.previous = [];
           this.counter = 0;
         }
         if(this.counter > 1){
-          axios.get(this.baseUrl+"/getdatabyid/"+this.previous[this.previous.length - this.counter])
+          axios.get("/getdatabyid/"+this.previous[this.previous.length - this.counter])
           .then(response => this.files = response.data)
           .catch(error => console.log(error))
           this.previous.pop();
@@ -119,12 +118,12 @@ export default {
       getDataById(id){
         this.counter++;
         this.previous.push(id);
-        axios.get(this.baseUrl+"/getdatabyid/"+id)
+        axios.get("/getdatabyid/"+id)
         .then(response => this.files = response.data)
         .catch(error => console.log(error))
       },
       downloadData(id){
-        axios.get(this.baseUrl+"/download/file/"+id)
+        axios.get("/download/file/"+id)
         .then(response => {
           this.$emit('file-added',response.data);
           document.getElementById('closeEdit').click();

@@ -134,7 +134,6 @@
           hidden:'true',
           id:'',
           equipements:'',
-          baseUrl:process.env.MIX_URL,
           loading : true
         }
       },
@@ -142,7 +141,7 @@
         if(this.user.role != 'PRODUCTION'){
           this.$router.push('/');
         }
-        axios.get(this.baseUrl+"/feedbacks/liste")
+        axios.get("/feedbacks/liste")
         .then(response => {
           this.feedbacks = response.data
           this.loading = false;
@@ -151,7 +150,7 @@
       },
       methods:{
         getResults(page = 1) {
-          axios.get(this.baseUrl+'/feedbacks/liste?page=' + page)
+          axios.get('/feedbacks/liste?page=' + page)
           .then(response => {
             console.log("what i get ", response.data)
             this.feedbacks = response.data;
@@ -159,7 +158,7 @@
           .catch(error => console.log(error));
         },
         getEquipements(zone){
-        axios.get(this.baseUrl+'/historiques/equipement/zone/' + zone)
+        axios.get('/historiques/equipement/zone/' + zone)
         .then(response =>this.equipements =  response.data)
         .catch(error => console.log(error));
         
@@ -209,7 +208,7 @@
           this.q.append('equipement', this.qEquipement);
           this.q.append('commentaire', this.qCommentaire);
 
-        //   axios.post(this.baseUrl+"/feedbacks/search", this.q)
+        //   axios.post("/feedbacks/search", this.q)
         //   .then(response => this.feedbacks = response.data)
         //   .catch(error => console.log(error))
 
@@ -218,7 +217,7 @@
           this.feedbacks = feedbacks.data; 
         },
         getFeedback(id){
-            axios.get(this.baseUrl+'/feedbacks/edit/' + id)
+            axios.get('/feedbacks/edit/' + id)
             .then(response => this.feedbackToEdit = response.data)
             .catch(error => console.log(error));
         },

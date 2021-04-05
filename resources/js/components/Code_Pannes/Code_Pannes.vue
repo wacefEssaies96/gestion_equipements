@@ -123,14 +123,13 @@
           hidden: 'true',
           id:'',
           loading:true,
-          baseUrl:process.env.MIX_URL,
         }
       },
       created(){
         if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-        axios.post(this.baseUrl+"/code_pannes/liste")
+        axios.post("/code_pannes/liste")
         .then(response => {
           this.code_pannes = response.data;
           this.loading = false;
@@ -139,7 +138,7 @@
       },
       methods:{
         getResults(page = 1) {
-          axios.post(this.baseUrl+'/code_pannes/liste?page=' + page)
+          axios.post('/code_pannes/liste?page=' + page)
           .then(response => {
             this.code_pannes = response.data;
           })
@@ -188,7 +187,7 @@
           this.q.append('zone', this.qZone);
           this.q.append('designation', this.qDesi);
 
-          axios.post(this.baseUrl+"/code_pannes/liste", this.q)
+          axios.post("/code_pannes/liste", this.q)
           .then(response => this.code_pannes = response.data)
           .catch(error => console.log(error))
 
@@ -197,7 +196,7 @@
           this.code_pannes = code_pannes.data; 
         },
         getCode_Panne(id){
-            axios.get(this.baseUrl+'/code_pannes/edit/' + id)
+            axios.get('/code_pannes/edit/' + id)
             .then(response => this.codePanneToEdit = response.data)
             .catch(error => console.log(error));
         },

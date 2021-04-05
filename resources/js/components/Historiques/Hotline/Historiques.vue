@@ -364,7 +364,6 @@ export default {
       id: "",
       histSertissage: "",
       loading:true,
-      baseUrl:process.env.MIX_URL,
     };
   },
   methods: {
@@ -398,7 +397,7 @@ export default {
     },
     getResults(page = 1) {
       axios
-        .post(this.baseUrl+"/historiques/liste?page=" + page)
+        .post("/historiques/liste?page=" + page)
         .then((response) => {
           this.historiques = response.data;
         })
@@ -406,7 +405,7 @@ export default {
     },
     getResultsForHotline(page = 1) {
       axios
-        .get(this.baseUrl+"/historiques/hotline?page=" + page)
+        .get("/historiques/hotline?page=" + page)
         .then((response) => {
           this.histsHotline = response.data;
         })
@@ -420,7 +419,7 @@ export default {
       this.q.append("tech_id", this.qTech);
 
       axios
-        .post(this.baseUrl+"/historiques/liste", this.q)
+        .post("/historiques/liste", this.q)
         .then((response) => (this.historiques = response.data))
         .catch((error) => console.log(error));
     },
@@ -445,7 +444,7 @@ export default {
     },
     getHistorique(id) {
       axios
-        .get(this.baseUrl+"/historiques/edit/" + id)
+        .get("/historiques/edit/" + id)
         .then((response) => (this.historiqueToEdit = response.data))
         .catch((error) => console.log(error));
         setTimeout(()=>{
@@ -455,13 +454,13 @@ export default {
     },
     getTech(zone) {
       axios
-        .get(this.baseUrl+"/historiques/techniciens/" + zone)
+        .get("/historiques/techniciens/" + zone)
         .then((response) => (this.tech = response.data))
         .catch((error) => console.log(error));
     },
     getHistSertissage(id){
       axios
-      .get(this.baseUrl+"/hist-sertissage/" + id)
+      .get("/hist-sertissage/" + id)
         .then((response) => (this.histSertissage = response.data))
         .catch((error) => console.log(error));
     }
@@ -471,15 +470,15 @@ export default {
           this.$router.push('/');
         }
     await axios
-      .post(this.baseUrl+"/historiques/liste")
+      .post("/historiques/liste")
       .then((response) => (this.historiques = response.data))
       .catch((error) => console.log(error));
     await axios
-      .get(this.baseUrl+"/historiques/techs")
+      .get("/historiques/techs")
       .then((response) => (this.techs = response.data))
       .catch((error) => console.log(error));
     await axios
-      .get(this.baseUrl+"/historiques/hotline")
+      .get("/historiques/hotline")
       .then(response => {
         this.histsHotline = response.data;
         this.loading = false;

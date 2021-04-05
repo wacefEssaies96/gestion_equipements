@@ -126,7 +126,6 @@
           qEmail:'',
           hidden:'true',
           id:'',
-          baseUrl:process.env.MIX_URL,
           loading:true
         }
       },
@@ -134,7 +133,7 @@
         if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-        axios.get(this.baseUrl+"/productions/liste")
+        axios.get("/productions/liste")
         .then(response => {
           this.productions = response.data
           this.loading = false;
@@ -143,7 +142,7 @@
       },
       methods:{
         getResults(page = 1) {
-          axios.get(this.baseUrl+'/productions/liste?page=' + page)
+          axios.get('/productions/liste?page=' + page)
           .then(response => {
             this.productions = response.data;
           })
@@ -194,7 +193,7 @@
           this.q.append('tel', this.qTel);
           this.q.append('email', this.qEmail);
 
-          axios.post(this.baseUrl+"/users/search", this.q)
+          axios.post("/users/search", this.q)
           .then(response => this.productions = response.data)
           .catch(error => console.log(error))
 
@@ -203,7 +202,7 @@
           this.productions = productions.data; 
         },
         getProduction(id){
-            axios.get(this.baseUrl+'/productions/edit/' + id)
+            axios.get('/productions/edit/' + id)
             .then(response => this.productionToEdit = response.data)
             .catch(error => console.log(error));
         },

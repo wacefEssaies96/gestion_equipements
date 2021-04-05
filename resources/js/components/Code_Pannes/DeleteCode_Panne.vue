@@ -25,14 +25,10 @@
 <script>
 export default {
     props:['id'],
-    data(){
-        return{
-            baseUrl:process.env.MIX_URL,
-        }
-    },
+
     methods:{
         deleteCodePanne(id){
-            axios.delete(this.baseUrl+'/code_pannes/' + id)
+            axios.delete('/code_pannes/' + id)
             .then(response => this.$emit('codePanne-deleted',response))
             .catch(error => console.log(error));               
         },

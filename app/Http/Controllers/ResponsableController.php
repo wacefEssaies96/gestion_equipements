@@ -21,13 +21,6 @@ class ResponsableController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'nom' => 'required',
-            'prenom' => 'required',
-            'password' => 'required:min:6',
-            'email' => 'required|email|unique:users',
-            'tel' => 'required'
-        ]);
         $user = new User();
         $user->nom = request('nom');
         $user->prenom = request('prenom');

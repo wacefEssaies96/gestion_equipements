@@ -81,7 +81,6 @@ export default {
             code: '',
             designation: '',
             zone: '',
-            baseUrl:process.env.MIX_URL,
         }
     },
     validations: {
@@ -89,7 +88,7 @@ export default {
             required,
             async isUnique(value){
                 if(value==='') return true;
-                const response = await axios.get(this.baseUrl+'/code_pannes/'+value)
+                const response = await axios.get('/code_pannes/'+value)
                 .catch(error => console.log(error));
                 if(response.data.length == 0) return true;
             }
@@ -116,7 +115,7 @@ export default {
             form.append('code', this.code);
             form.append('designation', this.designation);
             form.append('zone', this.zone);
-            axios.post(this.baseUrl+'/code_pannes',form)
+            axios.post('/code_pannes',form)
             .then(response => this.$emit('codePanne-added',response))
             .catch(error => console.log(error));
             this.refreshData();

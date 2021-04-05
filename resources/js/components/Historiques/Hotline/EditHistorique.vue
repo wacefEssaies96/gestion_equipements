@@ -110,7 +110,6 @@
         jour: '',
         zone: '',
         tech_id: '',
-        baseUrl:process.env.MIX_URL,
       }
     },
     watch:{
@@ -127,12 +126,12 @@
     methods: {
       getTechniciens(zone){
         this.tech_id = '';
-        axios.get(this.baseUrl+"/historiques/techniciens/"+zone)
+        axios.get("/historiques/techniciens/"+zone)
         .then(response => this.techniciens=response.data) 
         .catch(error => console.log(error))
       },
       update(){
-        axios.patch(this.baseUrl+'/historiques/edit/' + this.historiqueToEdit[0].id, {
+        axios.patch('/historiques/edit/' + this.historiqueToEdit[0].id, {
             heure_demande: this.heure_demande,
             jour: this.jour,
             zone: this.zone,
