@@ -3,7 +3,7 @@
   <div class="content-wrapper">
 
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -72,8 +72,15 @@
       <div class="card-header">
         <h3 class="card-title">Liste de tous les equipements</h3>
         <div class="card-tools">
-          <router-link class="btn btn-outline-info" to="/onedrive">Ajouter via Onedrive</router-link>
-                  <!-- Button trigger modal -->
+          <template v-if="accessData.userName == null">
+            <a href="/signin" class="btn btn-outline-info"><i class="nav-icon fas fa-cloud"></i> Se connecter à OneDrive</a> 
+          </template>
+          <template v-if="accessData.userName != null">
+            <h4>Bienvenue  {{ accessData.userName }} !</h4>
+            <a href="/signout" class="btn btn-outline-info">Se déconnecter de OneDrive</a>
+            <router-link class="btn btn-outline-info" to="/onedrive">Ajouter via Onedrive</router-link>
+          </template>
+          <!-- Button trigger modal -->
         <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
         Ajouter un nouveau equipement
         </button>
@@ -81,7 +88,7 @@
         </div>
       </div>
       <!-- /.card-header -->
-    <add-equipement @equipement-added="refreshAdded"></add-equipement>
+    <AddEquipement @equipement-added="refreshAdded" v-bind:isConnected="isConnected"></AddEquipement>
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -91,6 +98,7 @@
               <th>Designation</th>
               <th>N°serie</th>
               <th>Image</th>
+              <th>Document</th>
               <th>Zone</th>  
               <th>Action</th>
             </tr>
@@ -102,18 +110,45 @@
               <td>{{ equipement.designation }}</td>
               <td>{{ equipement.n_serie }}</td>
               <td><img :src="equipement.image" style="width:100px; height:100px"></td>
+              <td>
+                <div class="row">
+                  <button @click="getDocuments(equipement.id,'ins_c')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                  <i class="fas fa-file-pdf"></i> Instruction 1ér niveau
+                  </button>
+                </div>
+                <div class="row">
+                  <button @click="getDocuments(equipement.id,'ins_p')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                  <i class="fas fa-file-pdf"></i> Instruction préventive
+                  </button>
+                </div>
+                <div class="row">
+                  <button @click="getDocuments(equipement.id,'dossier_technique')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                  <i class="fas fa-file-pdf"></i> Dossier technique
+                  </button> 
+                </div>
+                <div class="row">
+                  <button @click="getDocuments(equipement.id,'liste_pr')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                  <i class="fas fa-file-pdf"></i> Liste PR
+                  </button>
+                </div>
+              </td>
+                <ViewPdf v-bind:path="document.document"></ViewPdf>
               <td>{{ equipement.zone }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getEquipement(equipement.id)">
-                Modifier
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getEquipement(equipement.id)" title="Modifier">
+                <i class="fas fa-edit"></i>
                 </button>
-                <button @click="setId(equipement.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">Supprimer</button>
-                <delete-equipement v-bind:id="id" @equipement-deleted="refreshDeleted"></delete-equipement>
-                <edit-equipement v-bind:equipementToEdit="equipementToEdit" @equipement-updated="refreshEdited"></edit-equipement>
+                <button @click="setId(equipement.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger" title="Supprimer"><i class="fas fa-trash-alt" alt="Supprimer"></i></button>
+                <DeleteEquipement v-bind:id="id" @equipement-deleted="refreshDeleted"></DeleteEquipement>
+                <EditEquipement 
+                  v-bind:equipementToEdit="equipementToEdit" 
+                  v-bind:isConnected="isConnected"
+                  @equipement-updated="refreshEdited"></EditEquipement>
               </td>
             </tr>
           </tbody>
         </table>
+
         <pagination class="m-auto" :data="equipements" @pagination-change-page="getResults"></pagination>
       </div>
       <!-- /.card-body -->
@@ -121,7 +156,18 @@
   </div>
 </template>
 <script>
+  import AddEquipement from './AddEquipement';
+  import EditEquipement from './EditEquipement';
+  import DeleteEquipement from './DeleteEquipement';
+  import ViewPdf from './ViewPdfFile.vue';
+
   export default {
+    components:{
+      AddEquipement,
+      EditEquipement,
+      DeleteEquipement,
+      ViewPdf
+    },
     props:['user'],
     data(){
       return{
@@ -134,20 +180,47 @@
         qNom: '',
         qCodeMachine: '',
         hidden: 'true',
-        id:''
+        id:'',
+        files: '',
+        file:'',
+        accessData: '',
+        isConnected: '',
+        accessData:'',
+        document:'',
+        loading:true,
+        baseUrl:process.env.MIX_URL,
       }
     },
-    created(){
+    async created(){
       if(this.user.role != 'ADMIN'){
         this.$router.push('/');
       }
-      axios.post("http://localhost:8000/equipements/liste")
-      .then(response => this.equipements = response.data)
+      await axios.get(this.baseUrl+"/getAccessData")
+      .then(response => this.accessData = JSON.parse(response.request.response))
       .catch(error => console.log(error))
+      await axios.post(this.baseUrl+"/equipements/liste")
+      .then(response => {
+        this.equipements = response.data;
+        this.loading = false;
+      })
+      .catch(error => console.log(error))
+      if(this.accessData.userName != null){
+        this.isConnected = true;
+      }
+      else{
+        this.isConnected = false;
+      }
     },
     methods:{
+      getDocuments(id,type){
+        axios.get(this.baseUrl+'/equipements/document/'+id+'/'+type)
+        .then(response => {
+          this.document = response.data
+          })
+        .catch(error => console.log(error))
+      },
       getResults(page = 1) {
-        axios.post('http://localhost:8000/equipements/liste?page=' + page)
+        axios.post(this.baseUrl+'/equipements/liste?page=' + page)
         .then(response => {
           this.equipements = response.data;
         })
@@ -198,7 +271,7 @@
         this.q.append('n_serie', this.qNserie);
         this.q.append('code', this.qCodeMachine);
 
-        axios.post("http://localhost:8000/equipements/liste", this.q)
+        axios.post(this.baseUrl+"/equipements/liste", this.q)
         .then(response => this.equipements = response.data)
         .catch(error => console.log(error))
 
@@ -207,7 +280,7 @@
         this.equipements = equipements.data; 
       },
       getEquipement(id){
-        axios.get('http://localhost:8000/equipements/edit/' + id)
+        axios.get(this.baseUrl+'/equipements/edit/' + id)
         .then(response => this.equipementToEdit = response.data)
         .catch(error => console.log(error));
       },

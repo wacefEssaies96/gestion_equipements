@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Hash;
 class TechnicienController extends Controller
 {
 
-    public function index()
-    {
-        return view('pages.techniciens');
-    }
     public function liste()
     {
         return $this->refresh();
@@ -94,5 +90,16 @@ class TechnicienController extends Controller
         $technicien =  User::join('techniciens','users.id','=','techniciens.user_id')
         ->where('role','=','TECHNICIEN')->paginate(10);
         return response()->json($technicien);
+    }
+    public function getAllTechs(){
+        $techs = User::where('role', '=', 'TECHNICIEN')->get();
+        return response()->json($techs);
+    }
+    public function getTechniciens($zone){
+        $techniciens =  Technicien::with('user')
+        ->where('zone','=',$zone)
+        ->where('status', '=', 'DISPONIBLE')
+        ->get();
+        return response()->json($techniciens);
     }
 }

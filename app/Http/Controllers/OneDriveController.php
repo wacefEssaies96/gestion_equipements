@@ -39,6 +39,15 @@ public function downloadEquipementData($id)
     return response()->json($data);
   }
 
+  public function downloadFile($id)
+  {
+    $graph = $this->getGraph();
+    $path = public_path()."/downloads/".time().".pdf";
+    $data = $graph->createRequest("GET", "/me/drive/items/".$id."/content?format=pdf")
+    ->download($path);
+    return response()->json($path);
+  }
+
   private function getGraph(): Graph
   {
     // Get the access token from the cache

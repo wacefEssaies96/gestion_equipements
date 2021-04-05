@@ -57,17 +57,6 @@
                           <span v-if="!$v.tel.maxLength">Veuillez entrer 8 chiffre ! (********)</span>
                         </div>
                       </div>
-                      <div class="form-group">
-                        <label for="pseudo">Pseudo</label>
-                        <input type="pseudo" class="form-control" placeholder="Pseudo" v-model="pseudo"
-                        :class="{'is-invalid':$v.pseudo.$invalid, 'is-valid':!$v.pseudo.$invalid}">
-                        <div class="valid-feedback">Pseudo valide</div>
-                        <div class="invalid-feedback">
-                          <span v-if="!$v.pseudo.required">Veuillez entrer un pseudo valide !</span>
-                          <span v-if="!$v.pseudo.minLength">Veuillez entrer au moins 3 caractères !</span>
-                          <span v-if="!$v.pseudo.maxLength">Maximum 15 caractères !</span>
-                        </div>
-                      </div>
                     </div>
                   </div>
                   <div class="form-group">
@@ -129,10 +118,10 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
                 prenom: '',
                 email: '',
                 tel: '',
-                pseudo: '',
                 password: '',
                 repeatPassword: '',
-                hidden: 'true'
+                hidden: 'true',
+                baseUrl:process.env.MIX_URL,
             }
         },
         watch:{
@@ -141,7 +130,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             this.prenom = newVal.prenom;
             this.email = newVal.email;
             this.tel = newVal.tel;
-            this.pseudo = newVal.pseudo;
             this.password = '';
             this.repeatPassword = '';
           }
@@ -151,12 +139,11 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
               this.hidden = status;
            },
             update(){
-              axios.patch('http://localhost:8000/responsables/edit/' + this.responsableToEdit.id, {
+              axios.patch(this.baseUrl+'/responsables/edit/' + this.responsableToEdit.id, {
                   nom: this.nom,
                   prenom: this.prenom,
                   tel: this.tel,
                   email: this.email,
-                  pseudo: this.pseudo,
                   password: this.password,
               })
               .then(response => this.$emit('responsable-updated',response))
@@ -180,11 +167,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             maxLength: maxLength('15')
           },
           prenom: {
-            required,
-            minLength: minLength('3'),
-            maxLength: maxLength('15')
-          },
-          pseudo: {
             required,
             minLength: minLength('3'),
             maxLength: maxLength('15')
@@ -216,7 +198,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             }
           },
           password: {
-            //required,
             minLength: minLength(6),
             maxLength: maxLength(15),
           },

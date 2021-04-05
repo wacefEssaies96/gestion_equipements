@@ -2,7 +2,7 @@
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -37,12 +37,7 @@
                   <input @keyup="search" type="text" v-model="qPrenom" class="form-control" placeholder="Prenom">
                 </div>
               </div>
-              <div class="col">
-                <div class="from-group">
-                  <label>Pseudo</label>
-                  <input @keyup="search" type="text" v-model="qPseudo" class="form-control" placeholder="Pseudo">
-                </div>
-              </div>
+            
               <div class="col">
                 <div class="from-group">
                   <label>Tel</label>
@@ -70,14 +65,13 @@
         </div>
       </div>
     <!-- /.card-header -->
-      <add-responsable @responsable-added="refresh"></add-responsable> 
+      <AddResponsable @responsable-added="refresh"></AddResponsable> 
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
             <tr>
               <th>Nom</th>
               <th>Prenom</th>
-              <th>Pseudo</th>
               <th>Email</th>
               <th>Téléphone</th>
               <th>Action</th>
@@ -87,16 +81,15 @@
             <tr v-for="responsable in responsables.data" :key="responsable.id">
               <td>{{ responsable.nom }}</td>
               <td>{{ responsable.prenom }}</td>
-              <td>{{ responsable.pseudo }}</td>
               <td>{{ responsable.email }}</td>
               <td>{{ responsable.tel }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getResponsable(responsable.id)">
-                Modifier
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getResponsable(responsable.id)">
+                <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(responsable.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">Supprimer</button>
-                <delete-responsable v-bind:id="id" @responsable-deleted="refreshDeleted"></delete-responsable>
-                <edit-responsable v-bind:responsableToEdit="responsableToEdit" @responsable-updated="refreshEdited"></edit-responsable>
+                <button @click="setId(responsable.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt" title="Supprimer"/></button>
+                <DeleteResponsable v-bind:id="id" @responsable-deleted="refreshDeleted"></DeleteResponsable>
+                <EditResponsable v-bind:responsableToEdit="responsableToEdit" @responsable-updated="refreshEdited"></EditResponsable>
               </td>
             </tr>
           </tbody>
@@ -108,7 +101,16 @@
   </div>
 </template>
 <script>
-    export default {
+  import AddResponsable from './AddResponsable';
+  import EditResponsable from './EditResponsable';
+  import DeleteResponsable from './DeleteResponsable';
+    export default {    
+      components:{
+      AddResponsable,
+      EditResponsable,
+      DeleteResponsable
+    },
+      
       props:['user'],
       data(){
         return{
@@ -118,23 +120,27 @@
           q: new FormData(),
           qNom:'',
           qPrenom:'',
-          qPseudo:'',
           qTel:'',
           qEmail:'',
-          hidden:'true'
+          hidden:'true',
+          loading:true,
+          baseUrl:process.env.MIX_URL,
         }
       },
       created(){
         if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-        axios.get("http://localhost:8000/responsables/liste")
-        .then(response => this.responsables = response.data)
+        axios.get(this.baseUrl+"/responsables/liste")
+        .then(response => {
+          this.responsables = response.data;
+          this.loading = false;
+        })
         .catch(error => console.log(error))
       },
       methods:{
         getResults(page = 1) {
-          axios.get('http://localhost:8000/responsables/liste?page=' + page)
+          axios.get(this.baseUrl+'/responsables/liste?page=' + page)
           .then(response => {
             this.responsables = response.data;
           })
@@ -154,7 +160,6 @@
           this.q.append('role', 'RESPONSABLE');
           this.q.append('nom', this.qNom);
           this.q.append('prenom', this.qPrenom);
-          this.q.append('pseudo', this.qPseudo);
           this.q.append('tel', this.qTel);
           this.q.append('email', this.qEmail);
 
@@ -192,7 +197,7 @@
           this.toast(value);
         },
         getResponsable(id){
-          axios.get('http://localhost:8000/responsables/edit/' + id)
+          axios.get(this.baseUrl+'/responsables/edit/' + id)
           .then(response => this.responsableToEdit = response.data)
           .catch(error => console.log(error));
         },

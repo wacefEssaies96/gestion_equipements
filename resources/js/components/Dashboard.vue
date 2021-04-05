@@ -609,7 +609,8 @@
       props:['user'],
         data(){
         return{
-          data:''
+          data:'',
+          baseUrl:process.env.MIX_URL
         }
       },
       created(){
@@ -619,7 +620,7 @@
         if(this.user.role == 'HOTLINE'){
           this.$router.push('/hist-hotline');
         }
-        axios.get('http://localhost:8000/getCount')
+        axios.get(this.baseUrl+'/getCount')
           .then(response =>  this.data = response.data)
           .catch(error => console.log(error));
       },

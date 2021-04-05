@@ -8,10 +8,6 @@ use Illuminate\Http\Request;
 class CodePanneController extends Controller
 {
   
-    public function index()
-    {
-        return view('pages.code_pannes');
-    }
     public function liste(Request $request)
     {
         $cp = CodePanne::where('code','like','%'.request('code').'%');
@@ -74,5 +70,9 @@ class CodePanneController extends Controller
     public function getCodePanneByCode($value){
         $cp = CodePanne::where('code','=',$value)->get();
         return response()->json($cp);
+    }
+    public function getCodePannes($zone){
+        $codePannes = CodePanne::where('zone','=',$zone)->get();
+        return response()->json($codePannes);
     }
 }

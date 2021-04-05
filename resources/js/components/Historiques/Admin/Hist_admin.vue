@@ -2,7 +2,7 @@
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -78,22 +78,29 @@
     <div class="card-header">
       <h3 class="card-title">Liste de tous les historiques</h3>
       <div class="card-tools">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
+        Ajouter un nouveau historique
+        </button>
         <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>
       </div>
     </div>
     <!-- /.card-header -->
-  <add-hist-admin @historique-added="refreshAdded"></add-hist-admin>  
+  <AddHistAdmin @historique-added="refreshAdded"></AddHistAdmin>  
+  
     <div class="card-body table-responsive p-0">
       <table class="table table-hover text-nowrap">
         <thead>
           <tr>
             <th>Num Bt</th>
             <th>Heure de demande</th>
+            <th>Heure de début</th>
+            <th>Heure de fin</th>
+            <th>Heure d'attente</th>
+            <th>Heure d'arret</th>
             <th>Jour</th>
             <th>Zone</th>
             <th>Appelle</th>
-            <th>Heure de début</th>
-            <th>Heure de fin</th>
             <th>Travaille éffectué</th>
             <th>Pièce de rechange</th>
             <th>Commentaire</th>
@@ -102,29 +109,31 @@
         </thead>
         <tbody>
           <tr v-for="historique in historiques.data" :key="historique.id">
-            <td>{{ historique.num_bt }}</td>
+            <td>{{ historique.id }}</td>
             <td>{{ historique.heure_demande }}</td>
+            <td>{{ historique.heure_debut }}</td>
+            <td>{{ historique.heure_fin }}</td>
+            <td>{{ historique.heure_attente }}</td>
+            <td>{{ historique.heure_arret }}</td>
             <td>{{ historique.jour }}</td>
             <td>{{ historique.zone }}</td>
             <td>{{ historique.appelle }}</td>
-            <td>{{ historique.heure_debut }}</td>
-            <td>{{ historique.heure_fin }}</td>
             <td>{{ historique.travaille }}</td>
             <td>{{ historique.piece_rechange }}</td>
             <td>{{ historique.commentaire }}</td>
             <td> 
-               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getHistorique(historique.id);">
-              Modifier
+               <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getHistorique(historique.id);">
+              <i class="fas fa-edit" title="Modifier"/>
               </button>
-              <button @click="setId(historique.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">Supprimer</button>
-              <delete-historique v-bind:id="id" @historique-deleted="refreshDeleted"></delete-historique>
-              <edit-hist-admin 
+              <button @click="setId(historique.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt" title="Supprimer"/></button>
+              <DeleteHist v-bind:id="id" @historique-deleted="refreshDeleted"></DeleteHist>
+              <EditHistAdmin 
                 v-bind:historiqueToEdit="historiqueToEdit"
                 v-bind:tech="tech"
                 v-bind:equipements="equipements"
                 v-bind:codePannes="codePannes" 
                 @historique-updated="refreshEdited">
-              </edit-hist-admin> 
+              </EditHistAdmin> 
             </td>
           </tr> 
         </tbody>
@@ -136,7 +145,15 @@
   </div>
 </template>
 <script>
+  import AddHistAdmin from './AddHistAdmin';
+  import EditHistAdmin from './EditHistAdmin';
+  import DeleteHist from '../DeleteHistoriques';
 export default {
+    components:{
+      AddHistAdmin,
+      EditHistAdmin,
+      DeleteHist
+    },
   props:['user'],
     data(){
       return{
@@ -155,22 +172,27 @@ export default {
         equipements: '',
         codePannes: '',
         hidden:'true',
+        loading:true,
+        baseUrl:process.env.MIX_URL,
       }
     },
-    created(){
+    async created(){
       if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-      axios.post("http://localhost:8000/historiques/liste")
+      await axios.post(this.baseUrl+"/historiques/liste")
       .then(response => this.historiques = response.data)
       .catch(error => console.log(error))
-      axios.get("http://localhost:8000/historiques/techs")
-      .then(response => this.techs = response.data)
+      await axios.get(this.baseUrl+"/historiques/techs")
+      .then(response => {
+        this.techs = response.data
+        this.loading = false;
+      })
       .catch(error => console.log(error))
     },
     methods:{
       getResults(page = 1) {
-        axios.post('http://localhost:8000/historiques/liste?page=' + page)
+        axios.post(this.baseUrl+'/historiques/liste?page=' + page)
         .then(response => {
           this.historiques = response.data;
         })
@@ -222,31 +244,31 @@ export default {
         this.q.append('appelle', this.qAppelle);
         this.q.append('tech_id', this.qTech);
 
-        axios.post("http://localhost:8000/historiques/liste", this.q)
+        axios.post(this.baseUrl+"/historiques/liste", this.q)
         .then(response => this.historiques = response.data)
         .catch(error => console.log(error))
 
       },
       getHistorique(id){
-        axios.get('http://localhost:8000/historiques/edit/' + id)
+        axios.get(this.baseUrl+'/historiques/edit/' + id)
         .then(response => this.historiqueToEdit = response.data)
         .catch(error => console.log(error));  
         setTimeout(() => this.getTech(this.historiqueToEdit[0].zone), 2000);
         setTimeout(() => this.getEquipements(this.historiqueToEdit[0].zone), 2000);
       },
       getTech(zone){
-        axios.get("http://localhost:8000/historiques/techniciens/" + zone)
+        axios.get(this.baseUrl+"/historiques/techniciens/" + zone)
         .then(response => this.tech = (response.data)) 
         .catch(error => console.log(error))
       },        
       getEquipements(zone){
-        axios.get('http://localhost:8000/historiques/equipement/zone/' + zone)
+        axios.get(this.baseUrl+'/historiques/equipement/zone/' + zone)
         .then(response =>this.equipements =  response.data)
         .catch(error => console.log(error));
         this.getCodePannes(zone);
       },
       getCodePannes(zone){
-        axios.get("http://localhost:8000/historiques/code-panne/"+zone)
+        axios.get(this.baseUrl+"/historiques/code-panne/"+zone)
         .then(response => this.codePannes = response.data)
         .catch(error => console.log(error))
       },

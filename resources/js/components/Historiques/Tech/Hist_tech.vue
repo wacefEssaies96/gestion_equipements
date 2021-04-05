@@ -24,8 +24,7 @@
       <div class="card-header">
         <h3 class="card-title">Liste de tous les historiques du technicien</h3>
         <div class="card-tools">
-          
-          
+    
         </div>
       </div>
       <!-- /.card-header -->
@@ -35,11 +34,13 @@
             <tr>
               <th>Num Bt</th>
               <th>Heure de demande</th>
+              <th>Heure de début</th>
+              <th>Heure de fin</th>
+              <th>Heure d'attente</th>
+              <th>Heure d'arret'</th>
               <th>Jour</th>
               <th>Zone</th>
               <th>Appelle</th>
-              <th>Heure de début</th>
-              <th>Heure de fin</th>
               <th>Travaille éffectué</th>
               <th>Pièce de rechange</th>
               <th>Commentaire</th>
@@ -48,26 +49,35 @@
           </thead>
           <tbody>
             <tr v-for="historique in histsTech.data" :key="historique.id">
-                <td>{{ historique.num_bt }}</td>
+                <td>{{ historique.id }}</td>
                 <td>{{ historique.heure_demande }}</td>
+                <td>{{ historique.heure_debut }}</td>
+                <td>{{ historique.heure_fin }}</td>
+                <td>{{ historique.heure_attente }}</td>
+                <td>{{ historique.heure_arret }}</td>
                 <td>{{ historique.jour }}</td>
                 <td>{{ historique.zone }}</td>
                 <td>{{ historique.appelle }}</td>
-                <td>{{ historique.heure_debut }}</td>
-                <td>{{ historique.heure_fin }}</td>
                 <td>{{ historique.travaille }}</td>
                 <td>{{ historique.piece_rechange }}</td>
                 <td>{{ historique.commentaire }}</td>
                 <td> 
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getEquipements(historique.zone);">
-                  Modifier
-                  </button>
-                  <edit-hist-tech 
+                  <template v-if="historique.heure_debut == null">
+                    <button type="button" class="btn btn-primary" @click="confirmAppelle(historique.id);">
+                    Confirmer
+                    </button>
+                  </template>
+                  <template v-if="historique.heure_debut != null">
+                    <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getEquipements(historique.zone);">
+                    <i class="far fa-file-edit" title="Remplir"/>
+                    </button>
+                  </template>
+                  <EditHistTech 
                     v-bind:id="historique"
                     v-bind:equipements="equipements"
                     v-bind:codePannes="codePannes" 
                     @historique-updated="refreshEdited">
-                  </edit-hist-tech> 
+                  </EditHistTech> 
                 </td>
             </tr> 
           </tbody>
@@ -90,26 +100,30 @@
           <thead>
             <tr>
               <th>Num Bt</th>
-              <th>Heure de demande</th>
-              <th>Jour</th>
-              <th>Zone</th>
-              <th>Appelle</th>
-              <th>Heure de début</th>
-              <th>Heure de fin</th>
-              <th>Travaille éffectué</th>
-              <th>Pièce de rechange</th>
-              <th>Commentaire</th>
+                <th>Heure de demande</th>
+                <th>Heure de début</th>
+                <th>Heure de fin</th>
+                <th>Heure d'attente</th>
+                <th>Heure d'arret'</th>
+                <th>Jour</th>
+                <th>Zone</th>
+                <th>Appelle</th>
+                <th>Travaille éffectué</th>
+                <th>Pièce de rechange</th>
+                <th>Commentaire</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="historique in historiques.data" :key="historique.id">
-              <td>{{ historique.num_bt }}</td>
+              <td>{{ historique.id }}</td>
               <td>{{ historique.heure_demande }}</td>
+              <td>{{ historique.heure_debut }}</td>
+              <td>{{ historique.heure_fin }}</td>
+              <td>{{ historique.heure_attente }}</td>
+              <td>{{ historique.heure_arret }}</td>
               <td>{{ historique.jour }}</td>
               <td>{{ historique.zone }}</td>
               <td>{{ historique.appelle }}</td>
-              <td>{{ historique.heure_debut }}</td>
-              <td>{{ historique.heure_fin }}</td>
               <td>{{ historique.travaille }}</td>
               <td>{{ historique.piece_rechange }}</td>
               <td>{{ historique.commentaire }}</td>
@@ -124,7 +138,11 @@
 </div>
 </template>
 <script>
+  import EditHistTech from './EditHistTech';
   export default {
+      components:{
+          EditHistTech,
+      },
     props:['user'],
     data(){
       return{
@@ -133,22 +151,41 @@
         id: '',
         equipements: '',
         codePannes: '',
-        hidden: 'false'
+        hidden: 'false',
+        baseUrl:process.env.MIX_URL,
       }
     },
     created(){
       if(this.user.role != 'TECHNICIEN'){
-          this.$router.push('/');
-        }
-      axios.post("http://localhost:8000/historiques/liste")
+        this.$router.push('/');
+      }
+      axios.post(this.baseUrl+"/historiques/liste")
       .then(response => this.historiques = response.data)
       .catch(error => console.log(error))
-      axios.get("http://localhost:8000/hist/tech/liste")
+      axios.get(this.baseUrl+"/hist/tech/liste")
       .then(response => this.histsTech = response.data)
       .catch(error => console.log(error))
 
     },
     methods:{
+      confirmAppelle(id){
+        axios.get(this.baseUrl+"/histtech/confirmAppelle/" + id)
+        .then(response => {
+            if(response.data == 'erreur'){
+              this.toast("Une erreur a été produite !"); 
+            }
+            else{
+              axios.post(this.baseUrl+"/historiques/liste")
+              .then(response => this.historiques = response.data)
+              .catch(error => console.log(error))
+              this.histsTech = response.data;
+              this.toast("Vous avez confirmé L'appelle !") ;
+            }
+        })
+        .catch(error => console.log(error));
+
+
+      },
       toast(value) {
         this.$swal.fire({
           icon: "success",
@@ -168,7 +205,7 @@
         this.toast(value);
       },
       getResults(page = 1) {
-        axios.post('http://localhost:8000/historiques/liste?page=' + page)
+        axios.post(this.baseUrl+'/historiques/liste?page=' + page)
         .then(response => {
           this.historiques = response.data;
         })
@@ -181,13 +218,13 @@
         this.historiques = historiques.data; 
       },
       getEquipements(zone){
-        axios.get('http://localhost:8000/historiques/equipement/zone/' + zone)
+        axios.get(this.baseUrl+'/historiques/equipement/zone/' + zone)
         .then(response =>this.equipements =  response.data)
         .catch(error => console.log(error));
         this.getCodePannes(zone);
       },
       getCodePannes(zone){
-        axios.get("http://localhost:8000/historiques/code-panne/"+zone)
+        axios.get(this.baseUrl+"/historiques/code-panne/"+zone)
         .then(response => this.codePannes = response.data)
         .catch(error => console.log(error))
       },

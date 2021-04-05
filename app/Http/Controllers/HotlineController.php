@@ -10,11 +10,6 @@ use Illuminate\Support\Facades\Hash;
 
 class HotlineController extends Controller
 {
-
-    public function index()
-    {
-        return view('pages.hotlines');
-    }
     
     public function liste()
     {

@@ -21,16 +21,19 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-sm-6">
-                    <div class="form-group">
-                      <label for="num_bt">Num Bt</label>
-                      <input type="text" class="form-control" placeholder="Num Bt" v-model="num_bt" 
-                        :class="{'is-invalid':$v.num_bt.$invalid,'is-valid':!$v.num_bt.$invalid}"
-                      >
-                      <div class="valid-feedback">Num valide</div>
-                      <div class="invalid-feedback">
-                        <span v-if="!$v.num_bt.required">Veuillez entrer un Num Bt !</span>
-                      </div>
-                    </div>
+                     <div class="form-group">
+                  <label for="tech">Techniciens</label>
+                  <select class="form-control" v-model="tech_id"
+                  :class="{'is-invalid':$v.tech_id.$invalid, 'is-valid':!$v.tech_id.$invalid}">
+                    <option v-for="technicien in techniciens" :key="technicien.user_id" :value="technicien.user_id">
+                      {{technicien.user.nom}} {{technicien.user.prenom}}
+                    </option>
+                  </select>
+                  <div class="valid-feedback">Technicien validé</div>
+                  <div class="invalid-feedback">
+                      <span v-if="!$v.tech_id.required">Veuillez choisir une option !</span>
+                  </div>
+                </div>
                     <div class="form-group">
                       <label for="heure_demande">Heure de demande</label>
                       <input type="time" class="form-control" placeholder="Heure de demande" v-model="heure_demande"
@@ -68,19 +71,16 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label for="tech">Techniciens</label>
-                  <select class="form-control" v-model="tech_id"
-                  :class="{'is-invalid':$v.tech_id.$invalid, 'is-valid':!$v.tech_id.$invalid}">
-                    <option v-for="technicien in techniciens" :key="technicien.user_id" :value="technicien.user_id">
-                      {{technicien.user.nom}} {{technicien.user.prenom}}
-                    </option>
+                <template v-if="histSertissage.type_travaille == 'C' || histSertissage.type_travaille == 'CS' || histSertissage.type_travaille == 'S'">
+                  <div class="form-group">
+                  <label>Type de travaille</label>
+                  <select v-model="type_travaille">
+                    <option value="C">C</option>
+                    <option value="CS">CS</option>
+                    <option value="S">S</option>
                   </select>
-                  <div class="valid-feedback">Technicien validé</div>
-                  <div class="invalid-feedback">
-                      <span v-if="!$v.tech_id.required">Veuillez choisir une option !</span>
-                  </div>
                 </div>
+                </template>
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
@@ -91,6 +91,7 @@
         <!-- /.card -->
         </div>
         <div class="modal-footer">
+          {{histSertissage.type_travaille}}
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button hidden id="submitEditHistorique" type="submit" class="btn btn-primary" data-dismiss="modal" @click="update">Confirm</button>
         </div>
@@ -101,20 +102,19 @@
 <script>
   import { required } from 'vuelidate/lib/validators';
   export default {
-    props: ['historiqueToEdit','tech'],
+    props: ['historiqueToEdit','tech','histSertissage'],
     data(){
       return{
         techniciens: {},
-        num_bt: '',
         heure_demande: '',
         jour: '',
         zone: '',
-        tech_id: ''
+        tech_id: '',
+        baseUrl:process.env.MIX_URL,
       }
     },
     watch:{
       historiqueToEdit(newVal){
-        this.num_bt = newVal[0].num_bt;
         this.heure_demande = newVal[0].heure_demande;
         this.jour = newVal[0].jour;
         this.zone = newVal[0].zone;
@@ -127,13 +127,12 @@
     methods: {
       getTechniciens(zone){
         this.tech_id = '';
-        axios.get("http://localhost:8000/historiques/techniciens/"+zone)
+        axios.get(this.baseUrl+"/historiques/techniciens/"+zone)
         .then(response => this.techniciens=response.data) 
         .catch(error => console.log(error))
       },
       update(){
-        axios.patch('http://localhost:8000/historiques/edit/' + this.historiqueToEdit[0].id, {
-            num_bt: this.num_bt,
+        axios.patch(this.baseUrl+'/historiques/edit/' + this.historiqueToEdit[0].id, {
             heure_demande: this.heure_demande,
             jour: this.jour,
             zone: this.zone,
@@ -154,9 +153,6 @@
       },
     },
     validations: {
-      num_bt: {
-        required,
-      },
       heure_demande: {
         required,
       },

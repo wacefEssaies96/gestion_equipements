@@ -43,7 +43,7 @@
                                 <div class="form-group">
                                     <label for="zone">Zone</label>
                                     <select class="form-control" v-model="zone"
-                                    :class="{'is-invalid':(code != '') ?$v.zone.$invalid:'', 'is-valid':!$v.zone.$invalid}">
+                                    :class="{'is-invalid':(zone != '') ?$v.zone.$invalid:'', 'is-valid':!$v.zone.$invalid}">
                                         <option value="Assemblage">Assemblage</option>
                                         <option value="Sertissage">Sertissage</option>
                                         <option value="Préparation">Préparation</option>
@@ -81,6 +81,7 @@ export default {
             code: '',
             designation: '',
             zone: '',
+            baseUrl:process.env.MIX_URL,
         }
     },
     validations: {
@@ -88,7 +89,7 @@ export default {
             required,
             async isUnique(value){
                 if(value==='') return true;
-                const response = await axios.get('http://localhost:8000/code_pannes/'+value)
+                const response = await axios.get(this.baseUrl+'/code_pannes/'+value)
                 .catch(error => console.log(error));
                 if(response.data.length == 0) return true;
             }
@@ -115,7 +116,7 @@ export default {
             form.append('code', this.code);
             form.append('designation', this.designation);
             form.append('zone', this.zone);
-            axios.post('http://localhost:8000/code_pannes',form)
+            axios.post(this.baseUrl+'/code_pannes',form)
             .then(response => this.$emit('codePanne-added',response))
             .catch(error => console.log(error));
             this.refreshData();

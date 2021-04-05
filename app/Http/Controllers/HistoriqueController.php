@@ -24,18 +24,13 @@ class HistoriqueController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
-    {
-        return view('pages.historique');
-    }
-
     public function listeTech(){
         return $this->refreshTech();
     }
 
     public function liste(Request $request)
     {
-        $hist = Historique::where('num_bt','like','%'.request('num_bt').'%');
+        $hist = Historique::where('id','like','%'.request('num_bt').'%');
         if($request->zone != ''){
             $hist = $hist->where('zone', '=', request('zone'));
         }
@@ -54,9 +49,7 @@ class HistoriqueController extends Controller
 
     public function store(Request $request)
     {
-
         $hist = new Historique();
-        $hist->num_bt = request('num_bt');
         $hist->heure_demande = request('heure_demande');
         $hist->hotline_id = Auth::id();
         $hist->zone = request('zone');
@@ -83,10 +76,7 @@ class HistoriqueController extends Controller
         }
         $hist->save();
 
-        $userId = request('tech_id');
-        $technicien = Technicien::where('user_id', '=', $userId)->first();
-        $technicien->status = 'NON DISPONIBLE';
-        $technicien->save();
+        
 
         if(request('code_panne') != null){
             $codePanne = request('code_panne');
@@ -131,14 +121,15 @@ class HistoriqueController extends Controller
             $cp->save();
         }
         $hist = Historique::find($id);
-        $hist->heure_fin = request('heure_fin');
-        $hist->heure_debut = Carbon::now('Africa/Tunis');
+        $hist->heure_fin = Carbon::now('Africa/Tunis');
+        $heure_arret = strtotime($hist->heure_fin) - strtotime($hist->heure_debut);
+        $hist->heure_arret = date("H:i:s",$heure_arret);
+        
         $hist->travaille = request('travaille');
         $hist->piece_rechange = request('piece_rechange');
         $hist->commentaire = request('commentaire');
         $hist->code_equip = request('code_equip');
         $hist->appelle = 'Cloturé';
-        $hist->valide = true;
         $hist->save();
         $userid = Auth::id();
         $technicien = Technicien::where('user_id', '=', $userid)->first();
@@ -159,8 +150,23 @@ class HistoriqueController extends Controller
             $histElectrique->nom_support = request('nom_support');
             $histElectrique->save();
         }
-        
         return $this->refreshTech();
+    }
+    public function confirmAppelle($id){
+        $hist = Historique::find($id);
+        if($hist->heure_debut == null){
+            $hist->heure_debut = Carbon::now('Africa/Tunis');
+            $heure_attente = strtotime($hist->heure_debut) - strtotime($hist->heure_demande);
+            $hist->heure_attente = date("H:i:s",$heure_attente);
+            $hist->valide = true;
+            $hist->save();
+            $userId = $hist->tech_id;
+            $technicien = Technicien::where('user_id', '=', $userId)->first();
+            $technicien->status = 'NON DISPONIBLE';
+            $technicien->save();
+            return $this->refreshTech();
+        }
+        return response()->json('erreur');
     }
     public function edit($id)
     {
@@ -185,7 +191,6 @@ class HistoriqueController extends Controller
     public function update($id)
     {
         $hist = Historique::find($id);
-        $hist->num_bt = request('num_bt');
         $hist->heure_demande = request('heure_demande');
         $hist->hotline_id = Auth::id();
         $hist->zone = request('zone');
@@ -235,16 +240,16 @@ class HistoriqueController extends Controller
                 $histAssemblage->num_planche = request('num_planche');
                 $histAssemblage->save();
             }
-            if(request('type_travaille') != ''){
-                $histSertissage = HistSertissage::where('hist_id', '=', $id)->first();
-                $histSertissage->type_travaille = request('type_travaille');
-                $histSertissage->save();
-            }
             if(request('nom_support') != ''){
                 $histElectrique = HistElectrique::where('hist_id', '=', $id)->first();
                 $histElectrique->nom_support = request('nom_support');
                 $histElectrique->save();
             }
+        }
+        if(request('type_travaille') != ''){
+            $histSertissage = HistSertissage::where('hist_id', '=', $id)->first();
+            $histSertissage->type_travaille = request('type_travaille');
+            $histSertissage->save();
         }
         $hist->save();
 
@@ -271,41 +276,22 @@ class HistoriqueController extends Controller
     }
     
     public function refresh(){
-        $historiques = Historique::paginate(5);
+        $historiques = Historique::paginate(10);
         return response()->json($historiques);
     }
 
     public function refreshTech(){
-        $historiques = Historique::where('tech_id','=',Auth::id())->where('valide','=',false)->paginate(10);
+        $historiques = Historique::where('tech_id','=',Auth::id())->where('heure_fin','=',null)->paginate(10);
         return response()->json($historiques);
     }
     public function getHotlineHistoriques(){
         $hist = Historique::where('hotline_id', '=', Auth::id())->paginate(10);
         return response()->json($hist);
     }
-    public function getTechniciens($zone){
-        $techniciens =  Technicien::with('user')
-        ->where('zone','=',$zone)
-        ->where('status', '=', 'DISPONIBLE')
-        ->get();
-        return response()->json($techniciens);
+
+    public function getHistSertissage($id){
+        $hist = HistSertissage::where('hist_id','=',$id)->first();
+        return response()->json($hist);
     }
     
-    public function getEquipements($zone){
-        $equipements = Equipement::where('zone','=',$zone)->get();
-        return response()->json($equipements);
-    }
-
-    public function getCodePannes($zone){
-        $codePannes = CodePanne::where('zone','=',$zone)->get();
-        return response()->json($codePannes);
-    }
-    public function getUserId(){
-        return response()->json(Auth::id());
-    }
-    public function getAllTechs(){
-        $techs = User::where('role', '=', 'TECHNICIEN')->get();
-        return response()->json($techs);
-    }
-
 }

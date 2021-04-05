@@ -74,6 +74,12 @@
                     <p>Techniciens</p>
                   </router-link>
                 </li>
+                <li class="nav-item">
+                  <router-link to='/productions' class="nav-link">
+                    <i class="fas fa-user-tie"></i>
+                    <p>Productions</p>
+                  </router-link>
+                </li>
               </ul>
             </li>
 
@@ -92,15 +98,7 @@
                   Code pannes
                 </p>
               </router-link>
-            </li> 
-            <li class="nav-item">
-              <router-link to='/onedrive' class="nav-link">
-                <i class="nav-icon fas fa-cloud"></i>
-                <p>
-                  One drive
-                </p>
-              </a>
-            </li>       
+            </li>        
             <li class="nav-item">
               <router-link to="/hist-admin" class="nav-link">
                 <i class="nav-icon fas fa-history"></i>
@@ -130,7 +128,18 @@
             </router-link>
           </li>
           @endif
+          @if (Auth::user()->role == "PRODUCTION")
+          <li class="nav-item">
+            <router-link to='/feedbacks' class="nav-link">
+            <i class="nav-icon far fa-comment-alt"></i>
+              <p>
+                Feedback
+              </p>
+            </a>
+          </li> 
+          @endif
         </ul>
+        
       </nav>
       <!-- /.sidebar-menu -->
     </div>

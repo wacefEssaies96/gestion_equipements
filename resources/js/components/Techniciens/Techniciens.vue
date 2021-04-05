@@ -3,7 +3,7 @@
   <div class="content-wrapper">
 
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -38,12 +38,7 @@
                   <input @keyup="search" type="text" v-model="qPrenom" class="form-control" placeholder="Prenom">
                 </div>
               </div>
-              <div class="col">
-                <div class="from-group">
-                  <label>Pseudo</label>
-                  <input @keyup="search" type="text" v-model="qPseudo" class="form-control" placeholder="Pseudo">
-                </div>
-              </div>
+              
               <div class="col">
                 <div class="from-group">
                   <label>Tel</label>
@@ -84,16 +79,18 @@
         </div>
       </div>
     <!-- /.card-header -->
-      <add-technicien @technicien-added="refreshAdded"></add-technicien>   
+      <AddTechnicien @technicien-added="refreshAdded"></AddTechnicien>   
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
             <tr>
               <th>Nom</th>
               <th>Prenom</th>
-              <th>Pseudo</th>
               <th>Téléphone</th>
               <th>Email</th>
+              <th>Qualification</th>
+              <th>Heure de début de service</th>
+              <th>Heure de fin de service</th>
               <th>Zone</th>
               <th>Action</th>
             </tr>
@@ -102,17 +99,19 @@
             <tr v-for="technicien in techniciens.data" :key="technicien.id">
               <td>{{ technicien.nom }}</td>
               <td>{{ technicien.prenom }}</td>
-              <td>{{ technicien.pseudo }}</td>
               <td>{{ technicien.tel }}</td>
               <td>{{ technicien.email }}</td>
+              <td>{{ technicien.qualification }}</td>
+              <td>{{ technicien.h_debut_service }}</td>
+              <td>{{ technicien.h_fin_service }}</td>
               <td>{{ technicien.zone }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getTechnicien(technicien.user_id)">
-                Modifier
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getTechnicien(technicien.user_id)">
+                <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(technicien.user_id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">Supprimer</button>
-                <delete-technicien v-bind:id="id" @technicien-deleted="refreshDeleted"></delete-technicien>
-                <edit-technicien v-bind:technicienToEdit="technicienToEdit" @technicien-updated="refreshEdited"></edit-technicien>
+                <button @click="setId(technicien.user_id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger">Supprimer</button>
+                <DeleteTechnicien v-bind:id="id" @technicien-deleted="refreshDeleted"></DeleteTechnicien>
+                <EditTechnicien v-bind:technicienToEdit="technicienToEdit" @technicien-updated="refreshEdited"></EditTechnicien>
               </td>
             </tr>
           </tbody>
@@ -124,7 +123,15 @@
   </div>
 </template>
 <script>
+  import AddTechnicien from './AddTechnicien';
+  import EditTechnicien from './EditTechnicien';
+  import DeleteTechnicien from './DeleteTechnicien';
     export default {
+    components:{
+      AddTechnicien,
+      EditTechnicien,
+      DeleteTechnicien
+    },
       props:['user'],
       data(){
         return{
@@ -133,20 +140,24 @@
           q: new FormData(),
           qNom:'',
           qPrenom:'',
-          qPseudo:'',
           qTel:'',
           qEmail:'',
           qZone:'',
           hidden:'true',
-          id:''
+          id:'',
+          loading:true,
+          baseUrl:process.env.MIX_URL,
         }
       },
       created(){
         if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-        axios.get("http://localhost:8000/techniciens/liste")
-        .then(response => this.techniciens = response.data)
+        axios.get(this.baseUrl+"/techniciens/liste")
+        .then(response => {
+          this.techniciens = response.data;
+          this.loading = false;
+        })
         .catch(error => console.log(error))
       },
       methods:{
@@ -192,12 +203,11 @@
           this.q.append('role', 'TECHNICIEN');
           this.q.append('nom', this.qNom);
           this.q.append('prenom', this.qPrenom);
-          this.q.append('pseudo', this.qPseudo);
           this.q.append('tel', this.qTel);
           this.q.append('email', this.qEmail);
           this.q.append('zone', this.qZone);
 
-          axios.post("http://localhost:8000/users/search", this.q)
+          axios.post(this.baseUrl+"/users/search", this.q)
           .then(response => this.techniciens = response.data)
           .catch(error => console.log(error))
 
@@ -206,13 +216,13 @@
           this.techniciens = techniciens.data; 
         },
         getResults(page = 1) {
-          axios.get('http://localhost:8000/techniciens/liste?page=' + page)
+          axios.get(this.baseUrl+'/techniciens/liste?page=' + page)
               .then(response => {
                   this.techniciens = response.data;
           });
         },
         getTechnicien(id){
-            axios.get('http://localhost:8000/techniciens/edit/' + id)
+            axios.get(this.baseUrl+'/techniciens/edit/' + id)
             .then(response => this.technicienToEdit = response.data)
             .catch(error => console.log(error));
         },

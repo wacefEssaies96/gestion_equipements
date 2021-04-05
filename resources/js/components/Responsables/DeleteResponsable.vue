@@ -25,9 +25,14 @@
 <script>
 export default {
     props:['id'],
+    date(){
+        return{
+            baseUrl:process.env.MIX_URL,
+        }
+    },
     methods:{
         deleteResponsable(id){
-            axios.delete('http://localhost:8000/responsables/' + id)
+            axios.delete(this.baseUrl+'/responsables/' + id)
             .then(response => this.$emit('responsable-deleted',response))
             .catch(error => console.log(error));               
         },

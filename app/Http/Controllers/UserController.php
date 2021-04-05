@@ -31,4 +31,7 @@ class UserController extends Controller
         $user = $user->paginate(10);
         return response()->json($user);
     }
+    public function getUserId(){
+        return response()->json(Auth::id());
+    }
 }

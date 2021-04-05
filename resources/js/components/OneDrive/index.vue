@@ -70,30 +70,36 @@ export default {
         files: '',
         file:'',
         accessData: '',
+        baseUrl:process.env.MIX_URL,
       }
     },
     created(){
-      axios.get("http://localhost:8000/getAccessData")
+      axios.get(this.baseUrl+"/getAccessData")
       .then(response => this.accessData = JSON.parse(response.request.response))
       .catch(error => console.log(error))
-      axios.get("http://localhost:8000/getalldata")
-      .then(response => this.files = response.data)
-      .catch(error => console.log(error))
+      
+      setTimeout(()=>{
+        if(this.accessData.userName != null){
+          axios.get(this.baseUrl+"/getalldata")
+          .then(response => this.files = response.data)
+          .catch(error => console.log(error))
+        }
+      },1000);
     },
     methods:{
       getDataById(id){
-        axios.get("http://localhost:8000/getdatabyid/"+id)
+        axios.get(this.baseUrl+"/getdatabyid/"+id)
         .then(response => this.files = response.data)
         .catch(error => console.log(error))
       },
       downloadData(id){
-        axios.get("http://localhost:8000/download/data/"+id)
+        axios.get(this.baseUrl+"/download/data/"+id)
         .then(response => this.file = response.data)
         .catch(error => console.log(error))
         this.equipementStore();
       },
       equipementStore(){
-        axios.post('http://localhost:8000/importDataFromExcel',{
+        axios.post(this.baseUrl+'/importDataFromExcel',{
             file : this.file
         })
         .then(response => this.checkStatus(response.data))

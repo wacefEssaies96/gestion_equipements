@@ -1,9 +1,9 @@
 <template>
 <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" >
 
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -38,12 +38,7 @@
                     <input @keyup="search" type="text" v-model="qPrenom" class="form-control" placeholder="Prenom">
                   </div>
                 </div>
-                <div class="col">
-                  <div class="from-group">
-                    <label>Pseudo</label>
-                    <input @keyup="search" type="text" v-model="qPseudo" class="form-control" placeholder="Pseudo">
-                  </div>
-                </div>
+                
                 <div class="col">
                   <div class="from-group">
                     <label>Tel</label>
@@ -71,14 +66,13 @@
         </div>
       </div>
       <!-- /.card-header -->
-      <add-hotline @hotline-added="refreshAdded"></add-hotline>  
+      <AddHotline @hotline-added="refreshAdded"></AddHotline>  
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
             <tr>
               <th>Nom</th>
               <th>Prenom</th>
-              <th>Pseudo</th>
               <th>Email</th>
               <th>Téléphone</th>
               <th>Action</th>
@@ -88,16 +82,15 @@
             <tr v-for="hotline in hotlines.data" :key="hotline.id">
               <td>{{ hotline.nom }}</td>
               <td>{{ hotline.prenom }}</td>
-              <td>{{ hotline.pseudo }}</td>
               <td>{{ hotline.email }}</td>
               <td>{{ hotline.tel }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getHotline(hotline.id)">
-                Modifier
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getHotline(hotline.id)">
+                <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(hotline.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">Supprimer</button>
-                <delete-hotline v-bind:id="id" @hotline-deleted="refreshDeleted"></delete-hotline>
-                <edit-hotline v-bind:hotlineToEdit="hotlineToEdit" @hotline-updated="refreshEdited"></edit-hotline>
+                <button @click="setId(hotline.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt" title="Supprimer"/></button>
+                <DeleteHotline v-bind:id="id" @hotline-deleted="refreshDeleted"></DeleteHotline>
+                <EditHotline v-bind:hotlineToEdit="hotlineToEdit" @hotline-updated="refreshEdited"></EditHotline>
               </td>
             </tr>
           </tbody>
@@ -109,7 +102,15 @@
   </div>
 </template>
 <script>
+  import AddHotline from './AddHotline';
+  import EditHotline from './EditHotline';
+  import DeleteHotline from './DeleteHotline';
     export default {
+      components:{
+        AddHotline,
+        EditHotline,
+        DeleteHotline
+      },
       props:['user'],
       data(){
         return{
@@ -118,24 +119,28 @@
           q: new FormData(),
           qNom:'',
           qPrenom:'',
-          qPseudo:'',
           qTel:'',
           qEmail:'',
           hidden:'true',
-          id:''
+          id:'',
+          loading:true,
+          baseUrl:process.env.MIX_URL,
         }
       },
       created(){
         if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-        axios.get("http://localhost:8000/hotlines/liste")
-        .then(response => this.hotlines = response.data)
+        axios.get(this.baseUrl+"/hotlines/liste")
+        .then(response => {
+          this.hotlines = response.data;
+          this.loading = false;
+          })
         .catch(error => console.log(error))
       },
       methods:{
         getResults(page = 1) {
-          axios.get('http://localhost:8000/hotlines/liste?page=' + page)
+          axios.get(this.baseUrl+'/hotlines/liste?page=' + page)
           .then(response => {
             this.hotlines = response.data;
           })
@@ -183,11 +188,10 @@
           this.q.append('role', 'HOTLINE');
           this.q.append('nom', this.qNom);
           this.q.append('prenom', this.qPrenom);
-          this.q.append('pseudo', this.qPseudo);
           this.q.append('tel', this.qTel);
           this.q.append('email', this.qEmail);
 
-          axios.post("http://localhost:8000/users/search", this.q)
+          axios.post(this.baseUrl+"/users/search", this.q)
           .then(response => this.hotlines = response.data)
           .catch(error => console.log(error))
 
@@ -196,13 +200,10 @@
           this.hotlines = hotlines.data; 
         },
         getHotline(id){
-            axios.get('http://localhost:8000/hotlines/edit/' + id)
-            .then(response => this.hotlineToEdit = response.data)
-            .catch(error => console.log(error));
+          axios.get(this.baseUrl+'/hotlines/edit/' + id)
+          .then(response => this.hotlineToEdit = response.data)
+          .catch(error => console.log(error));
         },
-      },
-      mounted() {
-        console.log('Component mounted.')
       }
     }
 </script>

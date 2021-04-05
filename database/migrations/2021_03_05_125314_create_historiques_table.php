@@ -15,8 +15,9 @@ class CreateHistoriquesTable extends Migration
     {
         Schema::create('historiques', function (Blueprint $table) {
             $table->id();
+            $table->time('heure_attente')->nullable();
+            $table->time('heure_arret')->nullable();
             //hotline
-            $table->string('num_bt')->nullable();
             $table->time('heure_demande')->nullable();
             $table->enum('appelle',['Cloturé','Non cloturé'])->nullable();
             $table->date('jour')->nullable();

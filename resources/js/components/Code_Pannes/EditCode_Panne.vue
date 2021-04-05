@@ -78,6 +78,7 @@ import { required} from 'vuelidate/lib/validators';
                 code: '',
                 designation: '',
                 zone: '',
+                baseUrl:process.env.MIX_URL,
             }
         },
         watch:{
@@ -89,7 +90,7 @@ import { required} from 'vuelidate/lib/validators';
         },
         methods: {
           update(){
-              axios.patch('http://localhost:8000/code_pannes/edit/' + this.codePanneToEdit.id, {
+              axios.patch(this.baseUrl+'/code_pannes/edit/' + this.codePanneToEdit.id, {
                   code: this.code,
                   designation: this.designation,
                   zone: this.zone

@@ -3,7 +3,7 @@
   <div class="content-wrapper">
 
     <!-- Content Header (Page header) -->
-    <section class="content-header">
+    <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -66,7 +66,7 @@
         </div>
       </div>
       <!-- /.card-header -->
-    <add-codePanne @codePanne-added="refreshAdded"></add-codePanne>   
+    <AddCodePanne @codePanne-added="refreshAdded"></AddCodePanne>   
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -83,12 +83,14 @@
               <td>{{ code_panne.designation }}</td>
               <td>{{ code_panne.zone }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getCode_Panne(code_panne.id)">
-                Modifier
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getCode_Panne(code_panne.id)">
+                  <i class="fas fa-edit" title="Modifier"/>
                 </button>              
-                <button @click="setId(code_panne.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">Supprimer</button>
-                <delete-codePanne v-bind:id="id" @codePanne-deleted="refreshDeleted"></delete-codePanne>
-                <edit-codePanne v-bind:codePanneToEdit="codePanneToEdit" @codePanne-updated="refreshEdited"></edit-codePanne>
+                <button @click="setId(code_panne.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger">
+                   <i class="fas fa-trash-alt" title="Supprimer"/>
+                  </button>
+                <DeleteCodePanne v-bind:id="id" @codePanne-deleted="refreshDeleted"></DeleteCodePanne>
+                <EditCodePanne v-bind:codePanneToEdit="codePanneToEdit" @codePanne-updated="refreshEdited"></EditCodePanne>
               </td>
             </tr>
           </tbody>
@@ -100,7 +102,15 @@
   </div>
 </template>
 <script>
+  import AddCodePanne from './AddCode_Panne';
+  import EditCodePanne from './EditCode_Panne';
+  import DeleteCodePanne from './DeleteCode_Panne';
     export default {
+        components:{
+          AddCodePanne,
+          EditCodePanne,
+          DeleteCodePanne,
+      },
       props:['user'],
       data(){
         return{
@@ -111,20 +121,25 @@
           qDesi: '',
           q: new FormData(),
           hidden: 'true',
-          id:''
+          id:'',
+          loading:true,
+          baseUrl:process.env.MIX_URL,
         }
       },
       created(){
         if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-        axios.post("http://localhost:8000/code_pannes/liste")
-        .then(response => this.code_pannes = response.data)
+        axios.post(this.baseUrl+"/code_pannes/liste")
+        .then(response => {
+          this.code_pannes = response.data;
+          this.loading = false;
+          })
         .catch(error => console.log(error))
       },
       methods:{
         getResults(page = 1) {
-          axios.post('http://localhost:8000/code_pannes/liste?page=' + page)
+          axios.post(this.baseUrl+'/code_pannes/liste?page=' + page)
           .then(response => {
             this.code_pannes = response.data;
           })
@@ -173,7 +188,7 @@
           this.q.append('zone', this.qZone);
           this.q.append('designation', this.qDesi);
 
-          axios.post("http://localhost:8000/code_pannes/liste", this.q)
+          axios.post(this.baseUrl+"/code_pannes/liste", this.q)
           .then(response => this.code_pannes = response.data)
           .catch(error => console.log(error))
 
@@ -182,7 +197,7 @@
           this.code_pannes = code_pannes.data; 
         },
         getCode_Panne(id){
-            axios.get('http://localhost:8000/code_pannes/edit/' + id)
+            axios.get(this.baseUrl+'/code_pannes/edit/' + id)
             .then(response => this.codePanneToEdit = response.data)
             .catch(error => console.log(error));
         },

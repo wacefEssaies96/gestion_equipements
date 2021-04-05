@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Equipement;
+use App\Document;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -20,11 +21,7 @@ class EquipementController extends Controller
         }  
         return response()->json("c bon");
     }
-    
-    public function index()
-    {
-        return view('pages.equipements');
-    }
+
     public function liste(Request $request)
     {
         $equip = Equipement::where('code','like','%'.request('code').'%');
@@ -52,8 +49,6 @@ class EquipementController extends Controller
         $equipement->n_serie = request('n_serie');
         $equipement->designation = request('designation');
         $imageArr = explode(',',request('image'));
-        // dd($imageArr);
-        // return response()->json($imageArr);
         if($imageArr[0] != 'null'){
             $extension  = ".png";
             if(str_contains($imageArr[0], 'jpeg')) $extension = ".jpg";
@@ -66,8 +61,15 @@ class EquipementController extends Controller
         }
         $equipement->zone = request('zone');
         $equipement->save();
+        $documents = json_decode($request->documents);
+        foreach($documents as $item){
+            $document = new Document();
+            $document->equipement_id = $equipement->id;
+            $document->document = $item->filePath;
+            $document->type = $item->type;
+            $document->save();
+        }
         return $this->refresh();  
-        
     }
 
     public function edit($id)
@@ -95,14 +97,19 @@ class EquipementController extends Controller
             fclose($image); // fermer le fichier
             $equipement->image = $filename;
         }
-        
-
         $equipement->nom = request('nom');
         $equipement->code= request('code');
         $equipement->n_serie = request('n_serie');
         $equipement->designation = request('designation');
         $equipement->zone = request('zone');
         $equipement->save();
+        $documents = json_decode(request('documents'));
+        foreach($documents as $item){
+            $document = Document::where('equipement_id', '=', $id)->where('type', '=', $item->type)->first();
+            unlink(realpath($document->document));
+            $document->document = $item->filePath;
+            $document->save();
+        }
         return $this->refresh();  
     }
 
@@ -112,6 +119,10 @@ class EquipementController extends Controller
         $equipement = Equipement::find($id);
         if($equipement->image != null){
             unlink(realpath($equipement->image));
+        }
+        $documents = Document::where('equipement_id', '=', $id)->get();
+        foreach($documents as $document){
+            unlink(realpath($document->document));
         }
         if($equipement->delete()){
             return $this->refresh();
@@ -126,5 +137,14 @@ class EquipementController extends Controller
     public function getEquipementByCode($value){
         $equipement = Equipement::where('code','=',$value)->get();
         return response()->json($equipement);
+    }
+
+    public function getEquipements($zone){
+        $equipements = Equipement::where('zone','=',$zone)->get();
+        return response()->json($equipements);
+    }
+    public function getEquipById($id){
+        $e = Equipement::where('id', '=', $id)->first();
+        return response()->json($e);
     }
 }
