@@ -5,7 +5,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Ajouter un nouveau hotline</h5>
+                <h5 class="modal-title" id="exampleModalCenterTitle">Ajouter un nouveau production</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -106,7 +106,7 @@
             </div>
             <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                  <button hidden type="submit" id="submitAddHotline" class="btn btn-primary" @click="hotlineStore" data-dismiss="modal"></button>
+                  <button hidden type="submit" id="submitAddProduction" class="btn btn-primary" @click="productionStore" data-dismiss="modal"></button>
             </div>
             </div>
         </div>
@@ -138,7 +138,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
         minLength: minLength('3'),
         maxLength: maxLength('15')
       },
-     
       email: {
         required,
         isUnique(value){
@@ -152,7 +151,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
         },
         async isValid(value){
             if(value==='') return true;
-            const response = await axios.get(this.baseUrl+'/responsables/verifemail/'+value)
+            const response = await axios.get('http://localhost:8000/responsables/verifemail/'+value)
             .catch(error => console.log(error));
             if(response.data.length == 0) return true;
         }
@@ -184,14 +183,14 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
       checkAddForm(){
         this.$v.$touch()
         if(!this.$v.$invalid){
-          var submitForm = document.getElementById('submitAddHotline');
+          var submitForm = document.getElementById('submitAddProduction');
           submitForm.click();
         }else{
             alert("Veuillez remplir les champs correctement !");
         }
       },
-      hotlineStore(){
-        axios.post(this.baseUrl+'/hotlines',{
+      productionStore(){
+        axios.post(this.baseUrl+'/productions',{
             nom: this.nom,
             prenom: this.prenom,
             email: this.email,
@@ -199,7 +198,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             password: this.password,
             role : this.role
         })
-        .then(response => this.$emit('hotline-added',response))
+        .then(response => this.$emit('production-added',response))
         .catch(error => console.log(error));
         this.refreshData();
       },

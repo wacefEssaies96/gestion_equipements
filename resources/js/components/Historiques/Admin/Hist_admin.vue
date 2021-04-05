@@ -114,9 +114,11 @@
             <td>{{ historique.commentaire }}</td>
             <td> 
                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getHistorique(historique.id);">
-              Modifier
+                  <i class="fas fa-edit" title="Modifier"/>
               </button>
-              <button @click="setId(historique.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">Supprimer</button>
+              <button @click="setId(historique.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">
+                  <i class="fas fa-trash-alt" title="Supprimer"/>
+              </button>
               <delete-historique v-bind:id="id" @historique-deleted="refreshDeleted"></delete-historique>
               <edit-hist-admin 
                 v-bind:historiqueToEdit="historiqueToEdit"
@@ -136,7 +138,14 @@
   </div>
 </template>
 <script>
+  import AddHistAdmin from './AddHistAdmin';
+  import EditHistAdmin from './EditHistAdmin';
 export default {
+   components:{
+          AddHistAdmin,
+          EditHistAdmin,
+        
+      },
   props:['user'],
     data(){
       return{
@@ -155,22 +164,23 @@ export default {
         equipements: '',
         codePannes: '',
         hidden:'true',
+        baseUrl:process.env.MIX_URL,
       }
     },
     created(){
       if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-      axios.post("http://localhost:8000/historiques/liste")
+      axios.post(this.baseUrl+"/historiques/liste")
       .then(response => this.historiques = response.data)
       .catch(error => console.log(error))
-      axios.get("http://localhost:8000/historiques/techs")
+      axios.get(this.baseUrl+"/historiques/techs")
       .then(response => this.techs = response.data)
       .catch(error => console.log(error))
     },
     methods:{
       getResults(page = 1) {
-        axios.post('http://localhost:8000/historiques/liste?page=' + page)
+        axios.post(this.baseUrl+'/historiques/liste?page=' + page)
         .then(response => {
           this.historiques = response.data;
         })
@@ -222,31 +232,31 @@ export default {
         this.q.append('appelle', this.qAppelle);
         this.q.append('tech_id', this.qTech);
 
-        axios.post("http://localhost:8000/historiques/liste", this.q)
+        axios.post(this.baseUrl+"/historiques/liste", this.q)
         .then(response => this.historiques = response.data)
         .catch(error => console.log(error))
 
       },
       getHistorique(id){
-        axios.get('http://localhost:8000/historiques/edit/' + id)
+        axios.get(this.baseUrl+'/historiques/edit/' + id)
         .then(response => this.historiqueToEdit = response.data)
         .catch(error => console.log(error));  
         setTimeout(() => this.getTech(this.historiqueToEdit[0].zone), 2000);
         setTimeout(() => this.getEquipements(this.historiqueToEdit[0].zone), 2000);
       },
       getTech(zone){
-        axios.get("http://localhost:8000/historiques/techniciens/" + zone)
+        axios.get(this.baseUrl+"/historiques/techniciens/" + zone)
         .then(response => this.tech = (response.data)) 
         .catch(error => console.log(error))
       },        
       getEquipements(zone){
-        axios.get('http://localhost:8000/historiques/equipement/zone/' + zone)
+        axios.get(this.baseUrl+'/historiques/equipement/zone/' + zone)
         .then(response =>this.equipements =  response.data)
         .catch(error => console.log(error));
         this.getCodePannes(zone);
       },
       getCodePannes(zone){
-        axios.get("http://localhost:8000/historiques/code-panne/"+zone)
+        axios.get(this.baseUrl+"/historiques/code-panne/"+zone)
         .then(response => this.codePannes = response.data)
         .catch(error => console.log(error))
       },

@@ -127,4 +127,8 @@ class EquipementController extends Controller
         $equipement = Equipement::where('code','=',$value)->get();
         return response()->json($equipement);
     }
+    public function getEquipById($id){
+        $e = Equipement::where('id', '=', $id)->first();
+        return response()->json($e);
+    }
 }

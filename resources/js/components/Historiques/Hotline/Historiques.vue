@@ -158,7 +158,7 @@
                       data-target="#editModal"
                       @click="getHistorique(histHotline.id)"
                     >
-                      Modifier
+                      <i class="fas fa-edit" title="Modifier"/>
                     </button>
                     <button
                       @click="setId(histHotline.id)"
@@ -167,7 +167,7 @@
                       type="button"
                       class="btn btn-danger"
                     >
-                      Supprimer
+                      <i class="fas fa-trash-alt" title="Supprimer"/>
                     </button>
                     <delete-historique
                       v-bind:id="id"
@@ -326,7 +326,13 @@
   </div>
 </template>
 <script>
+import AddHistorique from './AddHistorique';
+import EditHistorique from './EditHistorique';   
 export default {
+   components:{
+         AddHistorique,
+         EditHistorique,
+      },
   props:['user'],
   data() {
     return {
@@ -344,6 +350,7 @@ export default {
       qTech: "",
       q: new FormData(),
       id: "",
+      baseUrl:process.env.MIX_URL,
     };
   },
   methods: {
@@ -377,7 +384,7 @@ export default {
     },
     getResults(page = 1) {
       axios
-        .post("http://localhost:8000/historiques/liste?page=" + page)
+        .post(this.baseUrl+"/historiques/liste?page=" + page)
         .then((response) => {
           this.historiques = response.data;
         })
@@ -385,7 +392,7 @@ export default {
     },
     getResultsForHotline(page = 1) {
       axios
-        .get("http://localhost:8000/historiques/hotline?page=" + page)
+        .get(this.baseUrl+"/historiques/hotline?page=" + page)
         .then((response) => {
           this.histsHotline = response.data;
         })
@@ -399,7 +406,7 @@ export default {
       this.q.append("tech_id", this.qTech);
 
       axios
-        .post("http://localhost:8000/historiques/liste", this.q)
+        .post(this.baseUrl+"/historiques/liste", this.q)
         .then((response) => (this.historiques = response.data))
         .catch((error) => console.log(error));
     },
@@ -424,14 +431,14 @@ export default {
     },
     getHistorique(id) {
       axios
-        .get("http://localhost:8000/historiques/edit/" + id)
+        .get(this.baseUrl+"/historiques/edit/" + id)
         .then((response) => (this.historiqueToEdit = response.data))
         .catch((error) => console.log(error));
       setTimeout(() => this.getTech(this.historiqueToEdit[0].zone), 2000);
     },
     getTech(zone) {
       axios
-        .get("http://localhost:8000/historiques/techniciens/" + zone)
+        .get(this.baseUrl+"/historiques/techniciens/" + zone)
         .then((response) => (this.tech = response.data))
         .catch((error) => console.log(error));
     },
@@ -441,15 +448,15 @@ export default {
           this.$router.push('/');
         }
     axios
-      .post("http://localhost:8000/historiques/liste")
+      .post(this.baseUrl+"/historiques/liste")
       .then((response) => (this.historiques = response.data))
       .catch((error) => console.log(error));
     axios
-      .get("http://localhost:8000/historiques/techs")
+      .get(this.baseUrl+"/historiques/techs")
       .then((response) => (this.techs = response.data))
       .catch((error) => console.log(error));
     axios
-      .get("http://localhost:8000/historiques/hotline")
+      .get(this.baseUrl+"/historiques/hotline")
       .then((response) => (this.histsHotline = response.data))
       .catch((error) => console.log(error));
   },

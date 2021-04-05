@@ -119,6 +119,7 @@
                 image: null,
                 imageFile:null,
                 zone: '',
+                baseUrl:process.env.MIX_URL,
             }
         },
         watch:{
@@ -145,7 +146,7 @@
             
             },
             update(){
-                axios.patch('http://localhost:8000/equipements/edit/' + this.equipementToEdit.id, {
+                axios.patch(this.baseUrl+'/equipements/edit/' + this.equipementToEdit.id, {
                     nom: this.nom,
                     code: this.code,
                     designation: this.designation,

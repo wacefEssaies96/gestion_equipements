@@ -66,7 +66,7 @@
         </div>
       </div>
       <!-- /.card-header -->
-    <add-codePanne @codePanne-added="refreshAdded"></add-codePanne>   
+    <AddCode_Panne @codePanne-added="refreshAdded"></AddCode_Panne>   
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -84,11 +84,14 @@
               <td>{{ code_panne.zone }}</td>
               <td>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getCode_Panne(code_panne.id)">
-                Modifier
+                 <i class="fas fa-edit" title="Modifier"/>
                 </button>              
-                <button @click="setId(code_panne.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">Supprimer</button>
-                <delete-codePanne v-bind:id="id" @codePanne-deleted="refreshDeleted"></delete-codePanne>
-                <edit-codePanne v-bind:codePanneToEdit="codePanneToEdit" @codePanne-updated="refreshEdited"></edit-codePanne>
+                <button @click="setId(code_panne.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">
+                  <i class="fas fa-trash-alt" title="Supprimer"/>
+                  </button>
+                <DeleteCode_Panne v-bind:id="id" @codePanne-deleted="refreshDeleted"></DeleteCode_Panne>
+                <EditCode_Panne v-bind:codePanneToEdit="codePanneToEdit" @codePanne-updated="refreshEdited">
+                </EditCode_Panne>
               </td>
             </tr>
           </tbody>
@@ -100,8 +103,16 @@
   </div>
 </template>
 <script>
+  import AddCode_Panne from './AddCode_Panne';
+  import EditCode_Panne from './EditCode_Panne';
+  import DeleteCode_Panne from './DeleteCode_Panne';
     export default {
-      props:['user'],
+      components:{
+          AddCode_Panne,
+          EditCode_Panne,
+          DeleteCode_Panne,
+      },
+      props:['user'], 
       data(){
         return{
           code_pannes: {},
@@ -111,20 +122,21 @@
           qDesi: '',
           q: new FormData(),
           hidden: 'true',
-          id:''
+          id:'',
+          baseUrl:process.env.MIX_URL,
         }
       },
       created(){
         if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-        axios.post("http://localhost:8000/code_pannes/liste")
+        axios.post(this.baseUrl+"/code_pannes/liste")
         .then(response => this.code_pannes = response.data)
         .catch(error => console.log(error))
       },
       methods:{
         getResults(page = 1) {
-          axios.post('http://localhost:8000/code_pannes/liste?page=' + page)
+          axios.post(this.baseUrl+'/code_pannes/liste?page=' + page)
           .then(response => {
             this.code_pannes = response.data;
           })
@@ -173,7 +185,7 @@
           this.q.append('zone', this.qZone);
           this.q.append('designation', this.qDesi);
 
-          axios.post("http://localhost:8000/code_pannes/liste", this.q)
+          axios.post(this.baseUrl+"/code_pannes/liste", this.q)
           .then(response => this.code_pannes = response.data)
           .catch(error => console.log(error))
 
@@ -182,7 +194,7 @@
           this.code_pannes = code_pannes.data; 
         },
         getCode_Panne(id){
-            axios.get('http://localhost:8000/code_pannes/edit/' + id)
+            axios.get(this.baseUrl+'/code_pannes/edit/' + id)
             .then(response => this.codePanneToEdit = response.data)
             .catch(error => console.log(error));
         },

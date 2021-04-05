@@ -2,28 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Hotline;
+use App\Production;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-
-class HotlineController extends Controller
+class ProductionController extends Controller
 {
-
+    
     public function index()
     {
-        return view('pages.hotlines');
+        return view('pages.productions');
     }
-    
+
     public function liste()
     {
         return $this->refresh();
     }
     public function verifEmail($value){
-        $hotline = User::where('email','=',$value)->get();
-        return response()->json($hotline);
+        $production = User::where('email','=',$value)->get();
+        return response()->json($production);
     }
+
     public function store(Request $request)
     {
         $this->validate($request,[
@@ -40,51 +40,58 @@ class HotlineController extends Controller
         $password = Hash::make($request['password']);
         $user->password = $password;
         $user->tel = request('tel');
-        $user->role = 'HOTLINE';
+        $user->role = 'PRODUCTION';
         $user->save();
 
-        $hotline = new Hotline();
-        $hotline->user_id = $user->id;
-        $hotline->save();
+        $production = new Production();
+        $production->user_id = $user->id;
+        $production->save();
         if($user){
             return $this->refresh();  
         }
     }
 
-    public function edit($id)
+
+    public function show(Production $production)
     {
-        $hotline = User::find($id);
-        return response()->json($hotline);
+        //
     }
 
+    
+    public function edit($id)
+    {
+        $production = User::find($id);
+        return response()->json($production);
+    }
+
+    
     public function update($id)
     {
-        $hotline = User::find($id);
-        $hotline->nom = request('nom');
-        $hotline->prenom = request('prenom');
-        $hotline->email = request('email');
-        $hotline->tel = request('tel');
+        $production = User::find($id);
+        $production->nom = request('nom');
+        $production->prenom = request('prenom');
+        $production->email = request('email');
+        $production->tel = request('tel');
         if(request('password') != ''){
             $password = Hash::make(request('password'));
-            $hotline->password = $password;
+            $production->password = $password;
         }
-        $hotline->save();
+        $production->save();
         return $this->refresh();
     }
 
-   
+
     public function destroy($id)
     {
-        $hotline = User::find($id);
-        if($hotline->delete()){
+        $production = User::find($id);
+        if($production->delete()){
             return $this->refresh();
         }else{
             return response()->json(['erreur'=>'marche pas']);
         }
     }
-
     public function refresh(){
-        $hotline =  \DB::table('users')->where('role','=','HOTLINE')->paginate(10);
-        return response()->json($hotline);
+        $production =  \DB::table('users')->where('role','=','PRODUCTION')->paginate(10);
+        return response()->json($production);
     }
 }

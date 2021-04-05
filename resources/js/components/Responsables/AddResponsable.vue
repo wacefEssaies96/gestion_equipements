@@ -57,17 +57,7 @@
                       <span v-if="!$v.tel.maxLength">Veuillez entrer 8 chiffre ! (********)</span>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label for="pseudo">Pseudo</label>
-                    <input type="pseudo" class="form-control" placeholder="Pseudo" v-model="pseudo"
-                    :class="{'is-invalid': (pseudo != '') ? $v.pseudo.$invalid:'', 'is-valid':!$v.pseudo.$invalid}">
-                    <div class="valid-feedback">Pseudo valide</div>
-                    <div class="invalid-feedback">
-                      <span v-if="!$v.pseudo.required">Veuillez entrer un pseudo valide !</span>
-                      <span v-if="!$v.pseudo.minLength">Veuillez entrer au moins 3 caractères !</span>
-                      <span v-if="!$v.pseudo.maxLength">Maximum 15 caractères !</span>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
               <div class="form-group">
@@ -129,9 +119,9 @@ export default {
       prenom: '',
       email: '',
       tel: '',
-      pseudo: '',
       password: '',
       repeatPassword: '',
+      baseUrl:process.env.MIX_URL,
     }
   },
   validations: {
@@ -141,11 +131,6 @@ export default {
       maxLength: maxLength('15')
     },
     prenom: {
-      required,
-      minLength: minLength('3'),
-      maxLength: maxLength('15')
-    },
-    pseudo: {
       required,
       minLength: minLength('3'),
       maxLength: maxLength('15')
@@ -163,7 +148,7 @@ export default {
       },
       async isValid(value){
         if(value==='') return true;
-        const response = await axios.get('http://localhost:8000/responsables/verifemail/'+value)
+        const response = await axios.get(this.baseUrl+'/responsables/verifemail/'+value)
         .catch(error => console.log(error));
         if(response.data.length == 0) return true;
       }
@@ -202,12 +187,11 @@ export default {
       }
     },
     responsableStore(){
-        axios.post('http://localhost:8000/responsables',{
+        axios.post(this.baseUrl+'/responsables',{
             nom: this.nom,
             prenom: this.prenom,
             email: this.email,
             tel: this.tel,
-            pseudo: this.pseudo,
             password: this.password,
             role : this.role
         })
@@ -220,7 +204,6 @@ export default {
       this.prenom = '';
       this.email = '';
       this.tel= '';
-      this.pseudo= '';
       this.password= '';
       this.repeatPassword= '';
     }

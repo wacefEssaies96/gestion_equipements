@@ -9,11 +9,11 @@
                 </button>
             </div>
             <div class="modal-body">
-            <p>Voulez-vous vraiment supprimer cet historique ?&hellip;</p>
+            <p>Voulez-vous vraiment supprimer ce feedback ?&hellip;</p>
             </div>
             <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>
-            <button type="button" class="btn btn-success" data-dismiss="modal" @click="deleteHistorique(id)">Oui</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" @click="deleteFeedback(id)">Oui</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -23,12 +23,7 @@
     <!-- /.modal -->
 </template>
 <script>
-import DeleteHistoriques from './DeleteHistoriques';
-
 export default {
-    components:{
-         DeleteHistoriques,
-      },
     props:['id'],
         data(){
         return{
@@ -36,9 +31,9 @@ export default {
         }
       },
     methods:{
-        deleteHistorique(id){
-            axios.delete(this.baseUrl+'/historiques/' + id)
-            .then(response => this.$emit('historique-deleted',response))
+        deleteFeedback(id){
+            axios.delete(this.baseUrl+'/feedbacks/' + id)
+            .then(response => this.$emit('feedback-deleted',response))
             .catch(error => console.log(error));               
         },
     }

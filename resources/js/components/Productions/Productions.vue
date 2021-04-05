@@ -7,12 +7,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Hotlines</h1>
+            <h1>Productions</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
-              <li class="breadcrumb-item active">Hotlines</li>
+              <li class="breadcrumb-item active">Productions</li>
             </ol>
           </div>
         </div>
@@ -38,7 +38,7 @@
                     <input @keyup="search" type="text" v-model="qPrenom" class="form-control" placeholder="Prenom">
                   </div>
                 </div>
-                
+               
                 <div class="col">
                   <div class="from-group">
                     <label>Tel</label>
@@ -56,17 +56,17 @@
           </div>
         </template>
       <div class="card-header">
-        <h3 class="card-title">Liste de tous les hotlines</h3>
+        <h3 class="card-title">Liste de tous les productions</h3>
         <div class="card-tools">
           <!-- Button trigger modal -->
           <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
-          Ajouter un nouveau hotline
+          Ajouter un nouveau production
           </button>
           <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>
         </div>
       </div>
       <!-- /.card-header -->
-      <add-hotline @hotline-added="refreshAdded"></add-hotline>  
+      <add-production @production-added="refreshAdded"></add-production>  
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -79,46 +79,46 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="hotline in hotlines.data" :key="hotline.id">
-              <td>{{ hotline.nom }}</td>
-              <td>{{ hotline.prenom }}</td>
-              <td>{{ hotline.email }}</td>
-              <td>{{ hotline.tel }}</td>
+            <tr v-for="production in productions.data" :key="production.id">
+              <td>{{ production.nom }}</td>
+              <td>{{ production.prenom }}</td>
+              <td>{{ production.email }}</td>
+              <td>{{ production.tel }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getHotline(hotline.id)">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getProduction(production.id)">
                   <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(hotline.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">
+                <button @click="setId(production.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">
                   <i class="fas fa-trash-alt" title="Supprimer"/>
                 </button>
-                <delete-hotline v-bind:id="id" @hotline-deleted="refreshDeleted"></delete-hotline>
-                <edit-hotline v-bind:hotlineToEdit="hotlineToEdit" @hotline-updated="refreshEdited"></edit-hotline>
+                <delete-production v-bind:id="id" @production-deleted="refreshDeleted"></delete-production>
+                <edit-production v-bind:productionToEdit="productionToEdit" @production-updated="refreshEdited"></edit-production>
               </td>
             </tr>
           </tbody>
         </table>
-        <pagination class="m-auto" :data="hotlines" @pagination-change-page="getResults"></pagination>
+        <pagination class="m-auto" :data="productions" @pagination-change-page="getResults"></pagination>
       </div>
       <!-- /.card-body -->
     </div>
   </div>
 </template>
 <script>
-  import AddHotline from './AddHotline';
-  import EditHotline from './EditHotline';
-  import DeleteHotline from './DeleteHotline';
-  
+  import AddProduction from './AddProduction';
+  import EditProduction from './EditProduction';
+  import DeleteProduction from './DeleteProduction';
+
     export default {
-      components:{
-          AddHotline,
-          EditHotline,
-          DeleteHotline
+       components:{
+          AddProduction,
+          EditProduction,
+          DeleteProduction
       },
       props:['user'],
       data(){
         return{
-          hotlines: {},
-          hotlineToEdit: '',
+          productions: {},
+          productionToEdit: '',
           q: new FormData(),
           qNom:'',
           qPrenom:'',
@@ -133,15 +133,15 @@
         if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-        axios.get(this.baseUrl+"/hotlines/liste")
-        .then(response => this.hotlines = response.data)
+        axios.get(this.baseUrl+"/productions/liste")
+        .then(response => this.productions = response.data)
         .catch(error => console.log(error))
       },
       methods:{
         getResults(page = 1) {
-          axios.get(this.baseUrl+'/hotlines/liste?page=' + page)
+          axios.get(this.baseUrl+'/productions/liste?page=' + page)
           .then(response => {
-            this.hotlines = response.data;
+            this.productions = response.data;
           })
           .catch(error => console.log(error));
         },
@@ -158,19 +158,19 @@
             timer: 5000
             });
         },
-        refreshDeleted(hotlines){
-          this.hotlines = hotlines.data;
-          var value = 'Hotline a été supprimé avec succées';
+        refreshDeleted(productions){
+          this.productions = productions.data;
+          var value = 'Production a été supprimé avec succées';
           this.toast(value);
         },
-        refreshEdited(hotlines){
-          var value = 'Hotline a été modifié avec succées';
-          this.hotlines = hotlines.data;
+        refreshEdited(productions){
+          var value = 'Production a été modifié avec succées';
+          this.productions = productions.data;
           this.toast(value);
         },
-        refreshAdded(hotlines){
-          var value = 'Hotline a été ajouté avec succées';
-          this.hotlines = hotlines.data;
+        refreshAdded(productions){
+          var value = 'Production a été ajouté avec succées';
+          this.productions = productions.data;
           this.toast(value);
         },
         showSearch(){
@@ -184,23 +184,23 @@
           }
         },
         search(){
-          this.q.append('role', 'HOTLINE');
+          this.q.append('role', 'PRODUCTION');
           this.q.append('nom', this.qNom);
           this.q.append('prenom', this.qPrenom);
           this.q.append('tel', this.qTel);
           this.q.append('email', this.qEmail);
 
           axios.post(this.baseUrl+"/users/search", this.q)
-          .then(response => this.hotlines = response.data)
+          .then(response => this.productions = response.data)
           .catch(error => console.log(error))
 
         },
-        refresh(hotlines){
-          this.hotlines = hotlines.data; 
+        refresh(productions){
+          this.productions = productions.data; 
         },
-        getHotline(id){
-            axios.get(this.baseUrl+'/hotlines/edit/' + id)
-            .then(response => this.hotlineToEdit = response.data)
+        getProduction(id){
+            axios.get(this.baseUrl+'/productions/edit/' + id)
+            .then(response => this.productionToEdit = response.data)
             .catch(error => console.log(error));
         },
       },

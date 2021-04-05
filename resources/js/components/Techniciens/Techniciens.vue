@@ -38,12 +38,7 @@
                   <input @keyup="search" type="text" v-model="qPrenom" class="form-control" placeholder="Prenom">
                 </div>
               </div>
-              <div class="col">
-                <div class="from-group">
-                  <label>Pseudo</label>
-                  <input @keyup="search" type="text" v-model="qPseudo" class="form-control" placeholder="Pseudo">
-                </div>
-              </div>
+             
               <div class="col">
                 <div class="from-group">
                   <label>Tel</label>
@@ -56,6 +51,25 @@
                   <input @keyup="search" type="text" v-model="qEmail" class="form-control" placeholder="Email">
                 </div>
               </div>
+              <div class="col">
+                <div class="from-group">
+                  <label>Qualification</label>
+                  <input @keyup="search" type="textarea" v-model="qQualification" class="form-control" placeholder="Qualification">
+                </div>
+              </div>
+              <div class="col">
+                <div class="from-group">
+                  <label>Heure de début de service</label>
+                  <input @keyup="search" type="time" v-model="qH_debut_service" class="form-control" placeholder="Heure de début de service">
+                </div>
+              </div>
+              <div class="col">
+                <div class="from-group">
+                  <label>Heure de fin de service</label>
+                  <input @keyup="search" type="time" v-model="qH_debut_service" class="form-control" placeholder="Heure de fin de service">
+                </div>
+              </div>
+              
               <div class="col">
                 <div class="from-group">
                   <label>Zone</label>
@@ -91,9 +105,11 @@
             <tr>
               <th>Nom</th>
               <th>Prenom</th>
-              <th>Pseudo</th>
               <th>Téléphone</th>
               <th>Email</th>
+              <th>Qualification</th>
+              <th>Heure de début de service</th>
+              <th>Heure de fin de service</th>
               <th>Zone</th>
               <th>Action</th>
             </tr>
@@ -102,15 +118,19 @@
             <tr v-for="technicien in techniciens.data" :key="technicien.id">
               <td>{{ technicien.nom }}</td>
               <td>{{ technicien.prenom }}</td>
-              <td>{{ technicien.pseudo }}</td>
               <td>{{ technicien.tel }}</td>
               <td>{{ technicien.email }}</td>
+              <td>{{ technicien.qualification }}</td>
+              <td>{{ technicien.h_debut_service }}</td>
+              <td>{{ technicien.h_fin_service }}</td>
               <td>{{ technicien.zone }}</td>
               <td>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getTechnicien(technicien.user_id)">
-                Modifier
+                  <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(technicien.user_id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">Supprimer</button>
+                <button @click="setId(technicien.user_id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-danger">
+                  <i class="fas fa-trash-alt" title="Supprimer"/>
+                  </button>
                 <delete-technicien v-bind:id="id" @technicien-deleted="refreshDeleted"></delete-technicien>
                 <edit-technicien v-bind:technicienToEdit="technicienToEdit" @technicien-updated="refreshEdited"></edit-technicien>
               </td>
@@ -124,7 +144,16 @@
   </div>
 </template>
 <script>
+  import AddTechnicien from './AddTechnicien';
+  import EditTechnicien from './EditTechnicien';
+  import DeleteTechnicien from './DeleteTechnicien';
+  
     export default {
+      components:{
+      AddTechnicien,
+      EditTechnicien,
+      DeleteTechnicien
+    },
       props:['user'],
       data(){
         return{
@@ -133,19 +162,22 @@
           q: new FormData(),
           qNom:'',
           qPrenom:'',
-          qPseudo:'',
           qTel:'',
           qEmail:'',
+          qQualification:'',
+          qH_debut_service:'',
+          qH_fin_service:'',
           qZone:'',
           hidden:'true',
-          id:''
+          id:'',
+          baseUrl:process.env.MIX_URL,
         }
       },
       created(){
         if(this.user.role != 'ADMIN'){
           this.$router.push('/');
         }
-        axios.get("http://localhost:8000/techniciens/liste")
+        axios.get(this.baseUrl+"/techniciens/liste")
         .then(response => this.techniciens = response.data)
         .catch(error => console.log(error))
       },
@@ -192,12 +224,14 @@
           this.q.append('role', 'TECHNICIEN');
           this.q.append('nom', this.qNom);
           this.q.append('prenom', this.qPrenom);
-          this.q.append('pseudo', this.qPseudo);
           this.q.append('tel', this.qTel);
           this.q.append('email', this.qEmail);
+          this.q.append('email', this.qQualification);
+          this.q.append('email', this.qH_debut_service);
+          this.q.append('email', this.qH_fin_service);
           this.q.append('zone', this.qZone);
 
-          axios.post("http://localhost:8000/users/search", this.q)
+          axios.post(this.baseUrl+"/users/search", this.q)
           .then(response => this.techniciens = response.data)
           .catch(error => console.log(error))
 
@@ -206,13 +240,13 @@
           this.techniciens = techniciens.data; 
         },
         getResults(page = 1) {
-          axios.get('http://localhost:8000/techniciens/liste?page=' + page)
+          axios.get(this.baseUrl+'/techniciens/liste?page=' + page)
               .then(response => {
                   this.techniciens = response.data;
           });
         },
         getTechnicien(id){
-            axios.get('http://localhost:8000/techniciens/edit/' + id)
+            axios.get(this.baseUrl+'/techniciens/edit/' + id)
             .then(response => this.technicienToEdit = response.data)
             .catch(error => console.log(error));
         },

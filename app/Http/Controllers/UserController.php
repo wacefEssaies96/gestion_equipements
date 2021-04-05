@@ -12,7 +12,6 @@ class UserController extends Controller
 
         $user = User::where('nom','like','%'.request('nom').'%');
         $user = $user->where('prenom','like','%'.request('prenom').'%');
-        $user = $user->where('pseudo','like','%'.request('pseudo').'%');
         $user = $user->where('tel','like','%'.request('tel').'%');
         $user = $user->where('email','like','%'.request('email').'%');
         if($request->role == 'HOTLINE'){
@@ -20,6 +19,9 @@ class UserController extends Controller
         }
         if($request->role == 'RESPONSABLE'){
             $user = $user->where('role', '=', 'RESPONSABLE');
+        }
+        if($request->role == 'PRODUCTION'){
+            $user = $user->where('role', '=', 'PRODUCTION');
         }
         if($request->role == 'TECHNICIEN'){
             $user = $user->join('techniciens','users.id','=','techniciens.user_id');

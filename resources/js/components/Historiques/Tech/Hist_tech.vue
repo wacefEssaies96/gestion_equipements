@@ -60,7 +60,7 @@
                 <td>{{ historique.commentaire }}</td>
                 <td> 
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" @click="getEquipements(historique.zone);">
-                  Modifier
+                    <i class="far fa-file-edit" title="Remplir"/>
                   </button>
                   <edit-hist-tech 
                     v-bind:id="historique"
@@ -124,7 +124,11 @@
 </div>
 </template>
 <script>
+  import EditHistTech from './EditHistTech';
   export default {
+     components:{
+          EditHistTech,
+      },
     props:['user'],
     data(){
       return{
@@ -133,17 +137,18 @@
         id: '',
         equipements: '',
         codePannes: '',
-        hidden: 'false'
+        hidden: 'false',
+        baseUrl:process.env.MIX_URL,
       }
     },
     created(){
       if(this.user.role != 'TECHNICIEN'){
           this.$router.push('/');
         }
-      axios.post("http://localhost:8000/historiques/liste")
+      axios.post(this.baseUrl+"/historiques/liste")
       .then(response => this.historiques = response.data)
       .catch(error => console.log(error))
-      axios.get("http://localhost:8000/hist/tech/liste")
+      axios.get(this.baseUrl+"/hist/tech/liste")
       .then(response => this.histsTech = response.data)
       .catch(error => console.log(error))
 
@@ -168,7 +173,7 @@
         this.toast(value);
       },
       getResults(page = 1) {
-        axios.post('http://localhost:8000/historiques/liste?page=' + page)
+        axios.post(this.baseUrl+'/historiques/liste?page=' + page)
         .then(response => {
           this.historiques = response.data;
         })
@@ -181,13 +186,13 @@
         this.historiques = historiques.data; 
       },
       getEquipements(zone){
-        axios.get('http://localhost:8000/historiques/equipement/zone/' + zone)
+        axios.get(this.baseUrl+'/historiques/equipement/zone/' + zone)
         .then(response =>this.equipements =  response.data)
         .catch(error => console.log(error));
         this.getCodePannes(zone);
       },
       getCodePannes(zone){
-        axios.get("http://localhost:8000/historiques/code-panne/"+zone)
+        axios.get(this.baseUrl+"/historiques/code-panne/"+zone)
         .then(response => this.codePannes = response.data)
         .catch(error => console.log(error))
       },

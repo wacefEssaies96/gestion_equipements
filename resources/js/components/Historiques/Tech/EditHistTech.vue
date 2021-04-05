@@ -158,6 +158,7 @@
             type_travaille: '',
             nom_support:'',
             hist: this.id,
+            baseUrl:process.env.MIX_URL,
 
         }
     },
@@ -172,7 +173,7 @@
     },
     methods: {
       update(){
-        axios.patch('http://localhost:8000/histtech/edit/' + this.hist.id, {
+        axios.patch(this.baseUrl+'/histtech/edit/' + this.hist.id, {
             heure_fin: this.heure_fin,
             travaille: this.travaille,
             piece_rechange: this.piece_rechange,

@@ -25,9 +25,14 @@
 <script>
 export default {
     props:['id'],
+        data(){
+        return{
+          baseUrl:process.env.MIX_URL,
+        }
+      },
     methods:{
         deleteHotline(id){
-            axios.delete('http://localhost:8000/hotlines/' + id)
+            axios.delete(this.baseUrl+'/hotlines/' + id)
             .then(response => this.$emit('hotline-deleted',response))
             .catch(error => console.log(error));               
         },

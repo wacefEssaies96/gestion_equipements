@@ -119,6 +119,7 @@ export default {
             image:null,
             imageFile: null,
             zone: '',
+            baseUrl:process.env.MIX_URL,
         }
     },
     validations: {
@@ -131,7 +132,7 @@ export default {
             required,
             async isUnique(value){
                 if(value==='') return true;
-                const response = await axios.get('http://localhost:8000/equipements/'+value)
+                const response = await axios.get(this.baseUrl+'/equipements/'+value)
                 .catch(error => console.log(error));
                 if(response.data.length == 0) return true;
             }
@@ -179,7 +180,7 @@ export default {
             form.append('image', this.image);
             form.append('zone', this.zone);
             const config= {headers:{'Content-Type': 'multipart/form-data'}};
-            axios.post('http://localhost:8000/equipements',form,config)
+            axios.post(this.baseUrl+'/equipements',form,config)
             .then(response => this.$emit('equipement-added',response))
             .catch(error => console.log(error));
             this.refreshData();

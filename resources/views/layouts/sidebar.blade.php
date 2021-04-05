@@ -57,10 +57,16 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-              <router-link to='/responsables' class="nav-link">
-                <i class="fas fa-user-tie"></i>
-                <p>Responsables</p>
-              </router-link>
+                  <router-link to='/responsables' class="nav-link">
+                    <i class="fas fa-user-tie"></i>
+                    <p>Responsables</p>
+                  </router-link>
+                </li>
+                <li class="nav-item">
+                  <router-link to='/productions' class="nav-link">
+                    <i class="fas fa-user-tie"></i>
+                    <p>Productions</p>
+                  </router-link>
                 </li>
                 <li class="nav-item">
                   <router-link to='/hotlines' class="nav-link">
@@ -100,7 +106,15 @@
                   One drive
                 </p>
               </a>
-            </li>       
+            </li>  
+            <li class="nav-item">
+              <router-link to='/feedbacks' class="nav-link">
+              <i class="nav-icon far fa-comment-alt"></i>
+                <p>
+                  Feedback
+                </p>
+              </a>
+            </li>            
             <li class="nav-item">
               <router-link to="/hist-admin" class="nav-link">
                 <i class="nav-icon fas fa-history"></i>
@@ -126,6 +140,17 @@
               <i class="nav-icon fas fa-history"></i>
               <p>
                 Historiques
+              </p>
+            </router-link>
+          </li>
+          @endif
+            
+          @if (Auth::user()->role == "PRODUCTION")
+          <li class="nav-item">
+            <router-link to="/feedback-production" class="nav-link">
+              <i class="nav-icon fas fa-history"></i>
+              <p>
+                feedback Production
               </p>
             </router-link>
           </li>

@@ -4,7 +4,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalTitle">Modifier un responsable</h5>
+                <h5 class="modal-title" id="editModalTitle">Modifier un production</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -24,7 +24,8 @@
                       <div class="form-group">
                         <label for="nom">Nom</label>
                         <input type="text" class="form-control" placeholder="Nom" v-model="nom" 
-                          :class="{'is-invalid':$v.nom.$invalid,'is-valid':!$v.nom.$invalid}">
+                          :class="{'is-invalid':$v.nom.$invalid,'is-valid':!$v.nom.$invalid}"
+                        >
                         <div class="valid-feedback">Nom valide</div>
                         <div class="invalid-feedback">
                           <span v-if="!$v.nom.required">Veuillez entrer un nom !</span>
@@ -57,7 +58,7 @@
                           <span v-if="!$v.tel.maxLength">Veuillez entrer 8 chiffre ! (********)</span>
                         </div>
                       </div>
-                      
+                    
                     </div>
                   </div>
                   <div class="form-group">
@@ -70,7 +71,8 @@
                           <span v-if="!$v.email.isUnique">Veuillez entrer un email valide !</span>
                         </div>
                       </div>
-                      <a href="#" @click="changermdp('false')">Changer le mot de passe</a>
+                  
+                  <a href="#" @click="changermdp('false')">Changer le mot de passe</a>
                   <template v-if="hidden === 'false'">
                     <div class="form-group">
                       <label for="mdp">Mot de passe</label>
@@ -92,18 +94,19 @@
                       </div>
                     </div>
                   </template>
+                  
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Confirmer</button>
+                    <button type="submit" class="btn btn-primary">Confirmer</button>
                 </div>
               </form>
             </div>
             <!-- /.card -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="changermdp('true')">Close</button>
-                <button hidden id="submitEditResp" type="submit" class="btn btn-primary" data-dismiss="modal" @click="update">Confirm</button>
+                <button type="button" class="btn btn-secondary" @click="changermdp('true')" data-dismiss="modal">Close</button>
+                <button hidden id="submitEditProduction" type="submit" class="btn btn-primary" data-dismiss="modal" @click="update">Confirm</button>
             </div>
             </div>
         </div>
@@ -112,21 +115,21 @@
 <script>
 import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators';
     export default {
-      props: ['responsableToEdit'],
+      props: ['productionToEdit'],
       data(){
-            return{
-                nom: '',
-                prenom: '',
-                email: '',
-                tel: '',
-                password: '',
-                repeatPassword: '',
-                hidden: 'true',
-                baseUrl:process.env.MIX_URL,
-            }
+          return{
+            nom: '',
+            prenom: '',
+            email: '',
+            tel: '',
+            password: '',
+            repeatPassword: '',
+            hidden: 'true',
+            baseUrl:process.env.MIX_URL,
+          }
         },
         watch:{
-          responsableToEdit(newVal){
+          productionToEdit(newVal){
             this.nom = newVal.nom;
             this.prenom = newVal.prenom;
             this.email = newVal.email;
@@ -134,32 +137,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             this.password = '';
             this.repeatPassword = '';
           }
-        },
-         methods: {
-           changermdp(status){
-              this.hidden = status;
-           },
-            update(){
-              axios.patch(this.baseUrl+'/responsables/edit/' + this.responsableToEdit.id, {
-                  nom: this.nom,
-                  prenom: this.prenom,
-                  tel: this.tel,
-                  email: this.email,
-                  password: this.password,
-              })
-              .then(response => this.$emit('responsable-updated',response))
-              .catch(error => console.log(error));
-              this.changermdp('true');
-            },
-            checkEditForm(){
-              this.$v.$touch()
-              if(!this.$v.$invalid){
-                var submitForm = document.getElementById('submitEditResp');
-                submitForm.click();
-              }else{
-                alert("Veuillez remplir les champs correctement !");
-              }
-            },
         },
         validations: {
           nom: {
@@ -172,7 +149,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             minLength: minLength('3'),
             maxLength: maxLength('15')
           },
-          
           email: {
             required,
             isUnique(value){
@@ -200,13 +176,39 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             }
           },
           password: {
-            //required,
+            // required,
             minLength: minLength(6),
             maxLength: maxLength(15),
           },
           repeatPassword: {
             sameAsPassword: sameAs('password')
           }
+        },
+         methods: {
+            changermdp(status){
+              this.hidden = status;
+            },
+            update(){
+                axios.patch(this.baseUrl+'/productions/edit/' + this.productionToEdit.id, {
+                    nom: this.nom,
+                    prenom: this.prenom,
+                    tel: this.tel,
+                    email: this.email,
+                    password: this.password,
+                })
+                .then(response => this.$emit('production-updated',response))
+                .catch(error => console.log(error));
+                this.changermdp('true');
+            },
+          checkEditForm(){
+            this.$v.$touch()
+            if(!this.$v.$invalid){
+              var submitForm = document.getElementById('submitEditProduction');
+              submitForm.click();
+            }else{
+                  alert("Veuillez remplir les champs correctement !");
+            }
+          },
         }
     }
 </script>

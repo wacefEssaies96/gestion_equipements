@@ -121,7 +121,16 @@
   </div>
 </template>
 <script>
+  import AddEquipement from './AddEquipement';
+  import EditEquipement from './EditEquipement';
+  import DeleteEquipement from './DeleteEquipement';
+  
   export default {
+    components:{
+      AddEquipement,
+      EditEquipement,
+      DeleteEquipement
+    },
     props:['user'],
     data(){
       return{
@@ -134,20 +143,21 @@
         qNom: '',
         qCodeMachine: '',
         hidden: 'true',
-        id:''
+        id:'',
+        baseUrl:process.env.MIX_URL,
       }
     },
     created(){
       if(this.user.role != 'ADMIN'){
         this.$router.push('/');
       }
-      axios.post("http://localhost:8000/equipements/liste")
+      axios.post(this.baseUrl+"/equipements/liste")
       .then(response => this.equipements = response.data)
       .catch(error => console.log(error))
     },
     methods:{
       getResults(page = 1) {
-        axios.post('http://localhost:8000/equipements/liste?page=' + page)
+        axios.post(this.baseUrl+'/equipements/liste?page=' + page)
         .then(response => {
           this.equipements = response.data;
         })
@@ -198,7 +208,7 @@
         this.q.append('n_serie', this.qNserie);
         this.q.append('code', this.qCodeMachine);
 
-        axios.post("http://localhost:8000/equipements/liste", this.q)
+        axios.post(this.baseUrl+"/equipements/liste", this.q)
         .then(response => this.equipements = response.data)
         .catch(error => console.log(error))
 
@@ -207,7 +217,7 @@
         this.equipements = equipements.data; 
       },
       getEquipement(id){
-        axios.get('http://localhost:8000/equipements/edit/' + id)
+        axios.get(this.baseUrl+'/equipements/edit/' + id)
         .then(response => this.equipementToEdit = response.data)
         .catch(error => console.log(error));
       },

@@ -60,17 +60,7 @@
                                 <span v-if="!$v.tel.maxLength">Veuillez entrer 8 chiffre ! (********)</span>
                             </div>
                             </div>
-                            <div class="form-group">
-                            <label for="pseudo">Pseudo</label>
-                            <input type="pseudo" class="form-control" placeholder="Pseudo" v-model="pseudo"
-                            :class="{'is-invalid':(pseudo != '') ? $v.pseudo.$invalid:'', 'is-valid':!$v.pseudo.$invalid}">
-                            <div class="valid-feedback">Pseudo valide</div>
-                            <div class="invalid-feedback">
-                                <span v-if="!$v.pseudo.required">Veuillez entrer un pseudo valide !</span>
-                                <span v-if="!$v.pseudo.minLength">Veuillez entrer au moins 3 caractères !</span>
-                                <span v-if="!$v.pseudo.maxLength">Maximum 15 caractères !</span>
-                            </div>
-                            </div>
+                            
                         </div>
                         </div>
                         <div class="form-group">
@@ -183,12 +173,12 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             email: '',
             tel: '',
             zone: '',
-            pseudo: '',
             qualification: '',
             h_debut_service: '',
             h_fin_service: '',
             password: '',
             repeatPassword: '',
+            baseUrl:process.env.MIX_URL,
         }
     },
     validations: {
@@ -198,11 +188,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
         maxLength: maxLength('15')
         },
         prenom: {
-        required,
-        minLength: minLength('3'),
-        maxLength: maxLength('15')
-        },
-        pseudo: {
         required,
         minLength: minLength('3'),
         maxLength: maxLength('15')
@@ -234,7 +219,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
         },
         async isValid(value){
             if(value==='') return true;
-            const response = await axios.get('http://localhost:8000/responsables/verifemail/'+value)
+            const response = await axios.get(this.baseUrl+'/responsables/verifemail/'+value)
             .catch(error => console.log(error));
             if(response.data.length == 0) return true;
         }
@@ -273,12 +258,11 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             }
         },
         technicienStore(){
-            axios.post('http://localhost:8000/techniciens',{
+            axios.post(this.baseUrl+'/techniciens',{
                 nom: this.nom,
                 prenom: this.prenom,
                 email: this.email,
                 tel: this.tel,
-                pseudo: this.pseudo,
                 password: this.password,
                 h_debut_service: this.h_debut_service,
                 h_fin_service: this.h_fin_service,
@@ -294,7 +278,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             this.prenom = '';
             this.email = '';
             this.tel= '';
-            this.pseudo= '';
             this.password= '';
             this.repeatPassword= '';
             this.h_debut_service = '';

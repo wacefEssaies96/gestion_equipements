@@ -33,6 +33,21 @@ use Illuminate\Support\Facades\Route;
     Route::patch('/responsables/edit/{id}', 'ResponsableController@update');
     Route::delete('/responsables/{id}', 'ResponsableController@destroy');
 
+    //Production
+    Route::post('/productions', 'ProductionController@store');
+    Route::get('/productions/liste', 'ProductionController@liste');
+    Route::get('/productions/edit/{id}', 'ProductionController@edit');
+    Route::patch('/productions/edit/{id}', 'ProductionController@update');
+    Route::delete('/productions/{id}', 'ProductionController@destroy');
+
+    //Feedback
+    Route::post('/feedbacks', 'FeedbackController@store');
+    Route::get('/feedbacks/liste', 'FeedbackController@liste');
+    Route::get('/feedbacks/edit/{id}', 'FeedbackController@edit');
+    Route::patch('/feedbacks/edit/{id}', 'FeedbackController@update');
+    Route::delete('/feedbacks/{id}', 'FeedbackController@destroy');
+    
+
     //Hotline
     Route::post('/users/search', 'UserController@searchuser');
     Route::post('/hotlines', 'HotlineController@store');
