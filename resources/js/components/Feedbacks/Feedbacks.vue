@@ -92,14 +92,13 @@
                 <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getFeedback(feedback.id)">
                   <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(feedback.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger">
+                <button @click="setId(id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger">
                   <i class="fas fa-trash-alt" title="Supprimer"/></button>
-                <DeleteFeedback v-bind:id="id" @feedback-deleted="refreshDeleted"></DeleteFeedback>
+                <DeleteFeedback v-bind:id="feedback.id" @feedback-deleted="refreshDeleted"></DeleteFeedback>
                 <EditFeedback
                  v-bind:feedbackToEdit="feedbackToEdit"
                  v-bind:equipements="equipements"
                  @feedback-updated="refreshEdited">
-                  
                 </EditFeedback>
               </td>
             </tr>
@@ -152,17 +151,24 @@
         getResults(page = 1) {
           axios.get('/feedbacks/liste?page=' + page)
           .then(response => {
-            console.log("what i get ", response.data)
             this.feedbacks = response.data;
           })
           .catch(error => console.log(error));
         },
-        getEquipements(zone){
-        axios.get('/historiques/equipement/zone/' + zone)
-        .then(response =>this.equipements =  response.data)
-        .catch(error => console.log(error));
-        
-      },
+       async getFeedback(id){
+          await axios.get('/feedbacks/edit/'+id)
+          .then(response => {
+            this.feedbackToEdit = response.data
+          })
+          .catch(error => console.log(error));
+          await axios.get('/historiques/equipement/zone/'+this.feedbackToEdit.zone)
+          .then(response =>{
+            this.equipements = response.data;
+            console.log(this.equipements);
+          })
+          .catch(error => console.log(error));
+        },
+
         setId(id){
             this.id = id
         },
@@ -216,14 +222,7 @@
         refresh(feedbacks){
           this.feedbacks = feedbacks.data; 
         },
-        getFeedback(id){
-            axios.get('/feedbacks/edit/' + id)
-            .then(response => this.feedbackToEdit = response.data)
-            .catch(error => console.log(error));
-        },
-      },
-      mounted() {
-        console.log('Component mounted.')
+
       }
     }
 </script>

@@ -17,7 +17,7 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form @submit.prevent="checkAddForm">
+              <form @submit.prevent="checkEditForm">
                  <div class="card-body">
                         <div class="row">
                           <div class="col-sm-6">
@@ -33,7 +33,7 @@
                            <div class="form-group">
                             <label for="zone">Zone</label>
                             <select class="form-control" v-model="zone"
-                            :class="{'is-invalid':(zone != '') ? $v.zone.$invalid:'', 'is-valid':!$v.zone.$invalid}">
+                            :class="{'is-invalid':(zone != '') ? $v.zone.$invalid:'', 'is-valid':!$v.zone.$invalid}" @change="getEquipements(zone)">
                                 <option value="Assemblage">Assemblage</option>
                                 <option value="Sertissage">Sertissage</option>
                                 <option value="Préparation">Préparation</option>
@@ -49,13 +49,15 @@
                         </div>
                           <div class="form-group">
                             <label for="equipement">Equipement</label>
-                            <select class="form-control" v-model="equipement"
-                            :class="{'is-invalid':(equipement != '') ? $v.equipement.$invalid:'', 'is-valid':!$v.equipement.$invalid}">
-                                 {{equipement.nom}}
-                            </select>
+                              <select class="form-control" v-model="code_machine"
+                              :class="{'is-invalid':$v.code_machine.$invalid, 'is-valid':!$v.code_machine.$invalid}">
+                                  <option v-for="equipement in e" :key="equipement.id" :value="equipement.id">
+                                      {{equipement.nom}}
+                                  </option>
+                              </select>
                             <div class="valid-feedback">equipement validé</div>
                             <div class="invalid-feedback">
-                                <span v-if="!$v.equipement.required">Veuillez choisir un equipement !</span>
+                                <span v-if="!$v.code_machine.required">Veuillez choisir un equipement !</span>
                             </div>
                         </div>  
                         <div class="form-group">
@@ -82,7 +84,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" @click="changermdp('true')" data-dismiss="modal">Fermer</button>
-                <button hidden id="submitEditProduction" type="submit" class="btn btn-primary" data-dismiss="modal" @click="update">Confirmer</button>
+                <button hidden id="submitEditFeedback" type="submit" class="btn btn-primary" data-dismiss="modal" @click="update">Confirmer</button>
             </div>
             </div>
         </div>
@@ -91,21 +93,25 @@
 <script>
 import { required } from 'vuelidate/lib/validators';
     export default {
-      props: ['feedbackToEdit'],
+      props: ['feedbackToEdit','equipements'],
       data(){
           return{
             jour: '',
             zone: '',
-            equipement: '',
+            e: {},
             commentaire: '',
+            code_machine:'',
           }
         },
         watch:{
           feedbackToEdit(newVal){
             this.jour = newVal.jour;
             this.zone = newVal.zone;
-            this.code_equip = newVal.code_equip;
             this.commentaire = newVal.commentaire;
+            this.code_machine = newVal.code_equip
+          },
+          equipements(newVal){
+           this.e = newVal;
           }
         },
        validations: {
@@ -115,8 +121,7 @@ import { required } from 'vuelidate/lib/validators';
       zone: {
         required,
       },
-      
-      equipement: {
+      code_machine: {
         required,
       },
       commentaire: {
@@ -124,27 +129,32 @@ import { required } from 'vuelidate/lib/validators';
       },
     
     },
-         methods: {
-            update(){
-                axios.patch('/feedbacks/edit/' + this.feedbackToEdit.id, {
-                    jour: this.jour,
-                    zone: this.zone,
-                    equipement: this.equipement,
-                    commentaire: this.commentaire,
-                })
-                .then(response => this.$emit('feedback-updated',response))
-                .catch(error => console.log(error));
-                this.changermdp('true');
-            },
-          checkEditForm(){
-            this.$v.$touch()
-            if(!this.$v.$invalid){
-              var submitForm = document.getElementById('submitEditFeedback');
-              submitForm.click();
-            }else{
-                  alert("Veuillez remplir les champs correctement !");
-            }
-          },
-        }
-    }
+    methods: {
+    update(){
+      axios.patch('/feedbacks/edit/' + this.feedbackToEdit.id, {
+          jour: this.jour,
+          zone: this.zone,
+          code_equip: this.code_machine,
+          commentaire: this.commentaire,
+      })
+      .then(response => this.$emit('feedback-updated',response))
+      .catch(error => console.log(error));
+    },
+    getEquipements(zone){
+      this.code_machine = '';
+      axios.get('/historiques/equipement/zone/' + zone)
+      .then(response =>this.e =  response.data)
+      .catch(error => console.log(error));
+    },
+    checkEditForm(){
+      this.$v.$touch()
+      if(!this.$v.$invalid){
+        var submitForm = document.getElementById('submitEditFeedback');
+        submitForm.click();
+      }else{
+        alert("Veuillez remplir les champs correctement !");
+      }
+    },
+  }
+}
 </script>

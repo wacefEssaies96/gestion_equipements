@@ -152,8 +152,4 @@ class EquipementController extends Controller
         $equipements = Equipement::where('zone','=',$zone)->get();
         return response()->json($equipements);
     }
-    public function getEquipById($id){
-        $e = Equipement::where('id', '=', $id)->first();
-        return response()->json($e);
-    }
 }

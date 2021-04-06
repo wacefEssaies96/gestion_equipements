@@ -85,6 +85,8 @@ use Illuminate\Support\Facades\Route;
     Route::get('/code_pannes/{value}', 'CodePanneController@getCodePanneByCode');
     Route::get('/equipements/{value}', 'EquipementController@getEquipementByCode');
     Route::get('/equipements/document/{id}/{type}', 'DocumentController@getDocument');
+    Route::get('/equip/{id}', 'EquipementController@getEquipById');
+
     //Historique
     Route::get('/historiques/ht','UserController@getUserId');
     Route::get('/historiques/techniciens/{zone}', 'TechnicienController@getTechniciens');
