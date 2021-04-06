@@ -19,7 +19,7 @@ class EquipementController extends Controller
         }catch(Exception $ex){
             return response()->json("erreur");
         }  
-        return response()->json("c bon");
+        return $this->refresh();
     }
 
     public function liste(Request $request)
@@ -37,7 +37,7 @@ class EquipementController extends Controller
         if($request->designation != ''){
             $equip = $equip->where('designation', 'like', '%'.request('designation').'%');
         }
-        $equip = $equip->paginate(10);
+        $equip = $equip->with('documents')->paginate(10);
         return response()->json($equip);
     }
 
@@ -82,20 +82,22 @@ class EquipementController extends Controller
     public function update($id)
     {
         $equipement = Equipement::find($id);
-        if(!str_contains(request('image'), "uploads")) // image changed
-        {
-            if($equipement->image != ''){
-                unlink(realpath($equipement->image)); // détecher le lien ancien de l'image
+        if(request('image') != null){
+            if(!str_contains(request('image'), "uploads")) // image changed
+            {
+                if($equipement->image != ''){
+                    unlink(realpath($equipement->image)); // détecher le lien ancien de l'image
+                }
+                $imageArr = explode(',',request('image')); // Decoupe un string en tableau en fonction d'un caractère de base 
+                $extension  = ".png";
+                if(str_contains($imageArr[0], 'jpeg')) $extension = ".jpg";
+                $filename = "uploads/" . time() . '_'. request('nom') . '_'. rand(1000, 100000) . $extension;
+    
+                $image = fopen($filename, "wb"); // ouvrir l'image sous form binaire
+                fwrite($image, base64_decode($imageArr[1])); // decoder l'image a la base 64
+                fclose($image); // fermer le fichier
+                $equipement->image = $filename;
             }
-            $imageArr = explode(',',request('image')); // Decoupe un string en tableau en fonction d'un caractère de base 
-            $extension  = ".png";
-            if(str_contains($imageArr[0], 'jpeg')) $extension = ".jpg";
-            $filename = "uploads/" . time() . '_'. request('nom') . '_'. rand(1000, 100000) . $extension;
-
-            $image = fopen($filename, "wb"); // ouvrir l'image sous form binaire
-            fwrite($image, base64_decode($imageArr[1])); // decoder l'image a la base 64
-            fclose($image); // fermer le fichier
-            $equipement->image = $filename;
         }
         $equipement->nom = request('nom');
         $equipement->code= request('code');
@@ -106,7 +108,14 @@ class EquipementController extends Controller
         $documents = json_decode(request('documents'));
         foreach($documents as $item){
             $document = Document::where('equipement_id', '=', $id)->where('type', '=', $item->type)->first();
-            unlink(realpath($document->document));
+            if($document){
+                unlink(realpath($document->document));
+            }
+            else{
+                $document = new Document();
+                $document->equipement_id = $id;
+                $document->type = $item->type;
+            }
             $document->document = $item->filePath;
             $document->save();
         }

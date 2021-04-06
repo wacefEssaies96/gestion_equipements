@@ -1,19 +1,12 @@
 <template>
-    <!-- <div>
-        {{currentPage}} / {{pageCount}}
-        <pdf
-            :src="path"
-            @num-pages="pageCount = $event"
-            @page-loaded="currentPage = $event"
-        ></pdf>
-    </div> -->
         <!-- Modal -->
   <div class="modal fade" id="viewpdf" tabindex="-1" role="dialog" aria-labelledby="viewpdfTitle" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
+
       <div class="modal-header">
           <h5 class="modal-title" id="viewpdfTitle">Document</h5>
-          <button type="button" class="close" data-dismiss='modal' aria-label="Close">
+          <button type="button" class="close" @click="closeModal" data-dismiss='modal' aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
       </div>
@@ -26,24 +19,24 @@
         <!-- /.card-header -->
         <!-- form start -->
           <div class="card-body">
-  {{currentPage}} / {{pageCount}}
+
         <pdf
-            :src="path"
-            @num-pages="pageCount = $event"
-            @page-loaded="currentPage = $event"
+            v-for="i in numPages"
+            :key="i"
+            :src="loadingTask"
+            :page="i"
         ></pdf>
+        
           </div>
           <!-- /.card-body -->
 
           <div class="card-footer">
-            <!-- <button type="submit" class="btn btn-primary">Confirmer</button> -->
           </div>
       </div>
       <!-- /.card -->
       </div>
       <div class="modal-footer">
-            <button id="close" type="button" class="btn btn-secondary" data-dismiss='modal'>Fermer</button>
-            <!-- <button hidden type="submit" id="submitAddHotline" class="btn btn-primary" @click="hotlineStore" data-dismiss="modal"></button> -->
+            <button id="close" type="button" class="btn btn-secondary" data-dismiss='modal' @click="closeModal">Fermer</button>
       </div>
       </div>
   </div>
@@ -53,7 +46,7 @@
 <script>
  
 import pdf from 'vue-pdf'
- 
+
 export default {
     props:['path'],
     components: {
@@ -61,9 +54,24 @@ export default {
     },
     data() {
         return {
-            currentPage: 0,
-            pageCount: 0,
+            loadingTask:'',
+            numPages: 0,
         }
+    },
+    watch:{
+        path(newVal){
+            this.loadingTask = pdf.createLoadingTask(newVal);
+            this.loadingTask.promise.then(pdf => {
+                this.numPages = pdf.numPages;
+            });
+        }
+    },
+
+    methods:{
+        closeModal(){
+            this.loadingTask = '';
+            $('#viewpdf').on('click', '[data-dismiss="modal"]', function(e) { e.stopPropagation(); });
+        },
     }
 }
  
