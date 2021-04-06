@@ -235,7 +235,7 @@
               var submitForm = document.getElementById('submitEditEqui');
               submitForm.click();
             }else{
-                  alert("Veuillez remplir les champs correctement !");
+                alert("Veuillez remplir les champs correctement !");
             }
           },
       },

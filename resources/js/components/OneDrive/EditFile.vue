@@ -3,6 +3,9 @@
   <div class="modal fade" id="EditFile" tabindex="-1" role="dialog" aria-labelledby="EditFileTitle" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
+        <div :class="{'overlay':l}"><!--class="overlay" -->
+          <i :class="{'fas fa-2x fa-sync fa-spin':l}"></i><!--class="fas fa-2x fa-sync fa-spin" -->
+        </div>
       <div class="modal-header">
           <h5 class="modal-title" id="EditFileTitle">Ajouter un document vie Onedrive</h5>
           <button type="button" class="close" data-dismiss='modal' @click="closeModal" aria-label="Close">
@@ -41,7 +44,7 @@
                               Ouvrir</button>
                           </template>
                           <template v-if="file.file">
-                            <button @click="downloadData(file.id)" class="btn btn-default btn-sm float-right">
+                            <button @click="downloadData(file.id, file.file)" class="btn btn-default btn-sm float-right">
                               <i class="fas fa-cloud-download-alt"></i>
                             </button>
                           </template>
@@ -76,6 +79,7 @@ export default {
         previous:[],
         counter:0,
         type: '',
+        l:false,
       }
     },
     watch:{
@@ -100,33 +104,49 @@ export default {
         $('#EditFile').on('click', '[data-dismiss="modal"]', function(e) { e.stopPropagation(); });
       },
       goBack(){
+        this.l = true;
         if (this.counter == 1){
           axios.get("/getalldata")
-          .then(response => this.files = response.data)
+          .then(response => {
+            this.files = response.data
+            this.l = false;  
+          })
           .catch(error => console.log(error))
           this.previous = [];
           this.counter = 0;
         }
         if(this.counter > 1){
           axios.get("/getdatabyid/"+this.previous[this.previous.length - this.counter])
-          .then(response => this.files = response.data)
+          .then(response => {
+            this.files = response.data;
+            this.l = false;  
+          })
           .catch(error => console.log(error))
           this.previous.pop();
           this.counter--;
         }
       },
       getDataById(id){
+        this.l = true;
         this.counter++;
         this.previous.push(id);
         axios.get("/getdatabyid/"+id)
-        .then(response => this.files = response.data)
+        .then(response => {
+          this.files = response.data;
+          this.l = false
+        })
         .catch(error => console.log(error))
       },
-      downloadData(id){
-        axios.get("/download/file/"+id)
+      downloadData(id,file){
+        this.l = true;
+        let f = file.mimeType;
+        f = f.split('application/')[1];
+        axios.get("/download/file/"+id+"/"+f)
         .then(response => {
           this.$emit('file-added',response.data);
           document.getElementById('closeEdit').click();
+          this.l = false;
+          this.toast('success', 'Le fichier a été mis avec succées !');
         })
         .catch(error => console.log(error))
       },

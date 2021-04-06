@@ -69,7 +69,7 @@
                   </template>
                   <template v-if="historique.heure_debut != null">
                     <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getEquipements(historique.zone);">
-                    <i class="far fa-file-edit" title="Remplir"/>
+                    <i class="fas fa-edit" title="Remplir"></i>
                     </button>
                   </template>
                   <EditHistTech 

@@ -11,25 +11,13 @@ use Illuminate\Support\Facades\Auth;
 class FeedbackController extends Controller
 {
 
-    public function index()
-    {
-        return view('pages.feedbacks');
-    }
-
     public function liste()
     {
         return $this->refresh();
-      
-
-    }
-    public function create()
-    {
-        //
     }
 
     public function store(Request $request)
     {
-
         $feedback = new Feedback();
         $feedback->jour= request('jour');
         $feedback->zone = request('zone');
@@ -37,22 +25,13 @@ class FeedbackController extends Controller
         $feedback->commentaire = request('commentaire');
         $feedback->prod_id = Auth::id();
         $feedback->save();
-        return $this->refresh();
-
-      
+        return $this->refresh();      
     }
     
-
-    public function show(Feedback $feedback)
-    {
-        //
-    }
-
-   
     public function edit($id)
     {
         $feedback = Feedback::find($id);
-        return response()->json($feedback );
+        return response()->json($feedback);
     }
 
    
@@ -61,7 +40,7 @@ class FeedbackController extends Controller
         $feedback = Feedback::find($id);
         $feedback->jour = request('jour');
         $feedback->zone = request('zone');
-        $feedback->equipement = request('equipement');
+        $feedback->code_equip = request('code_equip');
         $feedback->commentaire = request('commentaire');
         $feedback->save();
         return $this->refresh();
@@ -78,20 +57,11 @@ class FeedbackController extends Controller
         }
     }
     public function refresh(){
-        $feedback = Feedback::paginate(10);
-        return response()->json($feedback );
+        $feedback = Feedback::
+        join('equipements', 'code_equip', '=', 'equipements.id')
+        ->select('feedback.*', 'equipements.nom')
+        ->paginate(10);
+        return response()->json($feedback);
     }
-    // public function refresh(){
-    //     $feedback = DB::table('feedback')
-    //                     ->join('equipements', 'feedback.code_equip', '=', 'equipements.id')
-    //                     ->select('feedback.*', 'equipements.nom')
-    //                     ->paginate(10);
-    // /*
-    //     select * from feedback, equiements where feedback.code_equip=equipements.id limit 10
-    // */
-    // }
-    // public function getProdectionFeedback ($value){
-    //     $fb = Feedback::where('id','=',$value)->get();
-    //     return response()->json($fb);
-    // }
+
 }

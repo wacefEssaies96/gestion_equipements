@@ -39,12 +39,18 @@ public function downloadEquipementData($id)
     return response()->json($data);
   }
 
-  public function downloadFile($id)
+  public function downloadFile($id,$file)
   {
     $graph = $this->getGraph();
     $path = public_path()."/downloads/".time().".pdf";
-    $data = $graph->createRequest("GET", "/me/drive/items/".$id."/content?format=pdf")
-    ->download($path);
+    if($file != 'pdf'){
+      $data = $graph->createRequest("GET", "/me/drive/items/".$id."/content?format=pdf")
+      ->download($path);
+    }
+    else{
+      $data = $graph->createRequest("GET", "/me/drive/items/".$id."/content")
+      ->download($path);
+    }
     return response()->json($path);
   }
 

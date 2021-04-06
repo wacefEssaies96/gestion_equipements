@@ -44,7 +44,7 @@
                               Ouvrir</button>
                           </template>
                           <template v-if="file.file">
-                            <button @click="downloadData(file.id)" class="btn btn-default btn-sm float-right">
+                            <button @click="downloadData(file.id,file.file)" class="btn btn-default btn-sm float-right">
                               <i class="fas fa-cloud-download-alt"></i>
                             </button>
                           </template>
@@ -137,9 +137,11 @@ export default {
           })
         .catch(error => console.log(error))
       },
-      downloadData(id){
+      downloadData(id,file){
         this.l = true;
-        axios.get("/download/file/"+id)
+        let f = file.mimeType;
+        f = f.split('application/')[1];
+        axios.get("/download/file/"+id+"/"+f)
         .then(response => {
           this.$emit('file-added',response.data);
           document.getElementById('close').click();

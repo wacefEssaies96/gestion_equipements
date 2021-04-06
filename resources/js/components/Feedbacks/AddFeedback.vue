@@ -52,9 +52,8 @@
                             <label for="equipement">Equipement</label>
                             <select class="form-control" v-model="equipement"
                             :class="{'is-invalid':(equipement != '') ? $v.equipement.$invalid:'', 'is-valid':!$v.equipement.$invalid}">
-                                <option v-for="equipement in e" :key="equipement.id" :value="equipement.id">
-                                   
-                                    {{equipement.nom}}
+                                <option v-for="equip in e" :key="equip.id" :value="equip.id">
+                                    {{equip.nom}}
                                 </option>
                             </select>
                             <div class="valid-feedback">Equipement validé</div>
@@ -113,7 +112,6 @@ import { required} from 'vuelidate/lib/validators';
       zone: {
         required,
       },
-      
       equipement: {
         required,
       },
@@ -133,7 +131,6 @@ import { required} from 'vuelidate/lib/validators';
         }
       },
       feedbackStore(){
-        this.equipement = '';
         axios.post('/feedbacks',{
             jour: this.jour,
             zone: this.zone,
@@ -144,7 +141,6 @@ import { required} from 'vuelidate/lib/validators';
         .then(response => this.$emit('feedback-added',response)) 
         .catch(error => console.log(error));
         this.refreshData();
-        
       },
       getEquipements(zone){
         this.equipement = '';
@@ -160,13 +156,6 @@ import { required} from 'vuelidate/lib/validators';
         this.commentaire= '';
         
       },
-      getEquipById(id){
-        this.equipement = '';
-        axios.get('/equipements/equipement/nom/' + id)
-        .then(response =>this.e =  response.data)
-        .catch(error => console.log(error));
-      }
-
     }
   }
 </script>

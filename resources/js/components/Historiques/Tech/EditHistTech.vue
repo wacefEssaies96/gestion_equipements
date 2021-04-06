@@ -53,6 +53,31 @@
                                 
                             </div>
                         </div>
+                        <template v-if="code_machine != ''">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <a href="" @click="getDocuments(code_machine,'ins_c')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                                    <i class="fas fa-file-pdf"></i> Instruction 1ér niveau
+                                    </a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="" @click="getDocuments(code_machine,'ins_p')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                                    <i class="fas fa-file-pdf"></i> Instruction préventive
+                                    </a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="" @click="getDocuments(code_machine,'dossier_technique')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                                    <i class="fas fa-file-pdf"></i> Dossier technique
+                                    </a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="" @click="getDocuments(code_machine,'liste_pr')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                                    <i class="fas fa-file-pdf"></i> Liste PR
+                                    </a>
+                                </div>
+                            </div>
+                            <ViewPdf v-bind:path="document.document"></ViewPdf>
+                        </template>
                            <div class="form-group">
                                     <label for="piece_rechange">Pièce de rechange</label>
                                     <input type="text" class="form-control" placeholder="Pièce de rechange" v-model="piece_rechange"
@@ -120,7 +145,12 @@
 <script>
     import { required } from 'vuelidate/lib/validators';
     import 'vue-select/dist/vue-select.css';
+    import ViewPdf from '../../Equipements/ViewPdfFile';
+
     export default {
+        components:{
+            ViewPdf
+        },
         props: ['equipements','codePannes','id'],
         data(){
         return{
@@ -136,6 +166,7 @@
             type_travaille: '',
             nom_support:'',
             hist: this.id,
+            document:''
         }
     },
     watch:{
@@ -148,6 +179,13 @@
         },
     },
     methods: {
+        getDocuments(id,type){
+        axios.get('/equipements/document/'+id+'/'+type)
+        .then(response => {
+          this.document = response.data
+          })
+        .catch(error => console.log(error))
+      },
       update(){
         axios.patch('/histtech/edit/' + this.hist.id, {
             travaille: this.travaille,

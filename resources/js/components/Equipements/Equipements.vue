@@ -78,7 +78,8 @@
           <template v-if="accessData.userName != null">
             <h4>Bienvenue  {{ accessData.userName }} !</h4>
             <a href="/signout" class="btn btn-outline-info">Se déconnecter de OneDrive</a>
-            <router-link class="btn btn-outline-info" to="/onedrive">Ajouter via Onedrive</router-link>
+            <button class="btn btn-outline-info" data-toggle="modal" data-target="#addList">Ajouter via Onedrive</button>
+            <AddList @list-added="refreshAdded"></AddList>
           </template>
           <!-- Button trigger modal -->
         <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
@@ -160,13 +161,15 @@
   import EditEquipement from './EditEquipement';
   import DeleteEquipement from './DeleteEquipement';
   import ViewPdf from './ViewPdfFile.vue';
+  import AddList from '../OneDrive/AddFileList'
 
   export default {
     components:{
       AddEquipement,
       EditEquipement,
       DeleteEquipement,
-      ViewPdf
+      ViewPdf,
+      AddList
     },
     props:['user'],
     data(){
@@ -214,7 +217,7 @@
       getDocuments(id,type){
         axios.get('/equipements/document/'+id+'/'+type)
         .then(response => {
-          this.document = response.data
+            this.document = response.data
           })
         .catch(error => console.log(error))
       },

@@ -87,6 +87,12 @@ class DocumentController extends Controller
         where('equipement_id', '=', $id)
         ->where('type', '=', $type)
         ->first();
+        if(!$document) return response()->json('introuvable');
+        return response()->json($document);
+    }
+    public function getDoc($id){
+        $document = Document::find($id)->first();
+        if(!$document) return response()->json('introuvable');
         return response()->json($document);
     }
     public function deleteData(Request $request){
