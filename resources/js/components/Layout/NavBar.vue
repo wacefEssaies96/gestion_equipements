@@ -42,6 +42,10 @@
                 l'appelle {{notification.data.editedHist.id}} .
                 <span class="float-right text-muted text-sm"></span>
               </template>
+              <template v-if="notification.data.appelleNonCloture">
+                <i class="fas fa-file mr-2"></i> L'appelle {{notification.data.appelleNonCloture.id}} reste non cloturé.
+                <span class="float-right text-muted text-sm"></span>
+              </template>   
             </a>
           </div>
           <div class="dropdown-divider"></div>

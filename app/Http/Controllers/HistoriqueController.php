@@ -19,6 +19,7 @@ use App\CodePanneInHist;
 use App\Notifications\HistoriqueAdded;
 use App\Notifications\TechConfirmedHist;
 use App\Notifications\TechEditedHist;
+use App\Notifications\AppelleNonCloture;
 
 class HistoriqueController extends Controller
 {
@@ -109,8 +110,16 @@ class HistoriqueController extends Controller
             $histElectrique->hist_id = $hist->id;
             $histElectrique->save();
         }
+        
         $technicien = User::find(request('tech_id'));
         Notification::send($technicien, new HistoriqueAdded($hist));
+        $admin = User::where('role', '=' ,'ADMIN')->first();
+        Notification::send($admin,new AppelleNonCloture($hist));
+        $hotline = User::
+        where('id', '=', $hist->hotline_id)
+        ->first();
+        Notification::send($hotline,new AppelleNonCloture($hist));
+
         if(Auth::user()->role == 'HOTLINE'){
             return $this->getHotlineHistoriques();
         }
@@ -161,6 +170,7 @@ class HistoriqueController extends Controller
         $users = User::where('id', '=', $hist->hotline_id)
         ->first();
         Notification::send($users, new TechEditedHist($hist));
+        
         return $this->refreshTech();
     }
     public function confirmAppelle($id){
