@@ -18,6 +18,8 @@ Vue.component('pagination', require('laravel-vue-pagination'));
 import dashboard from './components/Dashboard.vue';
 import productions from './components/Productions/Productions.vue';
 import feedbacks from './components/Feedbacks/Feedbacks.vue';
+import zones from './components/Zones/Zones.vue';
+import roles from './components/Roles/Roles.vue';
 import responsables from './components/Responsables/Responsables.vue';
 import hotlines from './components/Hotlines/Hotlines.vue';
 import techniciens from './components/Techniciens/Techniciens.vue';
@@ -35,6 +37,8 @@ const routes = [
     {path : '/hotlines',component : hotlines},
     {path : '/productions',component : productions},
     {path : '/feedbacks',component : feedbacks},
+    {path : '/zones',component : zones},
+    {path : '/roles',component : roles},
     {path : '/techniciens',component : techniciens},
     {path : '/equipements',component : equipements},
     {path : '/code_pannes',component : code_pannes},

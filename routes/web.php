@@ -17,8 +17,21 @@ use Illuminate\Support\Facades\Route;
     Route::get('/getalldata', 'OneDriveController@getAllData');
     Route::get('/getdatabyid/{id}', 'OneDriveController@getDataById');
     Route::get('/download/data/{id}', 'OneDriveController@downloadEquipementData');
-    Route::get('/download/file/{id}', 'OneDriveController@downloadFile');
+    Route::get('/download/file/{id}/{file}', 'OneDriveController@downloadFile');
     Route::post('/importDataFromExcel','EquipementController@importDataFromExcel');
+
+    //Zone
+    Route::post('/zones', 'ZoneController@store');
+    Route::post('/zones/liste', 'ZoneController@liste');
+    Route::get('/zones/edit/{id}', 'ZoneController@edit');
+    Route::patch('/zones/edit/{id}', 'ZoneController@update');
+    Route::delete('/zones/{id}', 'ZoneController@destroy');
+    //Role
+    Route::post('/roles', 'RoleController@store');
+    Route::post('/roles/liste', 'RoleController@liste');
+    Route::get('/roles/edit/{id}', 'RoleController@edit');
+    Route::patch('/roles/edit/{id}', 'RoleController@update');
+    Route::delete('/roles/{id}', 'RoleController@destroy');
     
     //Responsable
     Route::post('/responsables', 'ResponsableController@store');

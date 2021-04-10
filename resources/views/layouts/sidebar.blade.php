@@ -82,7 +82,14 @@
                 </li>
               </ul>
             </li>
-
+            <li class="nav-item">
+              <router-link to='/roles' class="nav-link">
+                <i class="nav-icon fas fa-cogs"></i>
+                <p>
+                  Roles
+                </p>
+              </router-link>
+            </li>  
             <li class="nav-item">
               <router-link to='/equipements' class="nav-link">
                 <i class="nav-icon fas fa-cogs"></i>
@@ -91,6 +98,14 @@
                 </p>
               </router-link>
             </li>  
+            <li class="nav-item">
+              <router-link to='/zones' class="nav-link">
+                <i class="nav-icon fas fa-file-code"></i>
+                <p>
+                  Zones
+                </p>
+              </router-link>
+            </li>     
             <li class="nav-item">
               <router-link to='/code_pannes' class="nav-link">
                 <i class="nav-icon fas fa-file-code"></i>
