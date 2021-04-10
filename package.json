@@ -27,7 +27,9 @@
     "dependencies": {
         "buefy": "^0.9.4",
         "dotenv": "^6.2.0",
+        "laravel-echo": "^1.10.0",
         "laravel-vue-pagination": "^2.3.1",
+        "pusher-js": "^7.0.3",
         "vue": "^2.6.11",
         "vue-multiselect": "^2.1.6",
         "vue-pdf": "^4.2.0",

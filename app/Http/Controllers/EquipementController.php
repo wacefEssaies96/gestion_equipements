@@ -140,7 +140,7 @@ class EquipementController extends Controller
         }
     }
     public function refresh(){
-        $equipement=Equipement::paginate(10);
+        $equipement=Equipement::with('documents')->paginate(10);
         return response()->json($equipement);
     }
     public function getEquipementByCode($value){

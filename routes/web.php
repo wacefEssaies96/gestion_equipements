@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\User;
 
     Route::get('/', 'HomeController@index');
     Route::get('/getCount', 'HomeController@getCount');
@@ -9,6 +10,11 @@ use Illuminate\Support\Facades\Route;
     Route::get('/onedrive', function()
     {
         return redirect('/#/equipements');
+    });
+    Route::get('/mark-as-read/{user}', function(User $user)
+    {
+        $user->unreadNotifications->markAsRead();
+        return response()->json('Marked as read');
     });
     Route::get('/getAccessData', 'HomeController@welcome');
     Route::get('/signin', 'AuthController@signin');

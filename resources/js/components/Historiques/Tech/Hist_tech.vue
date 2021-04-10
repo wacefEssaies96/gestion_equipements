@@ -62,12 +62,12 @@
                 <td>{{ historique.piece_rechange }}</td>
                 <td>{{ historique.commentaire }}</td>
                 <td> 
-                  <template v-if="historique.heure_debut == null">
+                  <template v-if="historique.valide == false">
                     <button type="button" class="btn btn-primary" @click="confirmAppelle(historique.id);">
                     Confirmer
                     </button>
                   </template>
-                  <template v-if="historique.heure_debut != null">
+                  <template v-if="historique.valide == true">
                     <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getEquipements(historique.zone);">
                     <i class="fas fa-edit" title="Remplir"></i>
                     </button>
@@ -164,7 +164,6 @@
       axios.get("/hist/tech/liste")
       .then(response => this.histsTech = response.data)
       .catch(error => console.log(error))
-
     },
     methods:{
       confirmAppelle(id){

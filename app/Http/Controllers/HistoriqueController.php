@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Notification;
 
 use App\User;
 use Carbon\Carbon;
@@ -15,7 +16,10 @@ use App\HistSertissage;
 use App\HistElectrique;
 use App\HistAssemblage;
 use App\CodePanneInHist;
-
+use App\Notifications\HistoriqueAdded;
+use App\Notifications\TechConfirmedHist;
+use App\Notifications\TechEditedHist;
+use App\Notifications\AppelleNonCloture;
 
 class HistoriqueController extends Controller
 {
@@ -106,6 +110,16 @@ class HistoriqueController extends Controller
             $histElectrique->hist_id = $hist->id;
             $histElectrique->save();
         }
+        
+        $technicien = User::find(request('tech_id'));
+        Notification::send($technicien, new HistoriqueAdded($hist));
+        $admin = User::where('role', '=' ,'ADMIN')->first();
+        Notification::send($admin,new AppelleNonCloture($hist));
+        $hotline = User::
+        where('id', '=', $hist->hotline_id)
+        ->first();
+        Notification::send($hotline,new AppelleNonCloture($hist));
+
         if(Auth::user()->role == 'HOTLINE'){
             return $this->getHotlineHistoriques();
         }
@@ -150,6 +164,13 @@ class HistoriqueController extends Controller
             $histElectrique->nom_support = request('nom_support');
             $histElectrique->save();
         }
+        $users = User::where('role', '=','ADMIN')
+        ->first();
+        Notification::send($users, new TechEditedHist($hist));
+        $users = User::where('id', '=', $hist->hotline_id)
+        ->first();
+        Notification::send($users, new TechEditedHist($hist));
+        
         return $this->refreshTech();
     }
     public function confirmAppelle($id){
@@ -164,6 +185,14 @@ class HistoriqueController extends Controller
             $technicien = Technicien::where('user_id', '=', $userId)->first();
             $technicien->status = 'NON DISPONIBLE';
             $technicien->save();
+
+            $users = User::where('role', '=','ADMIN')
+            ->first();
+            Notification::send($users, new TechConfirmedHist($hist));
+            $users = User::where('id', '=', $hist->hotline_id)
+            ->first();
+            Notification::send($users, new TechConfirmedHist($hist));
+
             return $this->refreshTech();
         }
         return response()->json('erreur');

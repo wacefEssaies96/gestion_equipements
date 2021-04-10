@@ -90,6 +90,7 @@
       </div>
       <!-- /.card-header -->
     <AddEquipement @equipement-added="refreshAdded" v-bind:isConnected="isConnected"></AddEquipement>
+    <ViewPdf @closed="refreshDoc" v-bind:path="document.document"></ViewPdf>
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -133,7 +134,6 @@
                   </button>
                 </div>
               </td>
-                <ViewPdf v-bind:path="document.document"></ViewPdf>
               <td>{{ equipement.zone }}</td>
               <td>
                 <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getEquipement(equipement.id)" title="Modifier">
@@ -214,6 +214,10 @@
       }
     },
     methods:{
+      refreshDoc(){
+        console.log('trigred');
+        this.document = '';
+      },
       getDocuments(id,type){
         axios.get('/equipements/document/'+id+'/'+type)
         .then(response => {
