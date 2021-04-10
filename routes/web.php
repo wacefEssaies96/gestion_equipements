@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\User;
 
     Route::get('/', 'HomeController@index');
     Route::get('/getCount', 'HomeController@getCount');
@@ -10,6 +11,11 @@ use Illuminate\Support\Facades\Route;
     {
         return redirect('/#/equipements');
     });
+    Route::get('/mark-as-read/{user}', function(User $user)
+    {
+        $user->unreadNotifications->markAsRead();
+        return response()->json('Marked as read');
+    });
     Route::get('/getAccessData', 'HomeController@welcome');
     Route::get('/signin', 'AuthController@signin');
     Route::get('/callback', 'AuthController@callback');
@@ -17,7 +23,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/getalldata', 'OneDriveController@getAllData');
     Route::get('/getdatabyid/{id}', 'OneDriveController@getDataById');
     Route::get('/download/data/{id}', 'OneDriveController@downloadEquipementData');
-    Route::get('/download/file/{id}', 'OneDriveController@downloadFile');
+    Route::get('/download/file/{id}/{file}', 'OneDriveController@downloadFile');
     Route::post('/importDataFromExcel','EquipementController@importDataFromExcel');
     
     //Responsable

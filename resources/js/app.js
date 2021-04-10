@@ -14,6 +14,7 @@ Vue.use(VueRouter);
 
 Vue.component('v-select', vSelect);
 Vue.component('pagination', require('laravel-vue-pagination'));
+Vue.component('navbar', require('./components/Layout/NavBar.vue').default);
 
 import dashboard from './components/Dashboard.vue';
 import productions from './components/Productions/Productions.vue';

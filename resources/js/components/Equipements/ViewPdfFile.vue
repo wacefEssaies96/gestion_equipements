@@ -36,7 +36,7 @@
       <!-- /.card -->
       </div>
       <div class="modal-footer">
-            <button id="close" type="button" class="btn btn-secondary" data-dismiss='modal' @click="closeModal">Fermer</button>
+            <button id="closeViewPdf" type="button" class="btn btn-secondary" data-dismiss='modal' @click="closeModal">Fermer</button>
       </div>
       </div>
   </div>
@@ -54,22 +54,29 @@ export default {
     },
     data() {
         return {
-            loadingTask:'',
+            loadingTask:null,
             numPages: 0,
         }
     },
     watch:{
         path(newVal){
-            this.loadingTask = pdf.createLoadingTask(newVal);
-            this.loadingTask.promise.then(pdf => {
-                this.numPages = pdf.numPages;
-            });
+            if(this.path == '') {
+                alert('Vide !');
+                document.getElementById('closeViewPdf').click();
+            }
+            else{
+                this.loadingTask = pdf.createLoadingTask(newVal);
+                this.loadingTask.promise.then(pdf => {
+                    this.numPages = pdf.numPages;
+                });
+            }
         }
     },
 
     methods:{
         closeModal(){
-            this.loadingTask = '';
+            this.loadingTask = null;
+            this.$emit('closed');
             $('#viewpdf').on('click', '[data-dismiss="modal"]', function(e) { e.stopPropagation(); });
         },
     }

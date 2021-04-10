@@ -62,7 +62,7 @@
       <!-- /.card -->
       </div>
       <div class="modal-footer">
-            <button id="close" type="button" class="btn btn-secondary" data-dismiss='modal' @click="closeModal">Fermer</button>
+            <button id="closeAddFile" type="button" class="btn btn-secondary" data-dismiss='modal' @click="closeModal">Fermer</button>
       </div>
       </div>
   </div>
@@ -144,13 +144,15 @@ export default {
         axios.get("/download/file/"+id+"/"+f)
         .then(response => {
           this.$emit('file-added',response.data);
-          document.getElementById('close').click();
-          this.l = false;
           this.toast('success', 'Le fichier a été mis avec succées !');
+          this.l = false;
+          document.getElementById('closeAddFile').click();
         })
         .catch(error => {
           console.log(error),
+          this.l = false;
           this.toast('error', "Une erreur s'est produite !");
+          document.getElementById('closeAddFile').click();
         })
       },
       toast(value,message){

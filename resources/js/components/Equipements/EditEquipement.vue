@@ -217,6 +217,7 @@
             },
             update(){
                 var json_arr = JSON.stringify(this.documents);
+                console.log(this.documents);
                 axios.patch('/equipements/edit/' + this.equipementToEdit.id, {
                     nom: this.nom,
                     code: this.code,
@@ -226,8 +227,11 @@
                     zone: this.zone,
                     documents: json_arr
                 })
-                .then(response => this.$emit('equipement-updated',response))
+                .then(response => {
+                    this.$emit('equipement-updated',response)
+                    })
                 .catch(error => console.log(error));
+                this.documents = [];
             },
           checkEditForm(){
             this.$v.$touch()
