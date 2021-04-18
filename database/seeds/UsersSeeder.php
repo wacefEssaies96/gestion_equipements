@@ -19,7 +19,7 @@ class UsersSeeder extends Seeder
             'email' => 'admin@cofat.com',
             'tel' => '00525755',
             'password' => bcrypt('password'),
-            'role' => 'ADMIN'
+            'role' => 'ADMIN',
          ]);
     }
 }

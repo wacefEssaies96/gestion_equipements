@@ -10,11 +10,11 @@
     <body class="hold-transition sidebar-mini layout-fixed">
         <div id="app">
             <div class="wrapper">
-                {{-- @include('layouts.navbar') --}}
                 <navbar :user="{{Auth::user()->load('notifications')}}"></navbar>
                 @include('layouts.sidebar')
                 <main>
                     <router-view :user="{{Auth::user()}}"></router-view>
+                    <chat :user="{{Auth::user()->load('notifications')}}"></chat>
                 </main>
                 @include('layouts.footer')
             </div>

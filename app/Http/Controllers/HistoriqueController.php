@@ -70,13 +70,13 @@ class HistoriqueController extends Controller
                 && request('code_equip') != '')
             { 
                 $hist->valide = true; 
+                $hist->heure_fin = request('heure_fin');
+                $hist->heure_debut = Carbon::now('Africa/Tunis');
+                $hist->travaille = request('travaille');
+                $hist->piece_rechange = request('piece_rechange');
+                $hist->commentaire = request('commentaire');
+                $hist->code_equip = request('code_equip');
             }
-            $hist->heure_fin = request('heure_fin');
-            $hist->heure_debut = Carbon::now('Africa/Tunis');
-            $hist->travaille = request('travaille');
-            $hist->piece_rechange = request('piece_rechange');
-            $hist->commentaire = request('commentaire');
-            $hist->code_equip = request('code_equip');
         }
         $hist->save();
 
@@ -113,8 +113,10 @@ class HistoriqueController extends Controller
         
         $technicien = User::find(request('tech_id'));
         Notification::send($technicien, new HistoriqueAdded($hist));
+
         $admin = User::where('role', '=' ,'ADMIN')->first();
         Notification::send($admin,new AppelleNonCloture($hist));
+
         $hotline = User::
         where('id', '=', $hist->hotline_id)
         ->first();
@@ -164,11 +166,10 @@ class HistoriqueController extends Controller
             $histElectrique->nom_support = request('nom_support');
             $histElectrique->save();
         }
-        $users = User::where('role', '=','ADMIN')
-        ->first();
+        $users = User::where('role', '=','ADMIN')->first();
         Notification::send($users, new TechEditedHist($hist));
-        $users = User::where('id', '=', $hist->hotline_id)
-        ->first();
+
+        $users = User::where('id', '=', $hist->hotline_id)->first();
         Notification::send($users, new TechEditedHist($hist));
         
         return $this->refreshTech();
@@ -186,11 +187,10 @@ class HistoriqueController extends Controller
             $technicien->status = 'NON DISPONIBLE';
             $technicien->save();
 
-            $users = User::where('role', '=','ADMIN')
-            ->first();
+            $users = User::where('role', '=','ADMIN')->first();
             Notification::send($users, new TechConfirmedHist($hist));
-            $users = User::where('id', '=', $hist->hotline_id)
-            ->first();
+            
+            $users = User::where('id', '=', $hist->hotline_id)->first();
             Notification::send($users, new TechConfirmedHist($hist));
 
             return $this->refreshTech();

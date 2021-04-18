@@ -12,6 +12,10 @@ use Excel;
 
 class EquipementController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function importDataFromExcel(Request $request){
         $file = public_path()."/downloads/equipement.xlsx";
         try{

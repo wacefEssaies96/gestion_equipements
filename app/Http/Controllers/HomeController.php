@@ -26,12 +26,12 @@ class HomeController extends Controller
         $nbTech = Technicien::all()->count();
         $nbHotline = Hotline::all()->count();
         $nbResp = Responsable::all()->count();
-        return response()->json([$nbHotline,$nbResp,$nbTech]);
+        $nbProd = Responsable::all()->count();
+        return response()->json([$nbHotline,$nbResp,$nbTech,$nbProd]);
     }
     public function welcome()
     {
         $viewData = $this->loadViewData();
-
         return response()->json($viewData);
     }
 }

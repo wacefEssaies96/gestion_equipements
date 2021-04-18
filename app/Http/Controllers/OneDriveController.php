@@ -13,6 +13,10 @@ use App\Equipement;
 
 class OneDriveController extends Controller
 {
+  public function __construct()
+  {
+      $this->middleware('auth');
+  }
   public function getAllData()
   {
     $graph = $this->getGraph();

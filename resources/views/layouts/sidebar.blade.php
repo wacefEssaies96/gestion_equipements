@@ -48,45 +48,11 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           @if (Auth::user()->role == "ADMIN")
             <li class="nav-item menu">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-users"></i>
+            <li class="nav-item">
+              <router-link to='/users' class="nav-link">
+                <i class="nav-icon fas fa-user-tie"></i>
                 <p>
                   Gérer les personnels
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-              <router-link to='/responsables' class="nav-link">
-                <i class="fas fa-user-tie"></i>
-                <p>Responsables</p>
-              </router-link>
-                </li>
-                <li class="nav-item">
-                  <router-link to='/hotlines' class="nav-link">
-                    <i class="fas fa-user"></i> 
-                    <p>Hotlines</p>
-                  </router-link>
-                </li>
-                <li class="nav-item">
-                  <router-link to='/techniciens' class="nav-link">
-                    <i class="fas fa-user"></i>
-                    <p>Techniciens</p>
-                  </router-link>
-                </li>
-                <li class="nav-item">
-                  <router-link to='/productions' class="nav-link">
-                    <i class="fas fa-user-tie"></i>
-                    <p>Productions</p>
-                  </router-link>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <router-link to='/roles' class="nav-link">
-                <i class="nav-icon fas fa-cogs"></i>
-                <p>
-                  Roles
                 </p>
               </router-link>
             </li>  
@@ -100,7 +66,7 @@
             </li>  
             <li class="nav-item">
               <router-link to='/zones' class="nav-link">
-                <i class="nav-icon fas fa-file-code"></i>
+                <i class="nav-icon fas fa-industry"></i>
                 <p>
                   Zones
                 </p>

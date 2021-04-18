@@ -7,21 +7,15 @@ use Illuminate\Http\Request;
 
 class ZoneController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function liste(Request $request)
     {
         return $this->refresh();
     }
-    public function index()
-    {
-        //
-    }
-
-
-    public function create()
-    {
-        //
-    }
-
 
     public function store(Request $request)
     {
@@ -33,18 +27,6 @@ class ZoneController extends Controller
         $zone->save();
         return $this->refresh();
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Zone  $zone
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Zone $zone)
-    {
-        //
-    }
-
    
     public function edit($id)
     {

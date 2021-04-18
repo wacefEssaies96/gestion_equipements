@@ -16,6 +16,33 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
 
+      <!-- Messages Dropdown Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" @click="markAsRead" data-toggle="dropdown" href="#">
+          <i class="far fa-comments"></i>
+          <span class="badge badge-danger navbar-badge">{{unreadMessages.length}}</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="#" class="dropdown-item">
+            <!-- Message Start -->
+            <div class="media" v-for="message in unreadMessages" :key="message.id">
+              <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <div class="media-body">
+                <h3 class="dropdown-item-title">
+                  {{message.data.reciever.nom}} {{message.data.reciever.prenom}}
+                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                </h3>
+                <p class="text-sm">{{message.data.newMessage.text}}</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+              </div>
+            </div>
+            <!-- Message End -->
+          </a>
+          <div class="dropdown-divider"></div>
+
+          <!-- <a href="#" class="dropdown-item dropdown-footer">See All Messages</a> -->
+        </div>
+      </li>
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a @click="markAsRead" class="nav-link" data-toggle="dropdown" href="#">
@@ -70,12 +97,14 @@ export default {
     data(){
         return{
             allNotifications:'',
+            allMessages:'',
+            um:'',
         }
     },
     methods:{
       markAsRead(){
         axios.get('/mark-as-read/'+this.user.id)
-        // .then(response => this.allNotifications = [])
+        // .then(response => this.unreadMessages = [])
         .catch(error => console.log(error));
       },
       toast(value) {
@@ -94,23 +123,40 @@ export default {
       unreadNotifications:{
         get: function(){
           return this.allNotifications.filter(notification=>{
-              return notification.read_at == null
+              return notification.read_at == null && (!notification.data.newMessage)
           })
         },
         set: function(newVal){
-          console.log(newVal);
+          // console.log(newVal);
           return newVal;
         }
-      }
+      },
+      unreadMessages:{
+        get: function(){
+          return this.allMessages.filter(notification=>{
+              return notification.read_at == null && notification.data.newMessage
+          })
+        },
+        set: function(newVal){
+          unreadMessages = newVal;
+        }
+      },
     },
     created(){
-        this.allNotifications = this.user.notifications
-        console.log(this.allNotifications);
-        Echo.private('App.User.' + this.user.id)
-        .notification((notification) => {
+      this.allNotifications = this.user.notifications;
+      this.allMessages = this.user.notifications;
+      console.log(this.user.notifications);
+      Echo.private('App.User.' + this.user.id)
+      .notification((notification) => {
+        if(notification.notification.data.newMessage){
+          this.allMessages.push(notification.notification);
+          this.toast('Vous avez un nouveau message !');
+        }
+        else{
           this.allNotifications.push(notification.notification)
           this.toast('Vous avez une nouvelle notification !');
-        });
+        }
+      });
     }
 }
 </script>
