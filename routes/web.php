@@ -17,10 +17,14 @@ use App\User;
         return response()->json('Marked as read');
     });
 
+    //chat
     Route::get('/contacts', 'MessageController@get');
     Route::get('/conversation/{id}', 'MessageController@getConversation');
     Route::post('/conversation/send', 'MessageController@send');
 
+    //desactiver un user
+    Route::get('/users/{id}/enable', 'UserController@enable');
+    Route::get('/users/{id}/disable', 'UserController@disable');
 
     //users
     Route::get('/users', 'UserController@liste');

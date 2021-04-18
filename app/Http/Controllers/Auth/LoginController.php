@@ -31,6 +31,11 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
+        if(Auth::user()->etat == 0){
+            Auth::logout();
+            abort(401, "Votre compte a été désactivé. Veuillez contacter l'administrateur.");
+            exit(-1);
+        }
         if(Auth::user()->role != 'ADMIN')
         {
             return'historiques';

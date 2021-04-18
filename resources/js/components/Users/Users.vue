@@ -98,6 +98,14 @@
               <td>{{ user.email }}</td>
               <td>{{ user.tel }}</td>
               <td>
+                <button v-if="user.etat == 0" type="button" 
+                  class="btn btn-outline-primary" @click="changerEtat(user.id)">
+                  <i class="fas fa-user-lock" title ="Activer" :id="'switch-user' + user.id"></i>
+                </button>
+                <button  v-else-if="user.etat == 1" type="button" 
+                  class="btn btn-outline-primary" @click="changerEtat(user.id)">
+                  <i class="fas fa-unlock" title="Désactiver" :id="'switch-user' + user.id"/>
+                </button>
                 <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getUser(user.id)">
                 <i class="fas fa-edit" title="Modifier"/>
                 </button>
@@ -216,12 +224,39 @@
         getUser(id){
           axios.get('/users/edit/' + id)
           .then(response => {
-              this.userToEdit = response.data;
-                console.log(response.data)  
+              this.userToEdit = response.data; 
             })
           .catch(error => console.log(error));
         },
-        
+        changerEtat(id) {
+          const label = document.getElementById('switch-user' + id);
+          if(label.title == "Activer"){
+            this.enable(id);
+          }
+          else{
+            this.disable(id)
+          }
+        },
+        enable(id){
+          axios.get('/users/' + id + '/enable')
+              .then(response => {
+                let label = document.getElementById('switch-user' + id);
+                label.className = "fas fa-unlock";
+                label.title= "Désactiver"
+                this.toast("Uitlisateur activé avec succès !")
+              })
+              .catch(error => console.log(error));
+        },
+        disable(id){
+          axios.get('/users/' + id + '/disable')
+              .then(response => {
+                let label = document.getElementById('switch-user' + id);
+                label.className = "fas fa-user-lock";
+                label.title= "Activer"
+                this.toast("Utilisateur désactivé avec succès !")
+              })
+              .catch(error => console.log(error));
+        },
       },
     }
 </script>

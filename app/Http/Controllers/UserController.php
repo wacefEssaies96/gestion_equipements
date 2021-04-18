@@ -165,4 +165,25 @@ class UserController extends Controller
         ->get();
         return response()->json($techniciens);
     }
+    public function disable(Request $request, int $id)
+    {
+        $user = User::find($id);
+        $user->etat = 0;
+        $user->save();
+ 
+        return json_encode(['message' => 'Utilisateur désactivé avec succès', 'success' => true]);
+    }
+ 
+    /**
+     * Enable spectific account
+     */
+    public function enable(Request $request, $id)
+    {
+        
+        $user = User::find($id);
+        $user->etat = 1;
+        $user->save();
+ 
+        return json_encode(['message' => 'Utilisateur activé avec succès', 'success' => true]);
+    }
 }
