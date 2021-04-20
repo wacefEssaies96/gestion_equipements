@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+  
     public function liste(){
         return $this->refresh();
     }
@@ -94,6 +95,8 @@ class UserController extends Controller
             return response()->json($technicien);
         }
     }
+   
+
 
     public function destroy($id){
 
@@ -106,7 +109,7 @@ class UserController extends Controller
 
     }
     public function refresh(){
-        $users = User::paginate(10);
+        $users = User::where ('role','!=','ADMIN')->paginate(10);
         return response()->json($users);
     }
 

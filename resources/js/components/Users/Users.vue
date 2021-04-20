@@ -91,7 +91,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in users.data" :key="user.id">
+            <tr v-for="user in users.data" :key="user.id" @click="getUser(user.id)" >
               <td>{{ user.nom }}</td>
               <td>{{ user.prenom }}</td>
               <td>{{ user.role }}</td>
@@ -109,12 +109,19 @@
                 <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getUser(user.id)">
                 <i class="fas fa-edit" title="Modifier"/>
                 </button>
-                <button @click="setId(user.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt" title="Supprimer"/></button>
+                 <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#showModal" @click="getUser(user.id)">
+                <i class="far fa-address-card" title="Profile"/>
+                 </button>
+                <button @click="setId(user.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger">
+                  <i class="fas fa-trash-alt" title="Supprimer"/></button>
                 <DeleteUser v-bind:id="id" @user-deleted="refreshDeleted"></DeleteUser>
                 <EditUser 
                     v-bind:userToEdit="userToEdit"
                     @user-updated="refreshEdited">
                 </EditUser>
+                <ShowUser
+                    v-bind:userShow="userToEdit">
+                 </ShowUser>
               </td>
             </tr>
           </tbody>
@@ -129,11 +136,13 @@
   import AddUser from './AddUser';
   import EditUser from './EditUser';
   import DeleteUser from './DeleteUser';
+  import ShowUser from './ShowUser';
     export default {    
       components:{
       AddUser,
       EditUser,
-      DeleteUser
+      DeleteUser,
+      ShowUser,
     },
       
       props:['user'],
