@@ -15,8 +15,8 @@ Vue.use(VueRouter);
 Vue.component('v-select', vSelect);
 Vue.component('pagination', require('laravel-vue-pagination'));
 Vue.component('navbar', require('./components/Layout/NavBar.vue').default);
-Vue.component('chat', require('./components/Chat/Chat.vue').default);
 
+import Vue from 'vue';
 import dashboard from './components/Dashboard.vue';
 import feedbacks from './components/Feedbacks/Feedbacks.vue';
 import zones from './components/Zones/Zones.vue';
@@ -27,7 +27,7 @@ import histHotline from './components/Historiques/Hotline/Historiques.vue';
 import histTechnicien from './components/Historiques/Tech/Hist_tech.vue';
 import onedrive from './components/OneDrive/index.vue';
 import users from './components/Users/Users.vue'
-import Vue from 'vue';
+import globalChat from './components/Chat/GlobalChat.vue';
 
 const routes = [
     {path : '/',component : dashboard},
@@ -39,7 +39,8 @@ const routes = [
     {path : '/hist-hotline',component : histHotline},
     {path : '/hist-technicien',component : histTechnicien},
     {path : '/onedrive',component : onedrive},
-    {path: '/users', component: users}
+    {path : '/users', component: users},
+    {path : '/chat', component: globalChat},
 ];
 
 const router = new VueRouter({routes});

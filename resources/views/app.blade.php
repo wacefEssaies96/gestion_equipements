@@ -14,7 +14,6 @@
                 @include('layouts.sidebar')
                 <main>
                     <router-view :user="{{Auth::user()}}"></router-view>
-                    <chat :user="{{Auth::user()->load('notifications')}}"></chat>
                 </main>
                 @include('layouts.footer')
             </div>

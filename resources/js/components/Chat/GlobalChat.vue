@@ -1,27 +1,33 @@
 <template>
+<!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header" :class="{'loading':loading}">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Chat</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
+              <li class="breadcrumb-item active">Chat</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
   <!-- DIRECT CHAT -->
-  <div class="card direct-chat direct-chat-primary w-25 h-70" style="position: fixed; bottom: 0px; right: 10px;">
+  <div class="card direct-chat direct-chat-primary w-75 ml-4 float-left">
     <div class="card-header">
       <h3 class="card-title">Direct Chat</h3>
-
-      <div class="card-tools">
-        <!-- <span title="3 New Messages" class="badge badge-primary">3</span> -->
-        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-          <i class="fas fa-minus"></i>
-        </button>
-        <button type="button" id="contacts" class="btn btn-tool" title="Contacts" data-widget="chat-pane-toggle">
-          <i class="fas fa-comments"></i>
-        </button>
-        <!--<button type="button" class="btn btn-tool" @click="closeChat()" >data-card-widget="remove"
-          <i class="fas fa-times"></i>
-        </button>-->
-      </div>
     </div>
     <!-- /.card-header -->
 
     <!-- Conversations are loaded here -->
     <div class="card-body">
-      <h3>{{ contact ? contact.nom : 'Selectionner un utilisateur' }}</h3>
+      <h4>{{ contact ? contact.nom : 'Selectionner un utilisateur' }}</h4>
         <div class="direct-chat-messages">
           <!-- Message. Default to the left -->
           <div class="direct-chat-msg" v-for="message in messages" :key="message.id" :class="{'right ' : message.from == user.id}">
@@ -45,27 +51,7 @@
           </div>
         <!-- /.direct-chat-msg -->
         </div>
-        <input hidden type="text" v-model="userContact2" disabled>
-      <!-- Contacts are loaded here -->
-      <div class="direct-chat-contacts">
-        <ul class="contacts-list">
-          <li v-for="(contact, index) in contacts" :key="contact.id" @click="selectContact(index, contact)">
-              <a href="#">
-              <img class="contacts-list-img" src="dist/img/user1-128x128.jpg" alt="User Avatar">
-              <div class="contacts-list-info">
-                  <span class="contacts-list-name">
-                  {{contact.nom}} {{contact.prenom}}
-                  <!-- <small class="contacts-list-date float-right">2/28/2015</small> -->
-                  </span>
-                  <!-- <span class="contacts-list-msg">How have you been? I was...</span> -->
-              </div>
-              <!-- /.contacts-list-info -->
-              </a>
-          </li>
-        <!-- End Contact Item -->
-        </ul>
-        <!-- /.contacts-list -->
-      </div>
+    
       <!-- /.card-body -->
       <div class="card-footer">
         <form @submit.prevent="send" action="#" method="post">
@@ -79,13 +65,34 @@
       </div>
     </div>
   </div>
+  <div class="card mr-4">
+    <div class="card-header">
+      <h3 class="card-title">Liste des utilisateurs</h3>
+    </div>
+    <div class="card-body">
+        <ul class="list-group">
+          <li class="list-group-item" v-for="(contact, index) in contacts" :key="contact.id" @click="selectContact(index, contact)">
+              <a href="#">
+              <!-- <img class="contacts-list-img" src="dist/img/user1-128x128.jpg" alt="User Avatar"> -->
+              <!-- <div class="contacts-list-info"> -->
+                  <!-- <span class="contacts-list-name"> -->
+                  {{contact.nom}} {{contact.prenom}}
+                  <!-- </span> -->
+              <!-- </div> -->
+              <!-- /.contacts-list-info -->
+              </a>
+          </li>
+        <!-- End Contact Item -->
+        </ul>
+        <!-- /.contacts-list -->
+    </div>
+  </div>
+  </div> 
 </template>
-
 <script>
-  export default {
-    props:['user','userContact'],
-
-    data(){
+export default {
+    props:['user'],
+     data(){
       return{
         selectedContact : null,
         messages: [],
@@ -93,19 +100,16 @@
         message:'',
         selected :0,
         contact:'',
-      }
-    },
-
-    computed:{
-      userContact2 : function(){
-        this.contact = this.userContact;
-        this.startConversation(this.userContact);
+        loading:true,
       }
     },
 
     created(){
       axios.get('/contacts')
-      .then((response) => this.contacts = response.data)
+      .then((response) => {
+        this.contacts = response.data
+        this.loading = false;  
+      })
       .catch( error => console.log(error));
       this.messages = this.user.notifications;
       Echo.private('App.User.' + this.user.id)
@@ -145,7 +149,6 @@
 
       selectContact(index, contact){
         this.contact = contact
-        document.getElementById('contacts').click();  
         this.startConversation(contact);
       },
       
@@ -159,5 +162,5 @@
         .catch(error => console.log(error))
       },
     }  
-  }
+}
 </script>

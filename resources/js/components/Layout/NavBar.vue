@@ -15,7 +15,6 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-
       <!-- Messages Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" @click="markAsRead" data-toggle="dropdown" href="#">
@@ -23,9 +22,9 @@
           <span class="badge badge-danger navbar-badge">{{unreadMessages.length}}</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item">
+          <a href="#" class="dropdown-item" v-for="message in allMessages" :key="message.id" @click="showChat(message.data.reciever)">
             <!-- Message Start -->
-            <div class="media" v-for="message in unreadMessages" :key="message.id">
+            <div class="media">
               <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
@@ -39,8 +38,7 @@
             <!-- Message End -->
           </a>
           <div class="dropdown-divider"></div>
-
-          <!-- <a href="#" class="dropdown-item dropdown-footer">See All Messages</a> -->
+          <router-link to="/chat" class="dropdown-item dropdown-footer">Voir tous les messages</router-link>
         </div>
       </li>
       <!-- Notifications Dropdown Menu -->
@@ -87,76 +85,91 @@
         </a>
       </li>
     </ul>
+    <template v-if="showChatb == true">
+      <Chat :user="user" v-bind:userContact="userContact"></Chat>
+    </template>
   </nav>
   <!-- /.navbar -->
 </template>
 <script>
+import Chat from '../Chat/Chat';
+
 export default {
-    props:['user'],
 
-    data(){
-        return{
-            allNotifications:'',
-            allMessages:'',
-            um:'',
-        }
-    },
-    methods:{
-      markAsRead(){
-        axios.get('/mark-as-read/'+this.user.id)
-        // .then(response => this.unreadMessages = [])
-        .catch(error => console.log(error));
-      },
-      toast(value) {
-        this.$swal.fire({
-        icon: "warning",
-        title: value,
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 5000,
-        });
-      },   
-    },
+  components:{
+    Chat
+  },
 
-    computed:{
-      unreadNotifications:{
-        get: function(){
-          return this.allNotifications.filter(notification=>{
-              return notification.read_at == null && (!notification.data.newMessage)
-          })
-        },
-        set: function(newVal){
-          // console.log(newVal);
-          return newVal;
-        }
-      },
-      unreadMessages:{
-        get: function(){
-          return this.allMessages.filter(notification=>{
-              return notification.read_at == null && notification.data.newMessage
-          })
-        },
-        set: function(newVal){
-          unreadMessages = newVal;
-        }
-      },
-    },
-    created(){
-      this.allNotifications = this.user.notifications;
-      this.allMessages = this.user.notifications;
-      console.log(this.user.notifications);
-      Echo.private('App.User.' + this.user.id)
-      .notification((notification) => {
-        if(notification.notification.data.newMessage){
-          this.allMessages.push(notification.notification);
-          this.toast('Vous avez un nouveau message !');
-        }
-        else{
-          this.allNotifications.push(notification.notification)
-          this.toast('Vous avez une nouvelle notification !');
-        }
-      });
+  props:['user'],
+
+  data(){
+    return{
+      allNotifications:'',
+      allMessages:'',
+      um:'',
+      showChatb:false,
+      userContact : null,
     }
+  },
+
+  methods:{
+    showChat(contact){
+      this.userContact = contact;
+      this.showChatb = true;
+    },
+    markAsRead(){
+      axios.get('/mark-as-read/'+this.user.id)
+      // .then(response => this.unreadMessages = [])
+      .catch(error => console.log(error));
+    },
+    toast(value) {
+      this.$swal.fire({
+      icon: "warning",
+      title: value,
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 5000,
+      });
+    },   
+  },
+
+  computed:{
+    unreadNotifications:{
+      get: function(){
+        return this.allNotifications.filter(notification=>{
+            return notification.read_at == null && (!notification.data.newMessage)
+        })
+      },
+      set: function(newVal){
+        return newVal;
+      }
+    },
+    unreadMessages:{
+      get: function(){
+        return this.allMessages.filter(notification=>{
+            return notification.read_at == null && notification.data.newMessage
+        })
+      },
+      set: function(newVal){
+        unreadMessages = newVal;
+      }
+    },
+  },
+  created(){
+    this.allNotifications = this.user.notifications;
+    this.allMessages = this.user.notifications;
+    Echo.private('App.User.' + this.user.id)
+    .notification((notification) => {
+      if(notification.notification.data.newMessage){
+        this.allMessages.push(notification.notification);
+        this.toast('Vous avez un nouveau message !');
+      }
+      else{
+        this.allNotifications.push(notification.notification)
+        this.toast('Vous avez une nouvelle notification !');
+      }
+    });
+  }
 }
 </script>

@@ -100,11 +100,11 @@
               <td>
                 <button v-if="user.etat == 0" type="button" 
                   class="btn btn-outline-primary" @click="changerEtat(user.id)">
-                  <i class="fas fa-user-lock" title ="Activer" :id="'switch-user' + user.id"></i>
+                  <i class="fas fa-unlock" title ="Activer" :id="'switch-user' + user.id"></i>
                 </button>
                 <button  v-else-if="user.etat == 1" type="button" 
                   class="btn btn-outline-primary" @click="changerEtat(user.id)">
-                  <i class="fas fa-unlock" title="Désactiver" :id="'switch-user' + user.id"/>
+                  <i class="fas fa-user-lock" title="Désactiver" :id="'switch-user' + user.id"/>
                 </button>
                 <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getUser(user.id)">
                 <i class="fas fa-edit" title="Modifier"/>
@@ -112,8 +112,8 @@
                 <button @click="setId(user.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt" title="Supprimer"/></button>
                 <DeleteUser v-bind:id="id" @user-deleted="refreshDeleted"></DeleteUser>
                 <EditUser 
-                    v-bind:userToEdit="userToEdit"
-                    @user-updated="refreshEdited">
+                  v-bind:userToEdit="userToEdit"
+                  @user-updated="refreshEdited">
                 </EditUser>
               </td>
             </tr>
@@ -194,7 +194,7 @@
 
         },
         setId(id){
-            this.id = id
+          this.id = id
         },
         toast(value){
           this.$swal.fire({
@@ -241,7 +241,7 @@
           axios.get('/users/' + id + '/enable')
               .then(response => {
                 let label = document.getElementById('switch-user' + id);
-                label.className = "fas fa-unlock";
+                label.className = "fas fa-user-lock";
                 label.title= "Désactiver"
                 this.toast("Uitlisateur activé avec succès !")
               })
@@ -251,7 +251,7 @@
           axios.get('/users/' + id + '/disable')
               .then(response => {
                 let label = document.getElementById('switch-user' + id);
-                label.className = "fas fa-user-lock";
+                label.className = "fas fa-unlock";
                 label.title= "Activer"
                 this.toast("Utilisateur désactivé avec succès !")
               })
