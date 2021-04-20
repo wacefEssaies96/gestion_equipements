@@ -125,6 +125,9 @@
                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getHistorique(historique.id);">
               <i class="fas fa-edit" title="Modifier"/>
               </button>
+               <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#showModal" @click="getHistorique(historique.id)">
+                <i class="far fa-list-alt" title="Intervention"/>
+                 </button>
               <button @click="setId(historique.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt" title="Supprimer"/></button>
               <DeleteHist v-bind:id="id" @historique-deleted="refreshDeleted"></DeleteHist>
               <EditHistAdmin 
@@ -134,6 +137,9 @@
                 v-bind:codePannes="codePannes" 
                 @historique-updated="refreshEdited">
               </EditHistAdmin> 
+              <ShowHistAdmin
+                v-bind:historiqueShow="historiqueToEdit">
+              </ShowHistAdmin>
             </td>
           </tr> 
         </tbody>
@@ -147,11 +153,13 @@
 <script>
   import AddHistAdmin from './AddHistAdmin';
   import EditHistAdmin from './EditHistAdmin';
+  import ShowHistAdmin from './ShowHistAdmin';
   import DeleteHist from '../DeleteHistoriques';
 export default {
     components:{
       AddHistAdmin,
       EditHistAdmin,
+      ShowHistAdmin,
       DeleteHist
     },
   props:['user'],

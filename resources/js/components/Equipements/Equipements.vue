@@ -139,12 +139,20 @@
                 <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getEquipement(equipement.id)" title="Modifier">
                 <i class="fas fa-edit"></i>
                 </button>
+                <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#showModal" @click="getEquipement(equipement.id)">
+                <i class="far fa-list-alt" title="Equipement"/>
+                 </button>
                 <button @click="setId(equipement.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger" title="Supprimer"><i class="fas fa-trash-alt" alt="Supprimer"></i></button>
                 <DeleteEquipement v-bind:id="id" @equipement-deleted="refreshDeleted"></DeleteEquipement>
                 <EditEquipement 
                   v-bind:equipementToEdit="equipementToEdit" 
                   v-bind:isConnected="isConnected"
-                  @equipement-updated="refreshEdited"></EditEquipement>
+                  @equipement-updated="refreshEdited">
+                </EditEquipement>
+                <ShowEquipement
+                    v-bind:equipementShow="equipementToEdit">
+                 </ShowEquipement>
+
               </td>
             </tr>
           </tbody>
@@ -159,6 +167,7 @@
 <script>
   import AddEquipement from './AddEquipement';
   import EditEquipement from './EditEquipement';
+  import ShowEquipement from './ShowEquipement';
   import DeleteEquipement from './DeleteEquipement';
   import ViewPdf from './ViewPdfFile.vue';
   import AddList from '../OneDrive/AddFileList'
@@ -167,6 +176,7 @@
     components:{
       AddEquipement,
       EditEquipement,
+      ShowEquipement,
       DeleteEquipement,
       ViewPdf,
       AddList
