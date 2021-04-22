@@ -16,6 +16,11 @@
                 <h3 class="card-title">Les coordonnées d'equipement</h3>
               </div>
               <div class="card-body">
+                <div class="row">
+                  <div class="col-3">
+                    <img :src="equipementShow.image" alt="Photo Aperçu de l'équipement" style="width:100px; height:100px">
+                  </div>
+                  <div class="col-9">
                     <div class="row">
                         <div class="col-6">
                             <h5>Nom</h5>
@@ -43,7 +48,8 @@
                         </div>
                      
                     </div>
-                 
+                  </div>
+                </div>
               </div>
             </div>
             <!-- /.card -->

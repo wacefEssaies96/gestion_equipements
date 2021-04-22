@@ -6,12 +6,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Historiques</h1>
+            <h1>interventions</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
-              <li class="breadcrumb-item active">Historiques</li>
+              <li class="breadcrumb-item"><router-link to="/">Acceuil</router-link></li>
+              <li class="breadcrumb-item active">interventions</li>
             </ol>
           </div>
         </div>
@@ -76,11 +76,11 @@
       </div>
     </template>
     <div class="card-header">
-      <h3 class="card-title">Liste de tous les historiques</h3>
+      <h3 class="card-title">Liste de tous les interventions</h3>
       <div class="card-tools">
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
-        Ajouter un nouveau historique
+        Ajouter un nouveau intervention
         </button>
         <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>
       </div>
@@ -125,7 +125,7 @@
                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getHistorique(historique.id);">
               <i class="fas fa-edit" title="Modifier"/>
               </button>
-               <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#showModal" @click="getHistorique(historique.id)">
+               <button type="button" class="btn btn-outline-warning" data-toggle="modal" data-target="#showModal" @click="getHistorique(historique.id);">
                 <i class="far fa-list-alt" title="Intervention"/>
                  </button>
               <button @click="setId(historique.id)" data-toggle="modal" data-target="#modal-danger" type="button" class="btn btn-outline-danger"><i class="fas fa-trash-alt" title="Supprimer"/></button>
@@ -138,7 +138,7 @@
                 @historique-updated="refreshEdited">
               </EditHistAdmin> 
               <ShowHistAdmin
-                v-bind:historiqueShow="historiqueToEdit">
+                v-bind:historiqueShow="historiqueToEdit[0]">
               </ShowHistAdmin>
             </td>
           </tr> 
