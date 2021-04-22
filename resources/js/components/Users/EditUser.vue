@@ -96,30 +96,7 @@
                                 <span v-if="!$v.qualification.maxLength">Maximum 190 caractères !</span>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="h_debut_service">Heurs de début de services</label>
-                                    <input type="time" class="form-control" placeholder="de 8h" v-model="h_debut_service"
-                                    :class="{'is-invalid':$v.h_debut_service.$invalid}">
-                                    <!-- <div class="valid-feedback">Validé</div> -->
-                                    <div class="invalid-feedback">
-                                        <span v-if="!$v.h_debut_service.required">Veuillez remplir ce champs !</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="h_fin_service">Heurs de fin de services</label>
-                                <input type="time" class="form-control" placeholder="jusqu'a 14h" v-model="h_fin_service"
-                                :class="{'is-invalid':$v.h_fin_service.$invalid}">
-                                <!-- <div class="valid-feedback">Validé</div> -->
-                                <div class="invalid-feedback">
-                                    <span v-if="!$v.h_fin_service.required">Veuillez remplir ce champs !</span>
-                                </div>
-                            </div>
-                            </div>
-                        </div>  
+                        
                         <div class="form-group">
                             <label for="zone">Zone</label>
                             <select class="form-control" v-model="zone"
@@ -189,8 +166,8 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             zone: '',
             role:'',
             qualification: '',
-            h_debut_service: '',
-            h_fin_service: '',
+            // h_debut_service: '',
+            // h_fin_service: '',
             password: '',
             repeatPassword: '',
             hidden: 'true',
@@ -206,8 +183,8 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             this.password = '';
             this.repeatPassword = '';
             this.qualification = newVal.qualification;
-            this.h_debut_service = newVal.h_debut_service;
-            this.h_fin_service = newVal.h_fin_service;
+            // this.h_debut_service = newVal.h_debut_service;
+            // this.h_fin_service = newVal.h_fin_service;
             this.zone = newVal.zone;
           },
 
@@ -224,8 +201,8 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
               email: this.email,
               role: this.role,
               password: this.password,
-              h_debut_service: this.h_debut_service,
-              h_fin_service: this.h_fin_service,
+              // h_debut_service: this.h_debut_service,
+              // h_fin_service: this.h_fin_service,
               zone: this.zone,
               qualification: this.qualification
             })
@@ -265,12 +242,12 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
           zone: {
             //   required
           },
-          h_debut_service: {
-            //   required
-          },
-          h_fin_service: {
-            //   required
-          },
+          // h_debut_service: {
+          //   //   required
+          // },
+          // h_fin_service: {
+          //   //   required
+          // },
           role: {
               required
           },

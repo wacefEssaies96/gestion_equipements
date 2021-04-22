@@ -58,16 +58,6 @@
                         </div>
   
                     </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <h5>H.début de services</h5>
-                            <p class="text-secondary">{{userShow.h_debut_service}}</p>
-                        </div>
-                        <div class="col-6">
-                            <h5>H.fin de services</h5>
-                            <p class="text-secondary">{{userShow.h_fin_service}}</p>
-                        </div>
-                    </div>
                 </template>   
               </div>
             </div>
