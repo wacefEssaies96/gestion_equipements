@@ -15,22 +15,27 @@ class CreateHistoriquesTable extends Migration
     {
         Schema::create('historiques', function (Blueprint $table) {
             $table->id();
+
+            //automatique
             $table->time('heure_attente')->nullable();
             $table->time('heure_arret')->nullable();
+            $table->date('jour')->nullable();
+            $table->time('heure_debut')->nullable();
+            $table->time('heure_fin')->nullable();
+
             //hotline
             $table->time('heure_demande')->nullable();
             $table->enum('appelle',['Cloturé','Non cloturé'])->nullable();
-            $table->date('jour')->nullable();
             $table->boolean('valide')->nullable();
             $table->enum('zone', ['Sertissage', 'Assemblage','Coupe','Préparation','Controle éléctrique'])->nullable();
             $table->bigInteger('tech_id')->unsigned();
+            $table->enum('type_travaille',['C','PS','S','CS']);
+            $table->bigInteger('code_equip')->unsigned()->nullable();
+            $table->string('description_demande')->nullable();
+
             //technicien
-            $table->time('heure_debut')->nullable();
-            $table->time('heure_fin')->nullable();
             $table->string('travaille')->nullable();
             $table->string('piece_rechange')->nullable();
-            $table->string('commentaire')->nullable();
-            $table->bigInteger('code_equip')->unsigned()->nullable();
 
             $table->bigInteger('hotline_id')->unsigned();
             $table->foreign('hotline_id')->references('id')->on('users');

@@ -19,8 +19,7 @@ class CreateTechniciensTable extends Migration
             $table->string('qualification')->nullable();
             $table->enum('status', ['DISPONIBLE', 'NON DISPONIBLE'])->nullable();
             $table->enum('zone', ['Sertissage', 'Assemblage','Coupe','Préparation','Controle éléctrique'])->nullable();
-            $table->time('h_debut_service');
-            $table->time('h_fin_service');
+            $table->enum('poste',['1','2','3']);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
