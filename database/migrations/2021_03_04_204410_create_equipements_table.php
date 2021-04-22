@@ -15,11 +15,15 @@ class CreateEquipementsTable extends Migration
     {
         Schema::create('equipements', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
             $table->string('code')->unique();
             $table->string('designation');
+            $table->string('emplacement');
+            $table->string('code_categorie');
+            $table->date('date_acq');
             $table->string('n_serie');
+            $table->string('contructeur');
             $table->string('image')->nullable();
+            $table->enum('etat', ['Production', 'Zsav','obsolete'])->nullable();
             $table->enum('zone', ['Sertissage', 'Assemblage','Coupe','Préparation','Controle éléctrique'])->nullable();
             $table->timestamps();
         });
