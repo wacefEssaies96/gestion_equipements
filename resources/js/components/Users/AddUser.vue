@@ -96,6 +96,20 @@
                                 <span v-if="!$v.qualification.maxLength">Maximum 190 caractères !</span>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="poste">Poste</label>
+                            <select class="form-control" v-model="poste"
+                            :class="{'is-invalid':(poste != '') ?$v.poste.$invalid:''}">
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                            </select>
+                            <!-- <div class="valid-feedback">Validé</div> -->
+                            <div class="invalid-feedback">
+                                <span v-if="!$v.poste.required">Veuillez remplir ce champs !</span>
+                                
+                            </div>
+                        </div>
                        
                         <div class="form-group">
                             <label for="zone">Zone</label>
@@ -163,8 +177,7 @@ export default {
         role:'',
         zone: '',   
         qualification: '',
-        // h_debut_service: '',
-        // h_fin_service: '',
+        poste:'',
         password: '',
         repeatPassword: '',
     }
@@ -180,7 +193,9 @@ export default {
       minLength: minLength('3'),
       maxLength: maxLength('15')
     },
+    poste:{
 
+    },
     role: {
         required
     },
@@ -258,6 +273,7 @@ export default {
             tel: this.tel,
             password: this.password,
             role : this.role,
+            poste:this.poste,
             // h_debut_service: this.h_debut_service,
             // h_fin_service: this.h_fin_service,
             zone: this.zone,
@@ -275,6 +291,7 @@ export default {
         this.password= '';
         this.repeatPassword= '';
         this.role = '';
+        this.poste='';
         // this.h_debut_service = '';
         // this.h_fin_service = '';
         this.zone = '';

@@ -48,7 +48,11 @@ class EquipementController extends Controller
     public function store(Request $request)
     {
         $equipement = new Equipement();
-        $equipement->nom = request('nom');
+        $equipement->code_categorie = request('code_categorie');
+        $equipement->emplacement = request('emplacement');
+        $equipement->date_acq = request('date_acq');
+        $equipement->constructeur = request('constructeur');
+        $equipement->etat = request('etat');
         $equipement->code= request('code');
         $equipement->n_serie = request('n_serie');
         $equipement->designation = request('designation');
@@ -103,7 +107,11 @@ class EquipementController extends Controller
                 $equipement->image = $filename;
             }
         }
-        $equipement->nom = request('nom');
+        $equipement->code_categorie = request('code_categorie');
+        $equipement->emplacement = request('emplacement');
+        $equipement->date_acq = request('date_acq');
+        $equipement->constructeur = request('constructeur');
+        $equipement->etat = request('etat');
         $equipement->code= request('code');
         $equipement->n_serie = request('n_serie');
         $equipement->designation = request('designation');

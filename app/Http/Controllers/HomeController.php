@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Technicien;
 use App\Hotline;
 use App\Responsable;
+use App\Production;
 use App\TokenStore\TokenCache;
 use Microsoft\Graph\Graph;
 use Microsoft\Graph\Model;
@@ -26,7 +27,7 @@ class HomeController extends Controller
         $nbTech = Technicien::all()->count();
         $nbHotline = Hotline::all()->count();
         $nbResp = Responsable::all()->count();
-        $nbProd = Responsable::all()->count();
+        $nbProd = Production::all()->count();
         return response()->json([$nbHotline,$nbResp,$nbTech,$nbProd]);
     }
     public function welcome()

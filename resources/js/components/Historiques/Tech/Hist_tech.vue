@@ -37,30 +37,38 @@
               <th>Heure de début</th>
               <th>Heure de fin</th>
               <th>Heure d'attente</th>
-              <th>Heure d'arret'</th>
-              <th>Jour</th>
+              <th>Heure d'arret</th>
+              <th>Description</th>
+              <th>Code machine</th>
+              <th>Designation</th>
+              <th>Emplacement</th>
+              <th>NSerie</th>
+              <th>Type Travaille</th>
               <th>Zone</th>
-              <th>Appelle</th>
+              <th>BT cloturé</th>
               <th>Travaille éffectué</th>
               <th>Pièce de rechange</th>
-              <th>Commentaire</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="historique in histsTech.data" :key="historique.id">
-                <td>{{ historique.id }}</td>
-                <td>{{ historique.heure_demande }}</td>
-                <td>{{ historique.heure_debut }}</td>
-                <td>{{ historique.heure_fin }}</td>
-                <td>{{ historique.heure_attente }}</td>
-                <td>{{ historique.heure_arret }}</td>
-                <td>{{ historique.jour }}</td>
-                <td>{{ historique.zone }}</td>
-                <td>{{ historique.appelle }}</td>
-                <td>{{ historique.travaille }}</td>
-                <td>{{ historique.piece_rechange }}</td>
-                <td>{{ historique.commentaire }}</td>
+              <td>{{ historique.id }}</td>
+              <td>{{ historique.heure_demande }}</td>
+              <td>{{ historique.heure_debut }}</td>
+              <td>{{ historique.heure_fin }}</td>
+              <td>{{ historique.heure_attente }}</td>
+              <td>{{ historique.heure_arret }}</td>
+              <td>{{ historique.description_demande }}</td>
+              <td>{{ historique.code_equip }}</td>
+              <td>{{ historique.designation }}</td>
+              <td>{{ historique.emplacement }}</td>
+              <td>{{ historique.n_serie }}</td>
+              <td>{{ historique.type_travaille }}</td>
+              <td>{{ historique.zone }}</td>
+              <td>{{ historique.appelle }}</td>
+              <td>{{ historique.travaille }}</td>
+              <td>{{ historique.piece_rechange }}</td>
                 <td> 
                   <template v-if="historique.valide == false">
                     <button type="button" class="btn btn-primary" @click="confirmAppelle(historique.id);">
@@ -100,17 +108,21 @@
           <thead>
             <tr>
               <th>Num Bt</th>
-                <th>Heure de demande</th>
-                <th>Heure de début</th>
-                <th>Heure de fin</th>
-                <th>Heure d'attente</th>
-                <th>Heure d'arret'</th>
-                <th>Jour</th>
-                <th>Zone</th>
-                <th>Appelle</th>
-                <th>Travaille éffectué</th>
-                <th>Pièce de rechange</th>
-                <th>Commentaire</th>
+              <th>Heure de demande</th>
+              <th>Heure de début</th>
+              <th>Heure de fin</th>
+              <th>Heure d'attente</th>
+              <th>Heure d'arret</th>
+              <th>Description</th>
+              <th>Code machine</th>
+              <th>Designation</th>
+              <th>Emplacement</th>
+              <th>NSerie</th>
+              <th>Type Travaille</th>
+              <th>Zone</th>
+              <th>BT cloturé</th>
+              <th>Travaille éffectué</th>
+              <th>Pièce de rechange</th>
             </tr>
           </thead>
           <tbody>
@@ -121,12 +133,16 @@
               <td>{{ historique.heure_fin }}</td>
               <td>{{ historique.heure_attente }}</td>
               <td>{{ historique.heure_arret }}</td>
-              <td>{{ historique.jour }}</td>
+              <td>{{ historique.description_demande }}</td>
+              <td>{{ historique.code_equip }}</td>
+              <td>{{ historique.designation }}</td>
+              <td>{{ historique.emplacement }}</td>
+              <td>{{ historique.n_serie }}</td>
+              <td>{{ historique.type_travaille }}</td>
               <td>{{ historique.zone }}</td>
               <td>{{ historique.appelle }}</td>
               <td>{{ historique.travaille }}</td>
               <td>{{ historique.piece_rechange }}</td>
-              <td>{{ historique.commentaire }}</td>
             </tr> 
           </tbody>
         </table>

@@ -95,10 +95,14 @@
         <table class="table table-hover text-nowrap">
           <thead>
             <tr>
-              <th>Nom</th>
               <th>Code_machine</th>
               <th>Designation</th>
+              <th>Emplacement</th>
+              <th>Code catégorie</th>
+              <th>Date d'acquisition</th>
               <th>N°serie</th>
+              <th>Constructeur</th>
+              <th>Etat</th>
               <th>Image</th>
               <th>Document</th>
               <th>Zone</th>  
@@ -107,10 +111,14 @@
           </thead>
           <tbody>
             <tr v-for="equipement in equipements.data" :key="equipement.id">
-              <td>{{ equipement.nom }}</td>
               <td>{{ equipement.code }}</td>
               <td>{{ equipement.designation }}</td>
+              <td>{{ equipement.emplacement }}</td>
+              <td>{{ equipement.code_categorie }}</td>
+              <td>{{ equipement.date_acq }}</td>
               <td>{{ equipement.n_serie }}</td>
+              <td>{{ equipement.constructeur }}</td>
+              <td>{{ equipement.etat }}</td>
               <td><img :src="equipement.image" style="width:100px; height:100px"></td>
               <td>
                 <div class="row">

@@ -2,7 +2,7 @@
     <div>
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalCenterTitle">Ajouter un nouveau equipement</h5>
@@ -24,18 +24,6 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label for="nom">Nom</label>
-                                                <input type="text" class="form-control" placeholder="Nom" v-model="nom" 
-                                                    :class="{'is-invalid':(nom != '') ? $v.nom.$invalid:'','is-valid':!$v.nom.$invalid}"
-                                                >
-                                                <div class="valid-feedback">Nom valide</div>
-                                                <div class="invalid-feedback">
-                                                    <span v-if="!$v.nom.required">Veuillez entrer un nom !</span>
-                                                    <span v-if="!$v.nom.minLength">Veuillez entrer au moins 3 caractères !</span>
-                                                    <span v-if="!$v.nom.maxLength">Maximum 15 caractères !</span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
                                             <label for="code">Code Machine</label>
                                             <input type="text" class="form-control" placeholder="Code Machine" v-model="code"
                                             :class="{'is-invalid':(code != '') ? $v.code.$invalid:'', 'is-valid':!$v.code.$invalid}">
@@ -45,8 +33,6 @@
                                                 <span v-if="!$v.code.isUnique">Code déja existant!</span> 
                                             </div>
                                             </div>
-                                        </div>
-                                        <div class="col-sm-6">
                                             <div class="form-group">
                                             <label for="designation">Designation</label>
                                             <input type="text" class="form-control" placeholder="Designation" v-model="designation"
@@ -56,6 +42,8 @@
                                                 <span v-if="!$v.designation.required">Veuillez entrer un designation !</span>
                                             </div>
                                             </div>
+                                        </div>
+                                        <div class="col-sm-6">
                                             <div class="form-group">
                                             <label for="n_serie">N°serie</label>
                                             <input type="text" class="form-control" placeholder="n_serie" v-model="n_serie"
@@ -64,6 +52,72 @@
                                             <div class="invalid-feedback">
                                                 <span v-if="!$v.n_serie.required">Veuillez entrer un N°serie valide !</span> 
                                             </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="emplacement">Emplacement</label>
+                                                <input type="text" class="form-control" placeholder="Emplacement" v-model="emplacement" 
+                                                    :class="{'is-invalid':(emplacement != '') ? $v.emplacement.$invalid:'','is-valid':!$v.emplacement.$invalid}"
+                                                >
+                                                <div class="valid-feedback">emplacement valide</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="!$v.emplacement.required">Veuillez entrer un emplacement !</span>
+                                                    <span v-if="!$v.emplacement.minLength">Veuillez entrer au moins 3 caractères !</span>
+                                                    <span v-if="!$v.emplacement.maxLength">Maximum 15 caractères !</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                            <label for="code_categorie">Code catégorie</label>
+                                            <input type="text" class="form-control" placeholder="Code catégorie" v-model="code_categorie"
+                                            :class="{'is-invalid':(code_categorie != '') ? $v.code_categorie.$invalid:'', 'is-valid':!$v.code_categorie.$invalid}">
+                                            <div class="valid-feedback">N°serie valide</div>
+                                            <div class="invalid-feedback">
+                                                <span v-if="!$v.code_categorie.required">Veuillez entrer un N°serie valide !</span> 
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                            <label for="date_acq">Date d'acquisition</label>
+                                            <input type="date" class="form-control" v-model="date_acq"
+                                            :class="{'is-invalid':(date_acq != '') ? $v.date_acq.$invalid:'', 'is-valid':!$v.date_acq.$invalid}">
+                                            <div class="valid-feedback">date valide</div>
+                                            <div class="invalid-feedback">
+                                                <span v-if="!$v.date_acq.required">Veuillez entrer une date !</span> 
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                            <label for="constructeur">Constructeur</label>
+                                            <input type="text" class="form-control" placeholder="Constructeur" v-model="constructeur"
+                                            :class="{'is-invalid':(constructeur != '') ? $v.constructeur.$invalid:'', 'is-valid':!$v.constructeur.$invalid}">
+                                            <div class="valid-feedback">constructeur valide</div>
+                                            <div class="invalid-feedback">
+                                                <span v-if="!$v.constructeur.required">Veuillez entrer un constructeur !</span> 
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="etat">Etat</label>
+                                                <select class="form-control" v-model="etat" 
+                                                    :class="{'is-invalid':(etat != '') ? $v.etat.$invalid:'','is-valid':!$v.etat.$invalid}"
+                                                >
+                                                    <option value="Production">Production</option>
+                                                    <option value="Zsav">Zsav</option>
+                                                    <option value="obsolete">obsolete</option>
+                                                </select>
+                                                <div class="valid-feedback">etat valide</div>
+                                                <div class="invalid-feedback">
+                                                    <span v-if="!$v.etat.required">Veuillez entrer une etat !</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -167,7 +221,6 @@ export default {
     props:['isConnected'],
     data(){
         return{
-            nom: '',
             code: '',
             designation: '',
             n_serie: '',
@@ -178,6 +231,12 @@ export default {
             filePath:'',
             typeDocument:'',
             documents:[],
+            
+            emplacement: '',
+            code_categorie:'',
+            date_acq:'',
+            constructeur:'',
+            etat:''
         }
     },
     watch:{
@@ -186,7 +245,7 @@ export default {
         }
     },
     validations: {
-        nom: {
+        emplacement: {
         required,
         minLength: minLength('3'),
         maxLength: maxLength('15')
@@ -212,6 +271,18 @@ export default {
         zone: {
             required
         },
+        code_categorie:{
+            required
+        },
+        date_acq:{
+            required
+        },
+        constructeur:{
+            required
+        },
+        etat:{
+            required
+        }
         
     },
     methods:{
@@ -263,12 +334,16 @@ export default {
         equipementStore(){
             var json_arr = JSON.stringify(this.documents);
             let form = new FormData();
-            form.append('nom', this.nom);
+            form.append('emplacement', this.emplacement);
             form.append('code', this.code);
             form.append('designation', this.designation);
             form.append('n_serie', this.n_serie);
             form.append('image', this.image);
             form.append('zone', this.zone);
+            form.append('code_categorie', this.code_categorie);
+            form.append('date_acq', this.date_acq);
+            form.append('constructeur', this.constructeur);
+            form.append('etat', this.etat);
             form.append('documents', json_arr);
             const config= {headers:{'Content-Type': 'multipart/form-data'}};
             axios.post('/equipements',form ,config)
@@ -277,13 +352,17 @@ export default {
             this.refreshData();
         },
         refreshData(){
-            this.nom = '';
+            this.emplacement = '';
             this.code = '';
             this.designation = '';
             this.n_serie= '';
             this.image= '';
             this.imageFile= '';
             this.zone= '';
+            this.code_categorie ='';
+            this.date_acq ='';
+            this.constructeur ="";
+            this.etat = "";
         }
     }
 }

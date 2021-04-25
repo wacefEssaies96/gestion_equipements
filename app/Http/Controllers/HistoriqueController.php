@@ -34,19 +34,55 @@ class HistoriqueController extends Controller
 
     public function liste(Request $request)
     {
-        $hist = Historique::where('id','like','%'.request('num_bt').'%');
+        $hist = Historique::where('historiques.id','like','%'.request('num_bt').'%');
         if($request->zone != ''){
-            $hist = $hist->where('zone', '=', request('zone'));
+            $hist = $hist->where('historiques.zone', '=', request('zone'));
         }
         if($request->appelle != ''){
-            $hist = $hist->where('appelle', '=', request('appelle'));
+            $hist = $hist->where('historiques.appelle', '=', request('appelle'));
         }
         if($request->tech_id != null){
-            $hist = $hist->where('tech_id', '=', request('tech_id'));
+            $hist = $hist->where('historiques.tech_id', '=', request('tech_id'));
         }
         if($request->jour != ''){
-            $hist = $hist->whereDate('jour', request('jour'));
+            $hist = $hist->whereDate('historiques.jour', request('jour'));
         }
+        if($request->code_categorie != ''){
+            $hist = $hist->where('equipements.code_categorie', request('code_categorie'));
+        }
+        $hist = $hist->join('equipements','historiques.code_equip', '=', 'equipements.id')
+        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code')
+        ->paginate(10);
+        return response()->json($hist);
+    }
+    public function listeHotline(Request $request)
+    {
+        $hist = Historique::where('historiques.id','like','%'.request('num_bt').'%');
+        $hist = $hist->join('equipements','historiques.code_equip', '=', 'equipements.id')
+        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code')
+        ->where('hotline_id', '=', Auth::id());
+        if($request->zone != ''){
+            $hist = $hist->where('historiques.zone', '=', request('zone'));
+        }
+        if($request->appelle != ''){
+            $hist = $hist->where('historiques.appelle', '=', request('appelle'));
+        }
+        if($request->tech_id != null){
+            $hist = $hist->where('historiques.tech_id', '=', request('tech_id'));
+        }
+        if($request->date_debut != ''){
+            $hist = $hist->whereTime('historiques.heure_debut', request('date_debut'));
+        }
+        if($request->date_fin != ''){
+            $hist = $hist->whereTime('historiques.heure_fin', request('date_fin'));
+        }
+        if($request->code_categorie != ''){
+            $hist = $hist->where('equipements.code_categorie','like', '%'.request('code_categorie').'%');
+        }
+        if($request->code_equip != ''){
+            $hist = $hist->where('equipements.code','like','%'.request('code_equip').'%');
+        }
+        
         $hist = $hist->paginate(10);
         return response()->json($hist);
     }
@@ -57,31 +93,26 @@ class HistoriqueController extends Controller
         $hist->heure_demande = request('heure_demande');
         $hist->hotline_id = Auth::id();
         $hist->zone = request('zone');
-        $hist->jour = request('jour');
+        $hist->jour = Carbon::now('Africa/Tunis');
         $hist->appelle = 'Non cloturé';
         $hist->tech_id = request('tech_id');
+        $hist->code_equip = request('code_equip');
+        $hist->description_demande = request('description_demande');
+        $hist->type_travaille = request('type_travaille');
         $hist->valide = false;
 
         if(Auth::user()->role == 'ADMIN') {
-            if(request('heure_fin') != '' 
-                && request('travaille') != '' 
-                && request('piece_rechange') != '' 
-                && request('commentaire') != '' 
-                && request('code_equip') != '')
-            { 
+            if(request('travaille') != '' && request('piece_rechange') != ''){ 
+                $hist->appelle = 'Cloturé';
                 $hist->valide = true; 
-                $hist->heure_fin = request('heure_fin');
+                $hist->heure_fin = Carbon::now('Africa/Tunis');
                 $hist->heure_debut = Carbon::now('Africa/Tunis');
                 $hist->travaille = request('travaille');
                 $hist->piece_rechange = request('piece_rechange');
-                $hist->commentaire = request('commentaire');
-                $hist->code_equip = request('code_equip');
             }
         }
         $hist->save();
-
         
-
         if(request('code_panne') != null){
             $codePanne = request('code_panne');
             foreach($codePanne as $item){
@@ -100,7 +131,6 @@ class HistoriqueController extends Controller
         }
         if($hist->zone == 'Sertissage'){
             $histAssemblage = new HistSertissage();
-            $histAssemblage->type_travaille = request('type_travaille');
             $histAssemblage->hist_id = $hist->id;
             $histAssemblage->save();
         }
@@ -143,9 +173,8 @@ class HistoriqueController extends Controller
         
         $hist->travaille = request('travaille');
         $hist->piece_rechange = request('piece_rechange');
-        $hist->commentaire = request('commentaire');
-        $hist->code_equip = request('code_equip');
         $hist->appelle = 'Cloturé';
+        $hist->type_travaille = request('type_travaille');
         $hist->save();
         $userid = Auth::id();
         $technicien = Technicien::where('user_id', '=', $userid)->first();
@@ -155,11 +184,6 @@ class HistoriqueController extends Controller
             $histAssemblage = HistAssemblage::where('historique_id', '=', $id)->first();
             $histAssemblage->num_planche = request('num_planche');
             $histAssemblage->save();
-        }
-        if(request('type_travaille') != ''){
-            $histSertissage = HistSertissage::where('hist_id', '=', $id)->first();
-            $histSertissage->type_travaille = request('type_travaille');
-            $histSertissage->save();
         }
         if(request('nom_support') != ''){
             $histElectrique = HistElectrique::where('hist_id', '=', $id)->first();
@@ -223,34 +247,27 @@ class HistoriqueController extends Controller
         $hist->heure_demande = request('heure_demande');
         $hist->hotline_id = Auth::id();
         $hist->zone = request('zone');
-        $hist->jour = request('jour');
-        $hist->appelle = request('appelle');
+        $hist->code_equip = request('code_equip');
+        $hist->description_demande = request('description_demande');
+        $hist->type_travaille = request('type_travaille');
+
         $techId = $hist->tech_id;
-        
+
         $technicien = Technicien::where('user_id','=',$techId)->first();
         $technicien->status = 'DISPONIBLE';
         $technicien->save();
-        
-        $technicien = Technicien::where('user_id','=',request('tech_id'))->first();
-        $technicien->status = 'NON DISPONIBLE';
-        $technicien->save();
 
         $hist->tech_id = request('tech_id');
-        if(Auth::user()->role == "ADMIN"){
-            if(request('heure_fin') != '' 
-                && request('travaille') != '' 
-                && request('piece_rechange') != '' 
-                && request('commentaire') != '' 
-                && request('code_equip') != '')
-            { 
+        if(Auth::user()->role == "ADMIN"){ 
+            $hist->appelle = request('appelle');
+            if( request('travaille') != '' && request('piece_rechange') != ''){ 
                 $hist->valide = true; 
+                $hist->heure_fin = Carbon::now('Africa/Tunis');
+                $hist->heure_debut = Carbon::now('Africa/Tunis');
+                $hist->travaille = request('travaille');
+                $hist->piece_rechange = request('piece_rechange');
             }
-            $hist->heure_fin = request('heure_fin');
-            $hist->heure_debut = Carbon::now('Africa/Tunis');
-            $hist->travaille = request('travaille');
-            $hist->piece_rechange = request('piece_rechange');
-            $hist->commentaire = request('commentaire');
-            $hist->code_equip = request('code_equip');
+            
             if(request('code_panne') != null){
                 $codePanneToDelete = CodePanneInHist::where('hist', '=', $id)->get();
                 foreach($codePanneToDelete as $item){
@@ -274,11 +291,6 @@ class HistoriqueController extends Controller
                 $histElectrique->nom_support = request('nom_support');
                 $histElectrique->save();
             }
-        }
-        if(request('type_travaille') != ''){
-            $histSertissage = HistSertissage::where('hist_id', '=', $id)->first();
-            $histSertissage->type_travaille = request('type_travaille');
-            $histSertissage->save();
         }
         $hist->save();
 
@@ -305,16 +317,22 @@ class HistoriqueController extends Controller
     }
     
     public function refresh(){
-        $historiques = Historique::paginate(10);
+        $historiques = Historique::join('equipements','historiques.code_equip', '=', 'equipements.id')
+        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code')
+        ->paginate(10);
         return response()->json($historiques);
     }
 
     public function refreshTech(){
-        $historiques = Historique::where('tech_id','=',Auth::id())->where('heure_fin','=',null)->paginate(10);
+        $historiques = Historique::join('equipements','historiques.code_equip', '=', 'equipements.id')
+        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code')
+        ->where('tech_id','=',Auth::id())->where('heure_fin','=',null)->paginate(10);
         return response()->json($historiques);
     }
     public function getHotlineHistoriques(){
-        $hist = Historique::where('hotline_id', '=', Auth::id())->paginate(10);
+        $hist = Historique::join('equipements','historiques.code_equip', '=', 'equipements.id')
+        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code')
+        ->where('hotline_id', '=', Auth::id())->paginate(10);
         return response()->json($hist);
     }
 

@@ -59,6 +59,9 @@
         <h3 class="card-title">Liste de tous les codes pannes</h3>
         <div class="card-tools">
           <!-- Button trigger modal -->
+          <button class="btn btn-outline-info" data-toggle="modal" data-target="#addFromExcel">
+          Ajouter via fichier excel
+          </button>
           <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
           Ajouter un nouveau code panne
           </button>
@@ -66,7 +69,8 @@
         </div>
       </div>
       <!-- /.card-header -->
-    <AddCodePanne @codePanne-added="refreshAdded"></AddCodePanne>   
+    <AddCodePanne @codePanne-added="refreshAdded"></AddCodePanne>
+    <AddFromExcel @codePanne-added="refreshAdded"></AddFromExcel>   
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -105,11 +109,13 @@
   import AddCodePanne from './AddCode_Panne';
   import EditCodePanne from './EditCode_Panne';
   import DeleteCodePanne from './DeleteCode_Panne';
+  import AddFromExcel from './AddFromExcel'
     export default {
         components:{
           AddCodePanne,
           EditCodePanne,
           DeleteCodePanne,
+          AddFromExcel
       },
       props:['user'],
       data(){

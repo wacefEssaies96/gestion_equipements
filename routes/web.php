@@ -72,6 +72,7 @@ use App\User;
     Route::delete('/equipements/{id}', 'EquipementController@destroy');
 
     //Code Panne
+    Route::post('/code-pannes/excel', 'CodePanneController@storeFromFile');
     Route::post('/code_pannes', 'CodePanneController@store');
     Route::post('/code_pannes/liste', 'CodePanneController@liste');
     Route::get('/code_pannes/edit/{id}', 'CodePanneController@edit');
@@ -87,7 +88,8 @@ use App\User;
 
     //Hitorique
     Route::get('/hist/tech/liste', 'HistoriqueController@listeTech');  
-    Route::post('/historiques/liste', 'HistoriqueController@liste'); 
+    Route::post('/historiques/liste', 'HistoriqueController@liste');
+    Route::post('/historiques/liste/hotline', 'HistoriqueController@listeHotline'); 
     Route::post('/historiques', 'HistoriqueController@store');
     Route::get('/historiques/edit/{id}', 'HistoriqueController@edit');
     Route::patch('/historiques/edit/{id}', 'HistoriqueController@update');

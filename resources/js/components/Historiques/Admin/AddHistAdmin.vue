@@ -23,27 +23,6 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm-4">
-                    
-                      <div class="form-group">
-                        <label for="heure_demande">Heure de demande</label>
-                        <input type="time" class="form-control" placeholder="Heure de demande" v-model="heure_demande"
-                        :class="{'is-invalid':(heure_demande != '') ?$v.heure_demande.$invalid:'', 'is-valid':!$v.heure_demande.$invalid}">
-                        <div class="valid-feedback">Heure de demande valide</div>
-                        <div class="invalid-feedback">
-                          <span v-if="!$v.heure_demande.required">Veuillez mettre une date !</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-4">
-                      <div class="form-group">
-                        <label for="jour">Jour</label>
-                        <input type="date" class="form-control" placeholder="Jour" v-model="jour"
-                        :class="{'is-invalid':(jour != '') ?$v.jour.$invalid:'', 'is-valid':!$v.jour.$invalid}">
-                        <div class="valid-feedback">Jour validé</div>
-                        <div class="invalid-feedback">
-                          <span v-if="!$v.jour.required">Veuillez remplir ce champs !</span>
-                        </div>
-                      </div>
                       <div class="form-group">
                         <label for="zone">Zone</label>
                             <select class="form-control" v-model="zone"
@@ -59,15 +38,39 @@
                                 <span v-if="!$v.zone.required">Veuillez choisir une zone !</span>
                             </div>
                       </div>
+                      <div class="form-group">
+                        <label for="type_travaille">Type de travaille</label>
+                        <select v-model="type_travaille" class="form-control"
+                        :class="{'is-invalid':(type_travaille != '') ? $v.type_travaille.$invalid:'', 'is-valid':!$v.type_travaille.$invalid}">
+                            <option value="">Choisir le type de travaille</option>
+                            <option value="C">C</option>
+                            <option value="S">S</option>
+                            <option value="CS">CS</option>
+                            <option value="PS">PS</option>
+                        </select>
+                        <div class="valid-feedback">validé</div>
+                        <div class="invalid-feedback">
+                          <span v-if="!$v.type_travaille.required">Veuillez remplir ce champs !</span>
+                        </div>
+                      </div>
                     </div>
                     <div class="col-sm-4">
                       <div class="form-group">
+                        <label for="heure_demande">Heure de demande</label>
+                        <input type="time" class="form-control" placeholder="Heure de demande" v-model="heure_demande"
+                        :class="{'is-invalid':(heure_demande != '') ?$v.heure_demande.$invalid:'', 'is-valid':!$v.heure_demande.$invalid}">
+                        <div class="valid-feedback">Heure de demande valide</div>
+                        <div class="invalid-feedback">
+                          <span v-if="!$v.heure_demande.required">Veuillez mettre une date !</span>
+                        </div>
+                      </div>
+                      <div class="form-group">
                         <label for="tech">Techniciens</label>
-                          <select id="selectTech" class="form-control" v-model="tech_id"
+                          <select class="form-control" v-model="tech_id"
                           :class="{'is-invalid':(tech_id != '') ?$v.tech_id.$invalid:'', 'is-valid':!$v.tech_id.$invalid}"
                           >
                             <option v-for="technicien in techniciens" :key="technicien.user_id" :value="technicien.user_id">
-                                {{technicien.user.nom}} {{technicien.user.prenom}}
+                              {{technicien.user.nom}} {{technicien.user.prenom}}
                             </option>
                           </select>
                           <div class="valid-feedback">Technicien validé</div>
@@ -76,71 +79,70 @@
                           </div>
                       </div>
                     </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <label for="description_demande">Description demandé</label>
+                        <input type="text" class="form-control" placeholder="Description demandé " v-model="description_demande"
+                        :class="{'is-invalid':(description_demande != '') ? $v.description_demande.$invalid:'', 'is-valid':!$v.description_demande.$invalid}">
+                        <div class="valid-feedback">validé</div>
+                        <div class="invalid-feedback">
+                          <span v-if="!$v.description_demande.required">Veuillez remplir ce champs !</span>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="code machine">Code Machine</label>
+                          <select class="form-control" v-model="code_machine"
+                          :class="{'is-invalid':(code_machine!= '') ? $v.code_machine.$invalid:'', 'is-valid':!$v.code_machine.$invalid}"
+                          >
+                            <option v-for="equip in e" :key="equip.id" :value="equip.id">
+                              {{equip.code}}
+                            </option>
+                          </select>
+                          <div class="valid-feedback">validé</div>
+                          <div class="invalid-feedback">
+                              <span v-if="!$v.code_machine.required">Veuillez choisir une option !</span>
+                          </div>
+                      </div>
+                    </div>
                   </div>
                   <div class="row">
                     <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="heure_fin">Heure de fin de travaille</label>
-                            <input type="time" class="form-control" placeholder="Heure de fin de travaille" v-model="heure_fin">
-                        </div>
-                        <div class="form-group">
-                            <label for="piece_rechange">Pièce de rechange</label>
-                            <input type="text" class="form-control" placeholder="Pièce de rechange" v-model="piece_rechange">
-                        </div>      
-                      </div>
-                      <div class="col-sm-6">
-                        <div class="form-group">
-                            <label for="code_machine">Code machine</label>
-                            <select class="form-control" v-model="code_machine">
-                                <option v-for="equipement in e" :key="equipement.id" :value="equipement.id">
-                                    {{equipement.code}}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="code_panne">Code panne</label>
-                            <v-select v-model="code_panne" :multiple="true" 
-                                :options="c" 
-                                :get-option-label='option => option.code'
-                                :reduce='option => option.id'></v-select>
-                          </div>
-                        </div>
-                      </div>
                       <div class="form-group">
-                          <label for="travaille">Travaille effectué</label>
-                          <textarea class="form-control" placeholder="Travaille éffectué" v-model="travaille"></textarea>
-                      </div>
-                      <div class="form-group">
-                        <template v-if="zone == 'Assemblage'">
-                          <label for="num_planche">Num Planche</label>
-                          <input type="text" class="form-control" v-model="num_planche">
-                        </template>
-                        <template v-if="zone == 'Sertissage'">
-                          <label for="type_travaille">Type de travaille</label>
-                            <select v-model="type_travaille" class="form-control"
-                            :class="{'is-invalid':$v.type_travaille.$invalid, 'is-valid':!$v.type_travaille.$invalid}">
-                                <option value="">Choisir le type de travaille</option>
-                                <option value="C">C</option>
-                                <option value="P">P</option>
-                                <option value="PH">PH</option>
-                                <option value="S">S</option>
-                                <option value="PS">PS</option>
-                            </select>
-                        </template>
-                        <template v-if="zone == 'Controle éléctrique'">
-                          <label for="nom_support">Nom Support</label>
-                          <input type="text" class="form-control" v-model="nom_support">
-                        </template>
-                      </div>
-                      <div class="form-group">
-                        <label for="commentaire">Commentaire</label>
-                        <textarea class="form-control" v-model="commentaire"></textarea>
-                      </div>
+                        <label for="code_panne">Code panne</label>
+                        <v-select v-model="code_panne" :multiple="true" 
+                            :options="c" 
+                            :get-option-label='option => option.code'
+                            :reduce='option => option.id'></v-select>
+                      </div> 
                     </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label for="piece_rechange">Pièce de rechange</label>
+                        <input type="text" class="form-control" placeholder="Pièce de rechange" v-model="piece_rechange">
+                      </div>
+
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <template v-if="zone == 'Assemblage'">
+                      <label for="num_planche">Num Planche</label>
+                      <input type="text" class="form-control" v-model="num_planche">
+                    </template>
+                    <template v-if="zone == 'Controle éléctrique'">
+                      <label for="nom_support">Nom Support</label>
+                      <input type="text" class="form-control" v-model="nom_support">
+                    </template>
+                  </div>
+                  <div class="form-group">
+                    <label for="travaille">Travaille effectué</label>
+                    <textarea class="form-control" v-model="travaille"></textarea>
+                  </div>
+                </div>
                 <!-- /.card-body -->
-                    <div class="card-footer">
-                      <button type="submit" class="btn btn-primary">Confirmer</button>
-                    </div>
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Confirmer</button>
+                </div>
               </form>
             </div>
             <!-- /.card -->
@@ -160,24 +162,21 @@ import { required } from 'vuelidate/lib/validators';
       data(){
         return{
           techniciens: {},
+          e:{},
+          c:[],
           heure_demande: '',
-          jour: '',
           zone: '',
           tech_id: '',
-          heure_fin: '',
           travaille: '',
-          commentaire: '',
           piece_rechange: '',
           code_machine: '',
           code_panne: '',
           num_planche: '',
           type_travaille:'',
           nom_support:'',
-          options:[],
           type_travaille: '',
           nom_support:'',
-          e:{},
-          c:[],
+          description_demande:'',
         }
     },
     methods:{
@@ -211,20 +210,21 @@ import { required } from 'vuelidate/lib/validators';
         }
       },
       historiqueStore(){
+        console.log(this.travaille+' '+this.piece_rechange)
         axios.post('/historiques',{
-            heure_demande: this.heure_demande,
-            jour: this.jour,
-            zone: this.zone,
-            tech_id: this.tech_id,
-            heure_fin: this.heure_fin,
-            travaille: this.travaille,
-            piece_rechange: this.piece_rechange,
-            commentaire: this.commentaire,
-            code_panne: this.code_panne,
-            code_equip: this.code_machine,
-            num_planche: this.num_planche,
-            type_travaille: this.type_travaille,
-            nom_support: this.nom_support
+
+          heure_demande: this.heure_demande,
+          zone: this.zone,
+          tech_id: this.tech_id,
+          code_equip: this.code_machine,
+          description_demande: this.description_demande,
+
+          travaille: this.travaille,
+          piece_rechange: this.piece_rechange,
+          num_planche: this.num_planche,
+          type_travaille: this.type_travaille,
+          nom_support: this.nom_support,
+          code_panne: this.code_panne,
         })
         .then(response => this.$emit('historique-added',response))
         .catch(error => console.log(error));
@@ -232,13 +232,12 @@ import { required } from 'vuelidate/lib/validators';
       },
       refreshData(){
         this.heure_demande= '';
-        this.jour= '';
+        this.description_demande= '';
         this.zone= '';
         this.tech_id= '';
         this.heure_fin= '';
         this.travaille= '';
         this.piece_rechange= '';
-        this.commentaire= '';
         this.code_panne= '';
         this.code_machine= '';
         this.num_planche= '';
@@ -247,39 +246,40 @@ import { required } from 'vuelidate/lib/validators';
       }
     },
     validations: {
+      description_demande:{
+        required
+      },
       heure_demande: {
         required,
       },
-      jour: {
-        required,
+      code_machine: {
+        required
       },
       zone: {
         required,
       },
       tech_id:{
-          required,
+        required,
       },
-      heure_fin:{
+      type_travaille:{
+        required 
       },
       travaille: {
-      },
-      commentaire: {
+
       },
       piece_rechange: {
-      },
-      code_machine: {
+
       },
       code_panne: {
+
       },
       num_planche: {
           
       },
-      type_travaille:{
-          
-      },
       nom_support:{
           
-      }
+      },
+      
     },
   }
 </script>

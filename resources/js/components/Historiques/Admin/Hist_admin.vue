@@ -92,18 +92,22 @@
       <table class="table table-hover text-nowrap">
         <thead>
           <tr>
-            <th>Num Bt</th>
-            <th>Heure de demande</th>
-            <th>Heure de début</th>
-            <th>Heure de fin</th>
-            <th>Heure d'attente</th>
-            <th>Heure d'arret</th>
-            <th>Jour</th>
-            <th>Zone</th>
-            <th>Appelle</th>
-            <th>Travaille éffectué</th>
-            <th>Pièce de rechange</th>
-            <th>Commentaire</th>
+           <th>Num Bt</th>
+              <th>Heure de demande</th>
+              <th>Heure de début</th>
+              <th>Heure de fin</th>
+              <th>Heure d'attente</th>
+              <th>Heure d'arret</th>
+              <th>Description</th>
+              <th>Code machine</th>
+              <th>Designation</th>
+              <th>Emplacement</th>
+              <th>NSerie</th>
+              <th>Type Travaille</th>
+              <th>Zone</th>
+              <th>BT cloturé</th>
+              <th>Travaille éffectué</th>
+              <th>Pièce de rechange</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -115,12 +119,16 @@
             <td>{{ historique.heure_fin }}</td>
             <td>{{ historique.heure_attente }}</td>
             <td>{{ historique.heure_arret }}</td>
-            <td>{{ historique.jour }}</td>
+            <td>{{ historique.description_demande }}</td>
+            <td>{{ historique.code_equip }}</td>
+            <td>{{ historique.designation }}</td>
+            <td>{{ historique.emplacement }}</td>
+            <td>{{ historique.n_serie }}</td>
+            <td>{{ historique.type_travaille }}</td>
             <td>{{ historique.zone }}</td>
             <td>{{ historique.appelle }}</td>
             <td>{{ historique.travaille }}</td>
             <td>{{ historique.piece_rechange }}</td>
-            <td>{{ historique.commentaire }}</td>
             <td> 
                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getHistorique(historique.id);">
               <i class="fas fa-edit" title="Modifier"/>
@@ -138,7 +146,7 @@
                 @historique-updated="refreshEdited">
               </EditHistAdmin> 
               <ShowHistAdmin
-                v-bind:historiqueShow="historiqueToEdit[0]">
+                v-bind:historiqueShow="historiqueToEdit">
               </ShowHistAdmin>
             </td>
           </tr> 

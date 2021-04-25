@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Excel;
 use App\CodePanne;
+use App\Imports\CodePannesImport;
 use Illuminate\Http\Request;
 
 class CodePanneController extends Controller
@@ -11,7 +13,36 @@ class CodePanneController extends Controller
     {
         $this->middleware('auth');
     }
-  
+    
+    public function storeFromFile(Request $request){
+        $path = $request->file;
+        Excel::import(new CodePannesImport, $path);
+        $this->fetchingData();
+        return $this->refresh();
+    }
+    public function fetchingData(){
+        $codePannes = CodePanne::all();
+        foreach($codePannes as $item){
+            $code = str_replace(["0","1","2","3","4","5","6","7","8","9"],"",$item->code);
+            if($code == "CE"){
+                $item->zone = "Controle éléctrique";
+            }
+            if($code == "OS" || $code == "OS(C/U)"){
+                $item->zone = "Sertissage";
+            }
+            if($code == "MC"){
+                $item->zone = "Coupe";
+            }
+            if($code == "PA" || $code == "MU" || $code == "R" || $code == "PG" || $code == "MK"){
+                $item->zone = "Assemblage";
+            }
+            if($code == "DR" || $code == "MQ" || $code == "DG" || $code == "IN" || $code == "PR" || $code == "BT" || $code == "DN" || $code == "MS" || $code == "AB"){
+                $item->zone = "Préparation";
+            }
+            $item->save();
+        }
+    }
+
     public function liste(Request $request)
     {
         $cp = CodePanne::where('code','like','%'.request('code').'%');

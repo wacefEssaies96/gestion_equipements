@@ -38,47 +38,6 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label for="code_machine">Code machine</label>
-                                    <select class="form-control" v-model="code_machine"
-                                    :class="{'is-invalid':(code_machine != '') ? $v.code_machine.$invalid:'', 'is-valid':!$v.code_machine.$invalid}">
-                                        <option v-for="equipement in e" :key="equipement.id" :value="equipement.id">
-                                            {{equipement.code}}
-                                        </option>
-                                    </select>
-                                    <div class="valid-feedback">Validé</div>
-                                    <div class="invalid-feedback">
-                                        <span v-if="!$v.code_machine.required">Veuillez choisir une option !</span>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <template v-if="code_machine != ''">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <a href="" @click="getDocuments(code_machine,'ins_c')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
-                                    <i class="fas fa-file-pdf"></i> Instruction 1ér niveau
-                                    </a>
-                                </div>
-                                <div class="col-sm-6">
-                                    <a href="" @click="getDocuments(code_machine,'ins_p')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
-                                    <i class="fas fa-file-pdf"></i> Instruction préventive
-                                    </a>
-                                </div>
-                                <div class="col-sm-6">
-                                    <a href="" @click="getDocuments(code_machine,'dossier_technique')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
-                                    <i class="fas fa-file-pdf"></i> Dossier technique
-                                    </a>
-                                </div>
-                                <div class="col-sm-6">
-                                    <a href="" @click="getDocuments(code_machine,'liste_pr')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
-                                    <i class="fas fa-file-pdf"></i> Liste PR
-                                    </a>
-                                </div>
-                            </div>
-                            <ViewPdf v-bind:path="document.document"></ViewPdf>
-                        </template>
-                           <div class="form-group">
                                     <label for="piece_rechange">Pièce de rechange</label>
                                     <input type="text" class="form-control" placeholder="Pièce de rechange" v-model="piece_rechange"
                                     :class="{'is-invalid':(piece_rechange != '') ? $v.piece_rechange.$invalid : '', 'is-valid':!$v.piece_rechange.$invalid}">
@@ -87,13 +46,56 @@
                                         <span v-if="!$v.piece_rechange.required">Veuillez remplir ce champs !</span>
                                     </div>
                                 </div>
+                                
+                            </div>
+                        </div>
+                        <label for="documents">Documents des équipements</label>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a href="" @click="getDocuments(id.code_equip,'ins_c')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                                <i class="fas fa-file-pdf"></i> Instruction 1ér niveau
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="" @click="getDocuments(id.code_equip,'ins_p')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                                <i class="fas fa-file-pdf"></i> Instruction préventive
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="" @click="getDocuments(id.code_equip,'dossier_technique')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                                <i class="fas fa-file-pdf"></i> Dossier technique
+                                </a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a href="" @click="getDocuments(id.code_equip,'liste_pr')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                                <i class="fas fa-file-pdf"></i> Liste PR
+                                </a>
+                            </div>
+                        </div>
+                        <ViewPdf v-bind:path="document.document"></ViewPdf>
+                        
+                           
                         <div class="form-group">
                             <label for="travaille">Travaille effectué</label>
                             <textarea class="form-control" placeholder="Travaille éffectué" v-model="travaille"
                             :class="{'is-invalid':(travaille != '') ? $v.travaille.$invalid : '', 'is-valid':!$v.travaille.$invalid}"></textarea>
                             <div class="valid-feedback">Validé</div>
                             <div class="invalid-feedback">
-                            <span v-if="!$v.travaille.required">Veuillez remplir ce champs !</span>
+                                <span v-if="!$v.travaille.required">Veuillez remplir ce champs !</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="type_travaille">Type de travaille</label>
+                            <select v-model="type_travaille" class="form-control">
+                                <option value="">Choisir le type de travaille</option>
+                                <option value="C">C</option>
+                                <option value="S">S</option>
+                                <option value="CS">CS</option>
+                                <option value="PS">PS</option>
+                            </select>
+                            <div class="valid-feedback">Validé</div>
+                            <div class="invalid-feedback">
+                                <span v-if="!$v.type_travaille.required">Veuillez remplir ce champs !</span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -101,30 +103,13 @@
                                 <label for="num_planche">Num Planche</label>
                                 <input type="text" class="form-control" v-model="num_planche">
                             </template>
-                            <template v-if="id.zone == 'Sertissage'">
-                                <label for="type_travaille">Type de travaille</label>
-                                    <select v-model="type_travaille" class="form-control">
-                                        <option value="">Choisir le type de travaille</option>
-                                        <option value="C">C</option>
-                                        <option value="P">P</option>
-                                        <option value="PH">PH</option>
-                                        <option value="S">S</option>
-                                        <option value="PS">PS</option>
-                                    </select>
-                               
-                               
-                            </template>
                             <template v-if="id.zone == 'Electrique'">
                                 <label for="nom_support">Nom Support</label>
                                 <input type="text" class="form-control" v-model="nom_support">
                                 
                             </template>
                         </div>
-                        <div class="form-group">
-                            <label for="commentaire">Commentaire</label>
-                            <textarea class="form-control" v-model="commentaire">
-                            </textarea>
-                        </div>
+                        
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -159,7 +144,6 @@
             travaille: '',
             commentaire: '',
             piece_rechange: '',
-            code_machine: '',
             code_panne: '',
             num_planche: '',
             options:[],
@@ -190,9 +174,7 @@
         axios.patch('/histtech/edit/' + this.hist.id, {
             travaille: this.travaille,
             piece_rechange: this.piece_rechange,
-            commentaire: this.commentaire,
             code_panne: this.code_panne,
-            code_equip: this.code_machine,
             num_planche: this.num_planche,
             type_travaille: this.type_travaille,
             nom_support: this.nom_support
@@ -212,17 +194,13 @@
       },
     },
     validations: {
-
+        type_travaille:{
+            required
+        },
         travaille: {
             required
         },
-        commentaire: {
-            required
-        },
         piece_rechange: {
-            required
-        },
-        code_machine: {
             required
         },
         code_panne: {

@@ -22,18 +22,20 @@
                 <div class="row">
                   <div class="col-sm-6">
                      <div class="form-group">
-                  <label for="tech">Techniciens</label>
-                  <select class="form-control" v-model="tech_id"
-                  :class="{'is-invalid':$v.tech_id.$invalid, 'is-valid':!$v.tech_id.$invalid}">
-                    <option v-for="technicien in techniciens" :key="technicien.user_id" :value="technicien.user_id">
-                      {{technicien.user.nom}} {{technicien.user.prenom}}
-                    </option>
-                  </select>
-                  <div class="valid-feedback">Technicien validé</div>
-                  <div class="invalid-feedback">
-                      <span v-if="!$v.tech_id.required">Veuillez choisir une option !</span>
-                  </div>
-                </div>
+                        <label for="zone">Zone</label>
+                            <select class="form-control" v-model="zone"
+                            :class="{'is-invalid':(zone != '') ? $v.zone.$invalid:'', 'is-valid':!$v.zone.$invalid}" @change="getData(zone)">
+                                <option value="Assemblage">Assemblage</option>
+                                <option value="Sertissage">Sertissage</option>
+                                <option value="Préparation">Préparation</option>
+                                <option value="Coupe">Coupe</option>
+                                <option value="Controle éléctrique">Controle éléctrique</option>
+                            </select>
+                            <div class="valid-feedback">Zone validé</div>
+                            <div class="invalid-feedback">
+                                <span v-if="!$v.zone.required">Veuillez choisir une zone !</span>
+                            </div>
+                      </div>
                     <div class="form-group">
                       <label for="heure_demande">Heure de demande</label>
                       <input type="time" class="form-control" placeholder="Heure de demande" v-model="heure_demande"
@@ -46,41 +48,58 @@
                   </div>
                   <div class="col-sm-6">
                     <div class="form-group">
-                      <label for="jour">Jour</label>
-                      <input type="date" class="form-control" placeholder="Jour" v-model="jour"
-                      :class="{'is-invalid':$v.jour.$invalid, 'is-valid':!$v.jour.$invalid}">
-                      <div class="valid-feedback">Jour validé</div>
-                      <div class="invalid-feedback">
-                        <span v-if="!$v.jour.required">Veuillez remplir ce champs !</span>
+                        <label for="description_demande">Description demandé</label>
+                        <input type="text" class="form-control" placeholder="Description demandé " v-model="description_demande"
+                        :class="{'is-invalid':(description_demande != '') ? $v.description_demande.$invalid:'', 'is-valid':!$v.description_demande.$invalid}">
+                        <div class="valid-feedback">validé</div>
+                        <div class="invalid-feedback">
+                          <span v-if="!$v.description_demande.required">Veuillez remplir ce champs !</span>
+                        </div>
                       </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="zone">Zone</label>
-                      <select class="form-control" v-model="zone"
-                      :class="{'is-invalid':$v.zone.$invalid, 'is-valid':!$v.zone.$invalid}" @change="getTechniciens(zone)">
-                          <option value="Assemblage">Assemblage</option>
-                          <option value="Sertissage">Sertissage</option>
-                          <option value="Préparation">Préparation</option>
-                          <option value="Coupe">Coupe</option>
-                          <option value="Controle éléctrique">Controle éléctrique</option>
-                      </select>
-                      <div class="valid-feedback">Zone validé</div>
-                      <div class="invalid-feedback">
-                          <span v-if="!$v.zone.required">Veuillez choisir une zone !</span>
+                   <div class="form-group">
+                        <label for="tech">Techniciens</label>
+                        <select id="selectTech" class="form-control" v-model="tech_id"
+                        :class="{'is-invalid':(tech_id != '') ? $v.tech_id.$invalid:'', 'is-valid':!$v.tech_id.$invalid}"
+                        >
+                          <option v-for="technicien in techniciens" :key="technicien.user_id" :value="technicien.user_id">
+                              {{technicien.user.nom}} {{technicien.user.prenom}}
+                          </option>
+                        </select>
+                        <div class="valid-feedback">Technicien validé</div>
+                        <div class="invalid-feedback">
+                            <span v-if="!$v.tech_id.required">Veuillez choisir une option !</span>
+                        </div>
                       </div>
-                    </div>
                   </div>
                 </div>
-                <template v-if="histSertissage.type_travaille == 'C' || histSertissage.type_travaille == 'CS' || histSertissage.type_travaille == 'S'">
+                 <div class="form-group">
+                    <label>Type de travaille</label>
+                    <select class="form-control" v-model="type_travaille"
+                    :class="{'is-invalid':(type_travaille != '') ? $v.type_travaille.$invalid:'', 'is-valid':!$v.type_travaille.$invalid}"
+                    >
+                      <option value="C">C</option>
+                      <option value="PS">PS</option>
+                      <option value="CS">CS</option>
+                      <option value="S">S</option>
+                    </select>
+                    <div class="valid-feedback">validé</div>
+                    <div class="invalid-feedback">
+                        <span v-if="!$v.type_travaille.required">Veuillez choisir une option !</span>
+                    </div>
+                  </div>
                   <div class="form-group">
-                  <label>Type de travaille</label>
-                  <select v-model="type_travaille">
-                    <option value="C">C</option>
-                    <option value="CS">CS</option>
-                    <option value="S">S</option>
-                  </select>
-                </div>
-                </template>
+                      <label for="code_equip">Code machine</label>
+                      <select class="form-control" v-model="code_equip"
+                      :class="{'is-invalid':(code_equip != '') ? $v.code_equip.$invalid:'', 'is-valid':!$v.code_equip.$invalid}">
+                          <option v-for="e in equipements_list" :key="e.id" :value="e.id">
+                              {{e.code}}
+                          </option>
+                      </select>
+                      <div class="valid-feedback">Validé</div>
+                      <div class="invalid-feedback">
+                          <span v-if="!$v.code_equip.required">Veuillez choisir une option !</span>
+                      </div>
+                  </div>
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
@@ -91,8 +110,7 @@
         <!-- /.card -->
         </div>
         <div class="modal-footer">
-          {{histSertissage.type_travaille}}
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
           <button hidden id="submitEditHistorique" type="submit" class="btn btn-primary" data-dismiss="modal" @click="update">Confirm</button>
         </div>
       </div>
@@ -102,38 +120,52 @@
 <script>
   import { required } from 'vuelidate/lib/validators';
   export default {
-    props: ['historiqueToEdit','tech','histSertissage'],
+    props: ['historiqueToEdit','tech','equipements'],
     data(){
       return{
         techniciens: {},
         heure_demande: '',
-        jour: '',
         zone: '',
         tech_id: '',
+        description_demande:'',
+        type_travaille:'',
+        code_equip:'',
+        equipements_list:{}
       }
     },
     watch:{
       historiqueToEdit(newVal){
         this.heure_demande = newVal[0].heure_demande;
-        this.jour = newVal[0].jour;
         this.zone = newVal[0].zone;
         this.tech_id = newVal[0].tech_id;
+        this.description_demande = newVal[0].description_demande;
+        this.type_travaille = newVal[0].type_travaille;
+        this.code_equip = newVal[0].code_equip;
       },
       tech(newVal){
         this.techniciens = newVal;
+      },
+      equipements(newVal){
+        this.equipements_list = newVal;
       }
     },
     methods: {
-      getTechniciens(zone){
+      async getData(zone){
         this.tech_id = '';
-        axios.get("/historiques/techniciens/"+zone)
+        this.code_equip ='';
+        await axios.get("/historiques/techniciens/"+zone)
         .then(response => this.techniciens=response.data) 
-        .catch(error => console.log(error))
+        .catch(error => console.log(error));
+        await axios.get('/historiques/equipement/zone/' + zone)
+        .then(response =>this.equipements_list =  response.data)
+        .catch(error => console.log(error));
       },
       update(){
         axios.patch('/historiques/edit/' + this.historiqueToEdit[0].id, {
             heure_demande: this.heure_demande,
-            jour: this.jour,
+            description_demande: this.description_demande,
+            type_travaille: this.type_travaille,
+            code_equip: this.code_equip,
             zone: this.zone,
             tech_id: this.tech_id,
         })
@@ -155,7 +187,7 @@
       heure_demande: {
         required,
       },
-      jour: {
+      type_travaille: {
         required,
       },
       zone: {
@@ -163,6 +195,12 @@
       },
       tech_id:{
           required,
+      },
+      description_demande:{
+        required
+      },
+      code_equip:{
+        required
       }
     },
   }

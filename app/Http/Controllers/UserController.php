@@ -128,8 +128,7 @@ class UserController extends Controller
             $person->status = "DISPONIBLE";
             $person->zone = $request->zone;
             $person->qualification = $request->qualification;
-            $person->h_debut_service = $request->h_debut_service;
-            $person->h_fin_service = $request->h_fin_service;
+            $person->poste = $request->poste;
         }
         if($person){
             $person->user_id = $id;

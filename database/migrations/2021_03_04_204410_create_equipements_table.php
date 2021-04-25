@@ -21,7 +21,7 @@ class CreateEquipementsTable extends Migration
             $table->string('code_categorie');
             $table->date('date_acq');
             $table->string('n_serie');
-            $table->string('contructeur');
+            $table->string('constructeur');
             $table->string('image')->nullable();
             $table->enum('etat', ['Production', 'Zsav','obsolete'])->nullable();
             $table->enum('zone', ['Sertissage', 'Assemblage','Coupe','Préparation','Controle éléctrique'])->nullable();

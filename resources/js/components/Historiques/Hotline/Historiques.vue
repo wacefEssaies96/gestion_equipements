@@ -51,11 +51,22 @@
                 </div>
                 <div class="col">
                   <div class="form-group">
-                    <label>Date</label>
+                    <label>Heure début</label>
                     <input
-                      @keyup="search"
-                      type="date"
-                      v-model="qJour"
+                      @change="search"
+                      type="time"
+                      v-model="qDateDebut"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                    <label>Heure fin</label>
+                    <input
+                      @change="search"
+                      type="time"
+                      v-model="qDateFin"
                       class="form-control"
                     />
                   </div>
@@ -94,7 +105,7 @@
                 </div>
                 <div class="col">
                   <div class="form-group">
-                    <label>Appelle</label>
+                    <label>BT cloturé</label>
                     <select
                       @change="search"
                       class="form-control"
@@ -106,7 +117,16 @@
                     </select>
                   </div>
                 </div>
+                <div class="col">
+                    <label>Categorie</label>
+                    <input type="text" v-model="qCodeCategorie" @keyup="search" class="form-control">
+                  </div>
               </div>
+              <div class="col">
+                    <label for="code__machine">Code machine</label>
+                    <input type="text" v-model="qCodeMachine" @keyup="search" class="form-control">
+                  </div>
+              
             </div>
           </div>
           </template>
@@ -121,7 +141,9 @@
             </div>
           </div>
           <!-- /.card-header -->
-          <AddHistorique @historique-added="refreshAdded"></AddHistorique>
+          <AddHistorique 
+            @historique-added="refreshAdded"
+          ></AddHistorique>
           <div class="card-body table-responsive p-0">
             <table class="table table-hover text-nowrap">
               <thead>
@@ -132,13 +154,17 @@
                   <th>Heure de fin</th>
                   <th>Heure d'attente</th>
                   <th>Heure d'arret</th>
-                  <th>Jour</th>
+                  <th>Description</th>
+                  <th>Code machine</th>
+                  <th>Designation</th>
+                  <th>Emplacement</th>
+                  <th>NSerie</th>
+                  <th>Type Travaille</th>
                   <th>Zone</th>
-                  <th>Appelle</th>
+                  <th>BT cloturé</th>
                   <th>Travaille éffectué</th>
                   <th>Pièce de rechange</th>
-                  <th>Commentaire</th>
-                  <th>Action</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -152,12 +178,16 @@
                   <td>{{ histHotline.heure_fin }}</td>
                   <td>{{ histHotline.heure_attente }}</td>
                   <td>{{ histHotline.heure_arret }}</td>
-                  <td>{{ histHotline.jour }}</td>
+                  <td>{{ histHotline.description_demande }}</td>
+                  <td>{{ histHotline.code_equip }}</td>
+                  <td>{{ histHotline.designation }}</td>
+                  <td>{{ histHotline.emplacement }}</td>
+                  <td>{{ histHotline.n_serie }}</td>
+                  <td>{{ histHotline.type_travaille }}</td>
                   <td>{{ histHotline.zone }}</td>
                   <td>{{ histHotline.appelle }}</td>
                   <td>{{ histHotline.travaille }}</td>
                   <td>{{ histHotline.piece_rechange }}</td>
-                  <td>{{ histHotline.commentaire }}</td>
                   <td>
                     <button
                       type="button"
@@ -184,7 +214,7 @@
                     <EditHistorique
                       v-bind:historiqueToEdit="historiqueToEdit"
                       v-bind:tech="tech"
-                      v-bind:histSertissage="histSertissage"
+                      v-bind:equipements="equipements"
                       @historique-updated="refreshEdited"
                     >
                     </EditHistorique>
@@ -215,7 +245,7 @@
                     <div class="from-group">
                       <label>Num Bt</label>
                       <input
-                        @keyup="search"
+                        @keyup="search('all')"
                         type="text"
                         v-model="qNumBt"
                         class="form-control"
@@ -224,12 +254,23 @@
                     </div>
                   </div>
                   <div class="col">
+                  <div class="form-group">
+                    <label>Heure début</label>
+                    <input
+                      @change="search('all')"
+                      type="time"
+                      v-model="qDateDebut"
+                      class="form-control"
+                    />
+                  </div>
+                  </div>
+                  <div class="col">
                     <div class="form-group">
-                      <label>Date</label>
+                      <label>Heure fin</label>
                       <input
-                        @keyup="search"
-                        type="date"
-                        v-model="qJour"
+                        @change="search('all')"
+                        type="time"
+                        v-model="qDateFin"
                         class="form-control"
                       />
                     </div>
@@ -237,7 +278,7 @@
                   <div class="col">
                     <div class="from-group">
                       <label>Zone</label>
-                      <select @change="search" class="form-control" v-model="qZone">
+                      <select @change="search('all')" class="form-control" v-model="qZone">
                         <option value="" selected>Vide</option>
                         <option value="Assemblage">Assemblage</option>
                         <option value="Sertissage">Sertissage</option>
@@ -254,7 +295,7 @@
                   <div class="col">
                     <div class="from-group">
                       <label>Technicien</label>
-                      <select @change="search" class="form-control" v-model="qTech">
+                      <select @change="search('all')" class="form-control" v-model="qTech">
                         <option value="" selected>Vide</option>
                         <option
                           v-for="tech in techs"
@@ -268,9 +309,9 @@
                   </div>
                   <div class="col">
                     <div class="form-group">
-                      <label>Appelle</label>
+                      <label>BT cloturé</label>
                       <select
-                        @change="search"
+                        @change="search('all')"
                         class="form-control"
                         v-model="qAppelle"
                       >
@@ -279,6 +320,14 @@
                         <option value="Non cloturé">Non cloturé</option>
                       </select>
                     </div>
+                  </div>
+                  <div class="col">
+                    <label>Categorie</label>
+                    <input type="text" v-model="qCodeCategorie" @keyup="search('all')" class="form-control">
+                  </div>
+                  <div class="col">
+                    <label for="code__machine">Code machine</label>
+                    <input type="text" placeholder="Code machine" v-model="qCodeMachine" @keyup="search('all')" class="form-control">
                   </div>
                 </div>
               </div>
@@ -301,12 +350,16 @@
                   <th>Heure de fin</th>
                   <th>Heure d'attente</th>
                   <th>Heure d'arret</th>
-                  <th>Jour</th>
+                  <th>Description</th>
+                  <th>Code machine</th>
+                  <th>Designation</th>
+                  <th>Emplacement</th>
+                  <th>NSerie</th>
+                  <th>Type Travaille</th>
                   <th>Zone</th>
-                  <th>Appelle</th>
+                  <th>BT cloturé</th>
                   <th>Travaille éffectué</th>
                   <th>Pièce de rechange</th>
-                  <th>Commentaire</th>
                 </tr>
               </thead>
               <tbody>
@@ -317,12 +370,16 @@
                   <td>{{ historique.heure_fin }}</td>
                   <td>{{ historique.heure_attente }}</td>
                   <td>{{ historique.heure_arret }}</td>
-                  <td>{{ historique.jour }}</td>
+                  <td>{{ historique.description_demande }}</td>
+                  <td>{{ historique.code_equip }}</td>
+                  <td>{{ historique.designation }}</td>
+                  <td>{{ historique.emplacement }}</td>
+                  <td>{{ historique.n_serie }}</td>
+                  <td>{{ historique.type_travaille }}</td>
                   <td>{{ historique.zone }}</td>
                   <td>{{ historique.appelle }}</td>
                   <td>{{ historique.travaille }}</td>
                   <td>{{ historique.piece_rechange }}</td>
-                  <td>{{ historique.commentaire }}</td>
                 </tr>
               </tbody>
             </table>
@@ -347,7 +404,6 @@ export default {
         AddHistorique,
         EditHistorique,
         DeleteHist,
-        baseUrl:process.env.MIX_URL,
     },
   props:['user'],
   data() {
@@ -361,13 +417,17 @@ export default {
       hiddenS: "true",
       qNumBt: "",
       qZone: "",
-      qJour: "",
+      qDateDebut: "",
+      qDateFin:"",
       qAppelle: "",
+      qCodeCategorie:"",
+      qCodeMachine:"",
       qTech: "",
       q: new FormData(),
       id: "",
       histSertissage: "",
       loading:true,
+      equipements:''
     };
   },
   methods: {
@@ -415,17 +475,33 @@ export default {
         })
         .catch((error) => console.log(error));
     },
-    search() {
+    launchQuery(type){
+      if(type == "all"){
+        axios.post("/historiques/liste", this.q)
+        .then((response) => {
+          this.historiques = response.data;
+        })
+        .catch((error) => console.log(error));
+      }
+      else{
+        axios.post("/historiques/liste/hotline", this.q)
+        .then((response) => {
+          this.histsHotline = response.data;
+        })
+        .catch((error) => console.log(error));
+      }
+
+    },
+    search(type) {
       this.q.append("num_bt", this.qNumBt);
       this.q.append("zone", this.qZone);
-      this.q.append("jour", this.qJour);
+      this.q.append("date_debut", this.qDateDebut);
+      this.q.append("date_fin", this.qDateFin);
       this.q.append("appelle", this.qAppelle);
+      this.q.append("code_categorie", this.qCodeCategorie)
+      this.q.append("code_equip", this.qCodeMachine)
       this.q.append("tech_id", this.qTech);
-
-      axios
-        .post("/historiques/liste", this.q)
-        .then((response) => (this.historiques = response.data))
-        .catch((error) => console.log(error));
+      this.launchQuery(type);
     },
     showSearch(){
       if(this.hiddenS == 'true'){
@@ -452,8 +528,8 @@ export default {
         .then((response) => (this.historiqueToEdit = response.data))
         .catch((error) => console.log(error));
         setTimeout(()=>{
-          this.getTech(this.historiqueToEdit[0].zone)
-          if(this.historiqueToEdit[0].zone == 'Sertissage') this.getHistSertissage(id);
+          this.getTech(this.historiqueToEdit[0].zone);
+          this.getEquipements(this.historiqueToEdit[0].zone);
         },2000);
     },
     getTech(zone) {
@@ -462,12 +538,11 @@ export default {
         .then((response) => (this.tech = response.data))
         .catch((error) => console.log(error));
     },
-    getHistSertissage(id){
-      axios
-      .get("/hist-sertissage/" + id)
-        .then((response) => (this.histSertissage = response.data))
-        .catch((error) => console.log(error));
-    }
+    getEquipements(zone){
+        axios.get('/historiques/equipement/zone/' + zone)
+        .then(response =>this.equipements =  response.data)
+        .catch(error => console.log(error));
+      },
   },
   async created() {
     if(this.user.role != 'HOTLINE'){
@@ -475,7 +550,10 @@ export default {
         }
     await axios
       .post("/historiques/liste")
-      .then((response) => (this.historiques = response.data))
+      .then(response => {
+        this.historiques = response.data;
+        console.log(response.data.data);  
+      })
       .catch((error) => console.log(error));
     await axios
       .get("/historiques/techs")
