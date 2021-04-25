@@ -21,6 +21,10 @@
               <div class="card-body">
                     <div class="row">
                         <div class="col-6">
+                            <h5>Code</h5>
+                            <p class="text-secondary">{{userShow.code}}</p>
+                        </div>
+                         <div class="col-6">
                             <h5>Nom</h5>
                             <p class="text-secondary">{{userShow.nom}}</p>
                         </div>

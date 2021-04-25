@@ -29,7 +29,13 @@
                 <div class="from-group">
                   <label>Nom</label>
                   <input @keyup="search" type="text" v-model="qNom" class="form-control" placeholder="Nom">
+                </div>              <div class="col">
+                <div class="from-group">
+                  <label>Code</label>
+                  <input @keyup="search" type="text" v-model="qCode" class="form-control" placeholder="Code">
                 </div>
+              </div>
+
               </div>
               <div class="col">
                 <div class="form-group">
@@ -82,6 +88,7 @@
         <table class="table table-hover text-nowrap">
           <thead>
             <tr>
+              <th>Code</th>
               <th>Nom</th>
               <th>Prenom</th>
               <th>Role</th>
@@ -92,6 +99,7 @@
           </thead>
           <tbody>
             <tr v-for="user in users.data" :key="user.id" @click="getUser(user.id)" >
+              <td>{{ user.code }}</td>
               <td>{{ user.nom }}</td>
               <td>{{ user.prenom }}</td>
               <td>{{ user.role }}</td>
@@ -152,6 +160,7 @@
           userToEdit: '',
           id:'',
           q: new FormData(),
+          qCode:'',
           qNom:'',
           qPrenom:'',
           qTel:'',
@@ -192,6 +201,7 @@
         },
         search(){
           this.q.append('role', this.qRole);
+           this.q.append('code', this.qCode);
           this.q.append('nom', this.qNom);
           this.q.append('prenom', this.qPrenom);
           this.q.append('tel', this.qTel);

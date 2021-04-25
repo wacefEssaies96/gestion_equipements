@@ -19,7 +19,7 @@
           <a class="d-block" href="{{ route('logout') }}"
            onclick="event.preventDefault();
                          document.getElementById('logout-form').submit();">
-            Se déconnecter
+                         <i class="nav-icon fas fa-sign-out-alt text-danger"> Se déconnecter</i>
         </a>
 
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -79,7 +79,8 @@
                   Code pannes
                 </p>
               </router-link>
-            </li>        
+            </li>
+            
             <li class="nav-item">
               <router-link to="/hist-admin" class="nav-link">
                 <i class="nav-icon fas fa-history"></i>

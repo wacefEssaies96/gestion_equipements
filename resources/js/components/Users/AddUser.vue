@@ -21,6 +21,12 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-sm-6">
+                   <div class="form-group">
+                    <label for="code">Code</label>
+                    <input type="text" class="form-control" placeholder="Code" disabled="true" v-model="code"
+                      :class="{'is-invalid':(code != '') ? $v.code.$invalid:''}">
+                    <!-- <div class="valid-feedback">Code valide</div> -->
+                  </div>
                   <div class="form-group">
                     <label for="nom">Nom</label>
                     <input type="text" class="form-control" placeholder="Nom" v-model="nom" 
@@ -59,7 +65,7 @@
                   </div>
                   <div class="form-group">
                     <label for="tel">Role</label>
-                    <select type="text" class="form-control" v-model="role"
+                    <select type="text" class="form-control" v-model="role" @change="loadcode"
                     :class="{'is-invalid':(role != '') ?$v.role.$invalid:'', 'is-valid':!$v.role.$invalid}">
                       <option value="TECHNICIEN">Technicien</option>
                       <option value="PRODUCTION">Production</option>
@@ -96,7 +102,19 @@
                                 <span v-if="!$v.qualification.maxLength">Maximum 190 caractères !</span>
                             </div>
                         </div>
-                       
+                       <div class="form-group">
+                            <label for="poste">Poste</label>
+                            <select class="form-control" v-model="poste"
+                            :class="{'is-invalid':(poste != '') ? $v.poste.$invalid:''}">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                            <!-- <div class="valid-feedback">Zone validé</div> -->
+                            <div class="invalid-feedback">
+                                <span v-if="!$v.poste.required">Veuillez choisir une poste!</span>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="zone">Zone</label>
                             <select class="form-control" v-model="zone"
@@ -156,6 +174,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
 export default {
   data(){
     return{
+        code: '',
         nom: '',
         prenom: '',
         email: '',
@@ -163,13 +182,15 @@ export default {
         role:'',
         zone: '',   
         qualification: '',
-        // h_debut_service: '',
-        // h_fin_service: '',
+        poste: '',
         password: '',
         repeatPassword: '',
     }
   },
   validations: {
+    code:{
+
+    },
     nom: {
       required,
       minLength: minLength('3'),
@@ -192,13 +213,10 @@ export default {
     zone: {
         // required
     },
-    // h_debut_service: {
-    //     // required
-    // },
-    // h_fin_service: {
-    //     // required
-    // },
-
+    poste: {
+        // required
+    },
+    
     email: {
       required,
       isUnique(value){
@@ -252,14 +270,14 @@ export default {
     },
     userStore(){
         axios.post('/users',{
+            code: this.code,
             nom: this.nom,
             prenom: this.prenom,
             email: this.email,
             tel: this.tel,
             password: this.password,
             role : this.role,
-            // h_debut_service: this.h_debut_service,
-            // h_fin_service: this.h_fin_service,
+            poste: this.poste,          
             zone: this.zone,
             qualification: this.qualification
         })
@@ -267,7 +285,14 @@ export default {
         .catch(error => console.log(error));
         this.refreshData();
     },
+    loadcode(e) {
+        axios.get('/users/next/' + e.target.value.toLowerCase())
+        .then( e => {
+          this.code = e.data
+        })
+    },
     refreshData(){
+        this.code = '';
         this.nom = '';
         this.prenom = '';
         this.email = '';
@@ -275,11 +300,11 @@ export default {
         this.password= '';
         this.repeatPassword= '';
         this.role = '';
-        // this.h_debut_service = '';
-        // this.h_fin_service = '';
+        this.poste = '';
         this.zone = '';
         this.qualification = '';
     }
   }
 }
+
 </script>
