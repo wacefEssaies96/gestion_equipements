@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Imports\EquipementImport;
+use App\Exports\EquipementExport;
 use Excel;
 
 class EquipementController extends Controller
@@ -24,6 +25,15 @@ class EquipementController extends Controller
             return response()->json("erreur");
         }  
         return $this->refresh();
+    }
+
+    public function storeFromFile(Request $request){
+        $path = $request->file;
+        Excel::import(new EquipementImport, $path);
+        return $this->refresh();
+    }
+    public function export() {
+        return Excel::download(new EquipementExport, 'equipement.xlsx');
     }
 
     public function liste(Request $request)

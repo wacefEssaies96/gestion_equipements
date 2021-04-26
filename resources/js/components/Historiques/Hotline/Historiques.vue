@@ -226,6 +226,7 @@
               class="m-auto"
               :data="histsHotline"
               @pagination-change-page="getResultsForHotline"
+              :limit="5" 
             ></pagination>
           </div>
 
@@ -387,6 +388,7 @@
               class="m-auto"
               :data="historiques"
               @pagination-change-page="getResults"
+              :limit="5" 
             ></pagination>
           </div>
           <!-- /.card-body -->

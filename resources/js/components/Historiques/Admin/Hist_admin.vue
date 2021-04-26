@@ -152,7 +152,7 @@
           </tr> 
         </tbody>
       </table>
-      <pagination class="m-auto" :data="historiques" @pagination-change-page="getResults"></pagination>
+      <pagination class="m-auto" :limit="5"  :data="historiques" @pagination-change-page="getResults"></pagination>
     </div>
     <!-- /.card-body -->
   </div>

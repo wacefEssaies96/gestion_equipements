@@ -81,7 +81,13 @@
             <button class="btn btn-outline-info" data-toggle="modal" data-target="#addList">Ajouter via Onedrive</button>
             <AddList @list-added="refreshAdded"></AddList>
           </template>
+          <button @click="exportData()" class="btn btn-outline-info">
+            Exporter les données
+          </button>
           <!-- Button trigger modal -->
+          <button class="btn btn-outline-info" data-toggle="modal" data-target="#addFromExcel">
+          Ajouter via fichier excel
+          </button>
         <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
         Ajouter un nouveau equipement
         </button>
@@ -90,6 +96,7 @@
       </div>
       <!-- /.card-header -->
     <AddEquipement @equipement-added="refreshAdded" v-bind:isConnected="isConnected"></AddEquipement>
+    <AddFromExcel v-bind:type="'equipement'" @codePanne-added="refreshAdded"></AddFromExcel>   
     <ViewPdf @closed="refreshDoc" v-bind:path="document.document"></ViewPdf>
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
@@ -166,7 +173,12 @@
           </tbody>
         </table>
 
-        <pagination class="m-auto" :data="equipements" @pagination-change-page="getResults"></pagination>
+        <pagination class="m-auto" 
+          :data="equipements" 
+          @pagination-change-page="getResults"
+          :limit="5" 
+        >
+        </pagination>
       </div>
       <!-- /.card-body -->
     </div>
@@ -178,7 +190,8 @@
   import ShowEquipement from './ShowEquipement';
   import DeleteEquipement from './DeleteEquipement';
   import ViewPdf from './ViewPdfFile.vue';
-  import AddList from '../OneDrive/AddFileList'
+  import AddList from '../OneDrive/AddFileList';
+  import AddFromExcel from '../AddFromExcel';
 
   export default {
     components:{
@@ -187,7 +200,8 @@
       ShowEquipement,
       DeleteEquipement,
       ViewPdf,
-      AddList
+      AddList,
+      AddFromExcel
     },
     props:['user'],
     data(){
@@ -232,6 +246,19 @@
       }
     },
     methods:{
+      exportData(){
+        axios.get('equipements/export', {responseType: 'blob'})
+        .then((response) => {
+            const url = URL.createObjectURL(new Blob([response.data], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            }))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', 'EquipementsListe')
+            document.body.appendChild(link)
+            link.click()
+        });
+      },
       refreshDoc(){
         console.log('trigred');
         this.document = '';

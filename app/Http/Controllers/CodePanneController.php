@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Excel;
 use App\CodePanne;
+use App\Exports\CodePanneExport;
 use App\Imports\CodePannesImport;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,9 @@ class CodePanneController extends Controller
         Excel::import(new CodePannesImport, $path);
         $this->fetchingData();
         return $this->refresh();
+    }
+    public function export() {
+        return Excel::download(new CodePanneExport, 'disney.xlsx');
     }
     public function fetchingData(){
         $codePannes = CodePanne::all();

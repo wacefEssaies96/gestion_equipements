@@ -58,6 +58,9 @@
       <div class="card-header">
         <h3 class="card-title">Liste de tous les codes pannes</h3>
         <div class="card-tools">
+          <button @click="exportData()" class="btn btn-outline-info">
+            Exporter les données
+          </button>
           <!-- Button trigger modal -->
           <button class="btn btn-outline-info" data-toggle="modal" data-target="#addFromExcel">
           Ajouter via fichier excel
@@ -70,7 +73,7 @@
       </div>
       <!-- /.card-header -->
     <AddCodePanne @codePanne-added="refreshAdded"></AddCodePanne>
-    <AddFromExcel @codePanne-added="refreshAdded"></AddFromExcel>   
+    <AddFromExcel v-bind:type="'codePanne'" @codePanne-added="refreshAdded"></AddFromExcel>   
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
@@ -99,7 +102,7 @@
             </tr>
           </tbody>
         </table>
-        <pagination class="m-auto" :data="code_pannes" @pagination-change-page="getResults"></pagination>
+        <pagination class="m-auto" :limit="5"  :data="code_pannes" @pagination-change-page="getResults"></pagination>
       </div>
       <!-- /.card-body -->
     </div>
@@ -109,7 +112,7 @@
   import AddCodePanne from './AddCode_Panne';
   import EditCodePanne from './EditCode_Panne';
   import DeleteCodePanne from './DeleteCode_Panne';
-  import AddFromExcel from './AddFromExcel'
+  import AddFromExcel from '../AddFromExcel'
     export default {
         components:{
           AddCodePanne,
@@ -143,6 +146,19 @@
         .catch(error => console.log(error))
       },
       methods:{
+        exportData(){
+          axios.get('code-pannes/export', {responseType: 'blob'})
+          .then((response) => {
+              const url = URL.createObjectURL(new Blob([response.data], {
+                  type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              }))
+              const link = document.createElement('a')
+              link.href = url
+              link.setAttribute('download', 'CodePanneListe')
+              document.body.appendChild(link)
+              link.click()
+          });
+        },
         getResults(page = 1) {
           axios.post('/code_pannes/liste?page=' + page)
           .then(response => {

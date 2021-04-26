@@ -16,12 +16,13 @@ class CreateEquipementsTable extends Migration
         Schema::create('equipements', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
-            $table->string('designation');
-            $table->string('emplacement');
-            $table->string('code_categorie');
-            $table->date('date_acq');
-            $table->string('n_serie');
-            $table->string('constructeur');
+            $table->string('designation')->nullable();
+            $table->string('code_section')->nullable();
+            $table->string('emplacement')->nullable();
+            $table->string('code_categorie')->nullable();
+            $table->date('date_acq')->default(now('Africa/Tunis'));
+            $table->string('n_serie')->nullable();
+            $table->string('constructeur')->nullable();
             $table->string('image')->nullable();
             $table->enum('etat', ['Production', 'Zsav','obsolete'])->nullable();
             $table->enum('zone', ['Sertissage', 'Assemblage','Coupe','Préparation','Controle éléctrique'])->nullable();

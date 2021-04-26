@@ -104,7 +104,7 @@
             </tr>
           </tbody>
         </table>
-        <pagination class="m-auto" :data="feedbacks" @pagination-change-page="getResults"></pagination>
+        <pagination class="m-auto" :limit="5"  :data="feedbacks" @pagination-change-page="getResults"></pagination>
       </div>
       <!-- /.card-body -->
     </div>

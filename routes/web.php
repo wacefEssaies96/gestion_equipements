@@ -65,6 +65,8 @@ use App\User;
     Route::delete('/feedbacks/{id}', 'FeedbackController@destroy');
 
     //Equipement
+    Route::get('equipements/export', 'EquipementController@export');
+    Route::post('/equipements/excel', 'EquipementController@storeFromFile');
     Route::post('/equipements', 'EquipementController@store');
     Route::post('/equipements/liste', 'EquipementController@liste');
     Route::get('/equipements/edit/{id}', 'EquipementController@edit');
@@ -72,6 +74,7 @@ use App\User;
     Route::delete('/equipements/{id}', 'EquipementController@destroy');
 
     //Code Panne
+    Route::get('code-pannes/export', 'CodePanneController@export');
     Route::post('/code-pannes/excel', 'CodePanneController@storeFromFile');
     Route::post('/code_pannes', 'CodePanneController@store');
     Route::post('/code_pannes/liste', 'CodePanneController@liste');

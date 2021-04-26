@@ -90,6 +90,7 @@
             </tr> 
           </tbody>
         </table>
+        <pagination :limit="5"  class="m-auto" :data="histsTech" @pagination-change-page="getResults"></pagination>
       </div>
       <!-- /.card-body -->
       </div>
@@ -146,7 +147,7 @@
             </tr> 
           </tbody>
         </table>
-        <pagination class="m-auto" :data="historiques" @pagination-change-page="getResults"></pagination>
+        <pagination :limit="5"  class="m-auto" :data="historiques" @pagination-change-page="getResults"></pagination>
       </div>
       <!-- /.card-body -->
       </div>
@@ -156,9 +157,9 @@
 <script>
   import EditHistTech from './EditHistTech';
   export default {
-      components:{
-          EditHistTech,
-      },
+    components:{
+      EditHistTech,
+    },
     props:['user'],
     data(){
       return{
