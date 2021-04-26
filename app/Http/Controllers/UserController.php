@@ -45,10 +45,37 @@ class UserController extends Controller
     public function getUserId(){
         return response()->json(Auth::id());
     }
-
+    public function nextId(Request $request, $kind) {
+        $prefix = '';
+        $result = null;
+        if($kind == 'technicien') {
+            $result = Technicien::max('id');
+            $prefix = 'TECH';
+        }
+        else if($kind ==  'hotline')  {
+            $result = Hotline::max('id');
+            $prefix = 'HOT';
+        }
+        else if($kind ==  'responsable')  {
+            $result = Responsable::max('id');
+            $prefix = 'RESP';
+        }
+        else if($kind ==  'production')  {
+            $result = Production::max('id');
+            $prefix = 'PROD';
+        }
+        else{
+            return  null;
+        }
+        if($result == null)
+            return  $prefix . '1';
+        else 
+            return $prefix . ($result + 1);
+    }
     public function store(Request $request)
     {
         $user = new User();
+        $user->code = request('code');
         $user->nom = request('nom');
         $user->prenom = request('prenom');
         $user->email = request('email');
@@ -58,7 +85,8 @@ class UserController extends Controller
         $user->role = request('role');
         $user->save();
         $this->createPersonel($request,$user->id);
-        if($user){
+        
+        if($user->role != 'TECHNICIEN'){
             return $this->refresh();  
         }
     }

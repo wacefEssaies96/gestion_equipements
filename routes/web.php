@@ -32,6 +32,7 @@ use App\User;
     Route::get('/users/edit/{id}', 'UserController@edit');
     Route::delete('/users/{id}', 'UserController@destroy');
     Route::patch('/users/edit/{id}', 'UserController@update');
+    Route::get('/users/next/{kind}', 'UserController@nextId');
 
     Route::get('/historiques/techniciens/{zone}', 'UserController@getTechniciens');
     Route::get('/historiques/hotline', 'HistoriqueController@getHotlineHistoriques');
