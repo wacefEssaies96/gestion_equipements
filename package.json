@@ -19,13 +19,13 @@
         "lodash": "^4.17.13",
         "popper.js": "^1.12",
         "resolve-url-loader": "^3.1.2",
-        "sass": "^1.32.10",
+        "sass": "^1.32.11",
         "sass-loader": "^8.0.0",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "buefy": "^0.9.4",
+        "buefy": "^0.9.7",
         "dotenv": "^6.2.0",
         "laravel-echo": "^1.10.0",
         "laravel-vue-pagination": "^2.3.1",
@@ -38,6 +38,6 @@
         "vue-sweetalert2": "^4.3.1",
         "vue-toast-notification": "^0.6.1",
         "vuelidate": "^0.7.6",
-        "vuetify": "^2.4.9"
+        "vuetify": "^2.4.11"
     }
 }

@@ -21,6 +21,12 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-sm-6">
+                   <div class="form-group">
+                    <label for="code">Code</label>
+                    <input type="text" class="form-control" placeholder="Code" disabled="true" v-model="code"
+                      :class="{'is-invalid':(code != '') ? $v.code.$invalid:''}">
+                    <!-- <div class="valid-feedback">Code valide</div> -->
+                  </div>
                   <div class="form-group">
                     <label for="nom">Nom</label>
                     <input type="text" class="form-control" placeholder="Nom" v-model="nom" 
@@ -59,7 +65,7 @@
                   </div>
                   <div class="form-group">
                     <label for="tel">Role</label>
-                    <select type="text" class="form-control" v-model="role"
+                    <select type="text" class="form-control" v-model="role" @change="loadcode"
                     :class="{'is-invalid':(role != '') ?$v.role.$invalid:'', 'is-valid':!$v.role.$invalid}">
                       <option value="TECHNICIEN">Technicien</option>
                       <option value="PRODUCTION">Production</option>
@@ -170,6 +176,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
 export default {
   data(){
     return{
+        code: '',
         nom: '',
         prenom: '',
         email: '',
@@ -183,6 +190,8 @@ export default {
     }
   },
   validations: {
+     code:{
+    },
     nom: {
       required,
       minLength: minLength('3'),
@@ -207,13 +216,7 @@ export default {
     zone: {
         // required
     },
-    // h_debut_service: {
-    //     // required
-    // },
-    // h_fin_service: {
-    //     // required
-    // },
-
+    
     email: {
       required,
       isUnique(value){
@@ -267,6 +270,7 @@ export default {
     },
     userStore(){
         axios.post('/users',{
+            code: this.code,
             nom: this.nom,
             prenom: this.prenom,
             email: this.email,
@@ -274,8 +278,6 @@ export default {
             password: this.password,
             role : this.role,
             poste:this.poste,
-            // h_debut_service: this.h_debut_service,
-            // h_fin_service: this.h_fin_service,
             zone: this.zone,
             qualification: this.qualification
         })
@@ -283,7 +285,14 @@ export default {
         .catch(error => console.log(error));
         this.refreshData();
     },
+     loadcode(e) {
+        axios.get('/users/next/' + e.target.value.toLowerCase())
+        .then( e => {
+          this.code = e.data
+        })
+    },
     refreshData(){
+        this.code = '';
         this.nom = '';
         this.prenom = '';
         this.email = '';
@@ -292,8 +301,6 @@ export default {
         this.repeatPassword= '';
         this.role = '';
         this.poste='';
-        // this.h_debut_service = '';
-        // this.h_fin_service = '';
         this.zone = '';
         this.qualification = '';
     }
