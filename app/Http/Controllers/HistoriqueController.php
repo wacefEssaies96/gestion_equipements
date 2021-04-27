@@ -34,63 +34,42 @@ class HistoriqueController extends Controller
 
     public function liste(Request $request)
     {
-        $hist = Historique::where('historiques.id','like','%'.request('num_bt').'%');
-        $hist = $hist->join('equipements','historiques.code_equip', '=', 'equipements.id')
-        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code');
-        if($request->zone != ''){
-            $hist = $hist->where('historiques.zone', '=', request('zone'));
-        }
-        if($request->appelle != ''){
-            $hist = $hist->where('historiques.appelle', '=', request('appelle'));
-        }
-        if($request->tech_id != null){
-            $hist = $hist->where('historiques.tech_id', '=', request('tech_id'));
-        }
-        if($request->date_debut != ''){
-            $hist = $hist->whereTime('historiques.heure_debut', request('date_debut'));
-        }
-        if($request->date_fin != ''){
-            $hist = $hist->whereTime('historiques.heure_fin', request('date_fin'));
-        }
-        if($request->code_categorie != ''){
-            $hist = $hist->where('equipements.code_categorie','like', '%'.request('code_categorie').'%');
-        }
-        if($request->code_equip != ''){
-            $hist = $hist->where('equipements.code','like','%'.request('code_equip').'%');
-        }
-       
-        $hist = $hist->paginate(10);
-        return response()->json($hist);
-    }
-    public function listeHotline(Request $request)
-    {
-        $hist = Historique::where('historiques.id','like','%'.request('num_bt').'%');
-        $hist = $hist->join('equipements','historiques.code_equip', '=', 'equipements.id')
-        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code')
-        ->where('hotline_id', '=', Auth::id());
-        if($request->zone != ''){
-            $hist = $hist->where('historiques.zone', '=', request('zone'));
-        }
-        if($request->appelle != ''){
-            $hist = $hist->where('historiques.appelle', '=', request('appelle'));
-        }
-        if($request->tech_id != null){
-            $hist = $hist->where('historiques.tech_id', '=', request('tech_id'));
-        }
-        if($request->date_debut != ''){
-            $hist = $hist->whereTime('historiques.heure_debut', request('date_debut'));
-        }
-        if($request->date_fin != ''){
-            $hist = $hist->whereTime('historiques.heure_fin', request('date_fin'));
-        }
-        if($request->code_categorie != ''){
-            $hist = $hist->where('equipements.code_categorie','like', '%'.request('code_categorie').'%');
-        }
-        if($request->code_equip != ''){
-            $hist = $hist->where('equipements.code','like','%'.request('code_equip').'%');
+        $hist = Historique::join('equipements','historiques.code_equip', '=', 'equipements.id')
+        ->leftJoin('code_panne_in_hists','historiques.id', '=', 'code_panne_in_hists.hist') 
+        ->leftJoin('code_pannes','code_panne_in_hists.code_panne', '=', 'code_pannes.id')
+        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code','code_panne_in_hists.code_panne','code_pannes.code AS codePanne','code_pannes.designation AS codePanneDesignation')
+        ->where('historiques.id','like','%'.request('num_bt').'%');
+
+        if($request->type == "HOTLINE"){
+            $hist = $hist->where('historiques.hotline_id', '=', Auth::id());
         }
         
+        if($request->code_panne != ''){
+            $hist = $hist->where('code_panne_in_hists.code_panne', '=', request('code_panne'));
+        }
+        if($request->zone != ''){
+            $hist = $hist->where('historiques.zone', '=', request('zone'));
+        }
+        if($request->appelle != ''){
+            $hist = $hist->where('historiques.appelle', '=', request('appelle'));
+        }
+        if($request->tech_id != null){
+            $hist = $hist->where('historiques.tech_id', '=', request('tech_id'));
+        }
+        if($request->date_debut != ''){
+            $hist = $hist->whereTime('historiques.heure_debut','like', '%'.request('date_debut').'%');
+        }
+        if($request->date_fin != ''){
+            $hist = $hist->whereTime('historiques.heure_fin','like', '%'.request('date_fin').'%');
+        }
+        if($request->code_categorie != ''){
+            $hist = $hist->where('equipements.code_categorie','like', '%'.request('code_categorie').'%');
+        }
+        if($request->code_equip != ''){
+            $hist = $hist->where('historiques.code_equip','like', '%'.request('code_equip').'%');
+        }
         $hist = $hist->paginate(10);
+
         return response()->json($hist);
     }
 
@@ -310,11 +289,10 @@ class HistoriqueController extends Controller
     public function destroy($id)
     {
         $hist = Historique::find($id);
-        $hist->delete();
         $technicien = Technicien::where('user_id','=',$hist->tech_id)->first();
         $technicien->status = 'DISPONIBLE';
         $technicien->save();
-        
+        $hist->delete();
         if(Auth::user()->role == 'HOTLINE'){
             return $this->getHotlineHistoriques();
         }
@@ -324,20 +302,26 @@ class HistoriqueController extends Controller
     
     public function refresh(){
         $historiques = Historique::join('equipements','historiques.code_equip', '=', 'equipements.id')
-        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code')
+        ->leftJoin('code_panne_in_hists','historiques.id', '=', 'code_panne_in_hists.hist')
+        ->leftJoin('code_pannes','code_panne_in_hists.code_panne', '=', 'code_pannes.id')
+        ->select('historiques.*','code_panne_in_hists.code_panne','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code','code_pannes.code AS codePanne','code_pannes.designation AS codePanneDesignation')
         ->paginate(10);
         return response()->json($historiques);
     }
 
     public function refreshTech(){
         $historiques = Historique::join('equipements','historiques.code_equip', '=', 'equipements.id')
-        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code')
+        ->leftJoin('code_panne_in_hists','historiques.id', '=', 'code_panne_in_hists.hist')
+        ->leftJoin('code_pannes','code_panne_in_hists.code_panne', '=', 'code_pannes.id')
+        ->select('historiques.*','code_panne_in_hists.code_panne','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code','code_pannes.code AS codePanne','code_pannes.designation AS codePanneDesignation')
         ->where('tech_id','=',Auth::id())->where('heure_fin','=',null)->paginate(10);
         return response()->json($historiques);
     }
     public function getHotlineHistoriques(){
         $hist = Historique::join('equipements','historiques.code_equip', '=', 'equipements.id')
-        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code')
+        ->leftJoin('code_panne_in_hists','historiques.id', '=', 'code_panne_in_hists.hist')
+        ->leftJoin('code_pannes','code_panne_in_hists.code_panne', '=', 'code_pannes.id')
+        ->select('historiques.*','code_panne_in_hists.code_panne','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code','code_pannes.code AS codePanne','code_pannes.designation AS codePanneDesignation')
         ->where('hotline_id', '=', Auth::id())->paginate(10);
         return response()->json($hist);
     }

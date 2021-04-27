@@ -61,7 +61,7 @@
                       <template v-if="zone != ''">
                        <div class="form-group">
                         <label for="tech">Techniciens</label>
-                        <select id="selectTech" class="form-control" v-model="tech_id"
+                        <select class="form-control" v-model="tech_id"
                         :class="{'is-invalid':(tech_id != '') ? $v.tech_id.$invalid:'', 'is-valid':!$v.tech_id.$invalid}"
                         >
                           <option v-for="technicien in techniciens" :key="technicien.user_id" :value="technicien.user_id">

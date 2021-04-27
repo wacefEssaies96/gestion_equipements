@@ -104,7 +104,11 @@ class CodePanneController extends Controller
     }
     public function refresh(){
         $code_panne = CodePanne::paginate(10);
-        return response()->json($code_panne );
+        return response()->json($code_panne);
+    }
+    public function getAllCp(){
+        $code_panne = CodePanne::all();
+        return response()->json($code_panne);
     }
     public function getCodePanneByCode($value){
         $cp = CodePanne::where('code','=',$value)->get();

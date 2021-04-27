@@ -41,7 +41,7 @@
                   <div class="from-group">
                     <label>Num Bt</label>
                     <input
-                      @keyup="search"
+                      @keyup="search('HOTLINE')"
                       type="text"
                       v-model="qNumBt"
                       class="form-control"
@@ -53,7 +53,7 @@
                   <div class="form-group">
                     <label>Heure début</label>
                     <input
-                      @change="search"
+                      @change="search('HOTLINE')"
                       type="time"
                       v-model="qDateDebut"
                       class="form-control"
@@ -64,26 +64,11 @@
                   <div class="form-group">
                     <label>Heure fin</label>
                     <input
-                      @change="search"
+                      @change="search('HOTLINE')"
                       type="time"
                       v-model="qDateFin"
                       class="form-control"
                     />
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="from-group">
-                    <label>Zone</label>
-                    <select @change="search" class="form-control" v-model="qZone">
-                      <option value="" selected>Vide</option>
-                      <option value="Assemblage">Assemblage</option>
-                      <option value="Sertissage">Sertissage</option>
-                      <option value="Préparation">Préparation</option>
-                      <option value="Coupe">Coupe</option>
-                      <option value="Controle éléctrique">
-                        Controle éléctrique
-                      </option>
-                    </select>
                   </div>
                 </div>
               </div>
@@ -91,7 +76,7 @@
                 <div class="col">
                   <div class="from-group">
                     <label>Technicien</label>
-                    <select @change="search" class="form-control" v-model="qTech">
+                    <select @change="search('HOTLINE')" class="form-control" v-model="qTech">
                       <option value="" selected>Vide</option>
                       <option
                         v-for="tech in techs"
@@ -107,7 +92,7 @@
                   <div class="form-group">
                     <label>BT cloturé</label>
                     <select
-                      @change="search"
+                      @change="search('HOTLINE')"
                       class="form-control"
                       v-model="qAppelle"
                     >
@@ -118,15 +103,46 @@
                   </div>
                 </div>
                 <div class="col">
-                    <label>Categorie</label>
-                    <input type="text" v-model="qCodeCategorie" @keyup="search" class="form-control">
-                  </div>
+                  <label>Categorie</label>
+                  <input type="text" v-model="qCodeCategorie" @keyup="search('HOTLINE')" class="form-control">
+                </div>
               </div>
-              <div class="col">
-                    <label for="code_machine">Code machine</label>
-                    <input type="text" v-model="qCodeMachine" @keyup="search" class="form-control">
+              <div class="row">
+                <div class="col">
+                  <div class="from-group">
+                    <label>Code panne</label>
+                    <select @change="search('HOTLINE')" class="form-control" v-model="qCodePanne">
+                      <option value="" selected>Vide</option>
+                      <option
+                        v-for="cp in allCodePanne"
+                        :key="cp.id"
+                        :value="cp.id"
+                      >
+                        {{ cp.code }}
+                      </option>
+                    </select>
                   </div>
-              
+                </div>
+                <div class="col">
+                  <label for="code_machine">Code machine</label>
+                  <input type="text" v-model="qCodeMachine" @keyup="search('HOTLINE')" class="form-control">
+                </div>
+                 <div class="col">
+                  <div class="from-group">
+                    <label>Zone</label>
+                    <select @change="search('HOTLINE')" class="form-control" v-model="qZone">
+                      <option value="" selected>Vide</option>
+                      <option value="Assemblage">Assemblage</option>
+                      <option value="Sertissage">Sertissage</option>
+                      <option value="Préparation">Préparation</option>
+                      <option value="Coupe">Coupe</option>
+                      <option value="Controle éléctrique">
+                        Controle éléctrique
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           </template>
@@ -157,9 +173,11 @@
                   <th>Heure d'arret</th>
                   <th>Description</th>
                   <th>Code machine</th>
-                  <th>Designation</th>
+                  <th>Designation M</th>
                   <th>Emplacement</th>
                   <th>NSerie</th>
+                  <th>Code panne</th>
+                  <th>Designation CP</th>
                   <th>Type Travaille</th>
                   <th>Zone</th>
                   <th>BT cloturé</th>
@@ -185,6 +203,8 @@
                   <td>{{ histHotline.designation }}</td>
                   <td>{{ histHotline.emplacement }}</td>
                   <td>{{ histHotline.n_serie }}</td>
+                  <td>{{ histHotline.codePanne }}</td>
+                  <td>{{ histHotline.codePanneDesignation }}</td>
                   <td>{{ histHotline.type_travaille }}</td>
                   <td>{{ histHotline.zone }}</td>
                   <td>{{ histHotline.appelle }}</td>
@@ -243,20 +263,20 @@
                 <h3 class="card-title">Recherche</h3>
               </div>
               <div class="card-body">
-                <div class="row">
-                  <div class="col">
-                    <div class="from-group">
-                      <label>Num Bt</label>
-                      <input
-                        @keyup="search('all')"
-                        type="text"
-                        v-model="qNumBt"
-                        class="form-control"
-                        placeholder="Num Bt"
-                      />
-                    </div>
+              <div class="row">
+                <div class="col">
+                  <div class="from-group">
+                    <label>Num Bt</label>
+                    <input
+                      @keyup="search('all')"
+                      type="text"
+                      v-model="qNumBt"
+                      class="form-control"
+                      placeholder="Num Bt"
+                    />
                   </div>
-                  <div class="col">
+                </div>
+                <div class="col">
                   <div class="form-group">
                     <label>Heure début</label>
                     <input
@@ -266,73 +286,90 @@
                       class="form-control"
                     />
                   </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-group">
-                      <label>Heure fin</label>
-                      <input
-                        @change="search('all')"
-                        type="time"
-                        v-model="qDateFin"
-                        class="form-control"
-                      />
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="from-group">
-                      <label>Zone</label>
-                      <select @change="search('all')" class="form-control" v-model="qZone">
-                        <option value="" selected>Vide</option>
-                        <option value="Assemblage">Assemblage</option>
-                        <option value="Sertissage">Sertissage</option>
-                        <option value="Préparation">Préparation</option>
-                        <option value="Coupe">Coupe</option>
-                        <option value="Controle éléctrique">
-                          Controle éléctrique
-                        </option>
-                      </select>
-                    </div>
+                </div>
+                <div class="col">
+                  <div class="form-group">
+                    <label>Heure fin</label>
+                    <input
+                      @change="search('all')"
+                      type="time"
+                      v-model="qDateFin"
+                      class="form-control"
+                    />
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col">
-                    <div class="from-group">
-                      <label>Technicien</label>
-                      <select @change="search('all')" class="form-control" v-model="qTech">
-                        <option value="" selected>Vide</option>
-                        <option
-                          v-for="tech in techs"
-                          :key="tech.id"
-                          :value="tech.id"
-                        >
-                          {{ tech.nom }} {{ tech.prenom }}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-group">
-                      <label>BT cloturé</label>
-                      <select
-                        @change="search('all')"
-                        class="form-control"
-                        v-model="qAppelle"
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="from-group">
+                    <label>Technicien</label>
+                    <select @change="search('all')" class="form-control" v-model="qTech">
+                      <option value="" selected>Vide</option>
+                      <option
+                        v-for="tech in techs"
+                        :key="tech.id"
+                        :value="tech.id"
                       >
-                        <option value="" selected>Vide</option>
-                        <option value="Cloturé">Cloturé</option>
-                        <option value="Non cloturé">Non cloturé</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <label>Categorie</label>
-                    <input type="text" v-model="qCodeCategorie" @keyup="search('all')" class="form-control">
-                  </div>
-                  <div class="col">
-                    <label for="code_machine">Code machine</label>
-                    <input type="text" placeholder="Code machine" v-model="qCodeMachine" @keyup="search('all')" class="form-control">
+                        {{ tech.nom }} {{ tech.prenom }}
+                      </option>
+                    </select>
                   </div>
                 </div>
+                <div class="col">
+                  <div class="form-group">
+                    <label>BT cloturé</label>
+                    <select
+                      @change="search('all')"
+                      class="form-control"
+                      v-model="qAppelle"
+                    >
+                      <option value="" selected>Vide</option>
+                      <option value="Cloturé">Cloturé</option>
+                      <option value="Non cloturé">Non cloturé</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col">
+                  <label>Categorie</label>
+                  <input type="text" v-model="qCodeCategorie" @keyup="search('all')" class="form-control">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="from-group">
+                    <label>Code panne</label>
+                    <select @change="search('all')" class="form-control" v-model="qCodePanne">
+                      <option value="" selected>Vide</option>
+                      <option
+                        v-for="cp in allCodePanne"
+                        :key="cp.id"
+                        :value="cp.id"
+                      >
+                        {{ cp.code }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col">
+                  <label for="code_machine">Code machine</label>
+                  <input type="text" v-model="qCodeMachine" @keyup="search('all')" class="form-control">
+                </div>
+                 <div class="col">
+                  <div class="from-group">
+                    <label>Zone</label>
+                    <select @change="search('all')" class="form-control" v-model="qZone">
+                      <option value="" selected>Vide</option>
+                      <option value="Assemblage">Assemblage</option>
+                      <option value="Sertissage">Sertissage</option>
+                      <option value="Préparation">Préparation</option>
+                      <option value="Coupe">Coupe</option>
+                      <option value="Controle éléctrique">
+                        Controle éléctrique
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
               </div>
             </div>
           </template>
@@ -359,6 +396,8 @@
                   <th>Designation</th>
                   <th>Emplacement</th>
                   <th>NSerie</th>
+                  <th>Code panne</th>
+                  <th>Designation CP</th>
                   <th>Type Travaille</th>
                   <th>Zone</th>
                   <th>BT cloturé</th>
@@ -380,6 +419,8 @@
                   <td>{{ historique.designation }}</td>
                   <td>{{ historique.emplacement }}</td>
                   <td>{{ historique.n_serie }}</td>
+                  <td>{{ historique.codePanne }}</td>
+                  <td>{{ historique.codePanneDesignation }}</td>
                   <td>{{ historique.type_travaille }}</td>
                   <td>{{ historique.zone }}</td>
                   <td>{{ historique.appelle }}</td>
@@ -406,11 +447,11 @@ import DeleteHist from '../DeleteHistoriques';
 import AddHistorique from './AddHistorique';
 import EditHistorique from './EditHistorique';
 export default {
-    components:{
-        AddHistorique,
-        EditHistorique,
-        DeleteHist,
-    },
+  components:{
+    AddHistorique,
+    EditHistorique,
+    DeleteHist,
+  },
   props:['user'],
   data() {
     return {
@@ -429,6 +470,8 @@ export default {
       qCodeCategorie:"",
       qCodeMachine:"",
       qTech: "",
+      qCodePanne:"",
+      allCodePanne:'',
       q: new FormData(),
       id: "",
       histSertissage: "",
@@ -446,6 +489,66 @@ export default {
         showConfirmButton: false,
         timer: 5000,
       });
+    },
+    
+    getResults(page = 1) {
+      axios.post("/historiques/liste?page=" + page)
+      .then((response) => {
+        this.historiques = response.data;
+      })
+      .catch((error) => console.log(error));
+    },
+    getResultsForHotline(page = 1) {
+      this.q.append("type",'HOTLINE');
+      axios.post("/historiques/liste?page=" + page,this.q)
+      .then((response) => {
+        this.histsHotline = response.data;
+      })
+      .catch((error) => console.log(error));
+    },
+    
+    search(type) {
+      this.q.append("num_bt", this.qNumBt);
+      this.q.append("zone", this.qZone);
+      this.q.append("date_debut", this.qDateDebut);
+      this.q.append("date_fin", this.qDateFin);
+      this.q.append("appelle", this.qAppelle);
+      this.q.append("code_categorie", this.qCodeCategorie)
+      this.q.append("code_equip", this.qCodeMachine)
+      this.q.append("tech_id", this.qTech);
+      this.q.append("code_panne", this.qCodePanne)
+      this.q.append("type",type);
+      axios.post("/historiques/liste", this.q)
+      .then(response => {
+        this.histsHotline = response.data;
+        this.historiques = response.data;
+        this.loading = false; 
+      })
+      .catch(error => console.log(error))
+    },
+    showSearch(){
+      if(this.hiddenS == 'true'){
+        this.hiddenS = 'false';
+        return 1;
+      }
+      if(this.hiddenS == 'false'){
+        this.hiddenS = 'true';
+        return 1;
+      }
+    },
+    viewAll(status) {
+      this.hidden = status;
+      if(status == 'false'){
+        this.search('HOTLINE');
+      }else{
+        this.search('all');
+      }
+    },
+    refreshForHotline(histsHotline) {
+      this.histsHotline = histsHotline.data;
+    },
+    refresh(historiques) {
+      this.historiques = historiques.data;
     },
     setId(id) {
       this.id = id;
@@ -465,113 +568,30 @@ export default {
       this.histsHotline = historiques.data;
       this.toast(value);
     },
-    getResults(page = 1) {
-      axios
-        .post("/historiques/liste?page=" + page)
-        .then((response) => {
-          this.historiques = response.data;
-        })
-        .catch((error) => console.log(error));
+    async getHistorique(id) {
+      await axios.get("/historiques/edit/" + id)
+      .then((response) => (this.historiqueToEdit = response.data))
+      .catch((error) => console.log(error));
+      await axios.get("/historiques/techniciens/" + this.historiqueToEdit[0].zone)
+      .then((response) => (this.tech = response.data))
+      .catch((error) => console.log(error));
+      await axios.get('/historiques/equipement/zone/' + this.historiqueToEdit[0].zone)
+      .then(response => this.equipements =  response.data)
+      .catch(error => console.log(error));
     },
-    getResultsForHotline(page = 1) {
-      axios
-        .get("/historiques/hotline?page=" + page)
-        .then((response) => {
-          this.histsHotline = response.data;
-        })
-        .catch((error) => console.log(error));
-    },
-    launchQuery(type){
-      if(type == "all"){
-        axios.post("/historiques/liste", this.q)
-        .then((response) => {
-          this.historiques = response.data;
-        })
-        .catch((error) => console.log(error));
-      }
-      else{
-        axios.post("/historiques/liste/hotline", this.q)
-        .then((response) => {
-          this.histsHotline = response.data;
-        })
-        .catch((error) => console.log(error));
-      }
-
-    },
-    search(type) {
-      this.q.append("num_bt", this.qNumBt);
-      this.q.append("zone", this.qZone);
-      this.q.append("date_debut", this.qDateDebut);
-      this.q.append("date_fin", this.qDateFin);
-      this.q.append("appelle", this.qAppelle);
-      this.q.append("code_categorie", this.qCodeCategorie)
-      this.q.append("code_equip", this.qCodeMachine)
-      this.q.append("tech_id", this.qTech);
-      this.launchQuery(type);
-    },
-    showSearch(){
-      if(this.hiddenS == 'true'){
-        this.hiddenS = 'false';
-        return 1;
-      }
-      if(this.hiddenS == 'false'){
-        this.hiddenS = 'true';
-        return 1;
-      }
-    },
-    viewAll(status) {
-      this.hidden = status;
-    },
-    refreshForHotline(histsHotline) {
-      this.histsHotline = histsHotline.data;
-    },
-    refresh(historiques) {
-      this.historiques = historiques.data;
-    },
-    getHistorique(id) {
-      axios
-        .get("/historiques/edit/" + id)
-        .then((response) => (this.historiqueToEdit = response.data))
-        .catch((error) => console.log(error));
-        setTimeout(()=>{
-          this.getTech(this.historiqueToEdit[0].zone);
-          this.getEquipements(this.historiqueToEdit[0].zone);
-        },2000);
-    },
-    getTech(zone) {
-      axios
-        .get("/historiques/techniciens/" + zone)
-        .then((response) => (this.tech = response.data))
-        .catch((error) => console.log(error));
-    },
-    getEquipements(zone){
-        axios.get('/historiques/equipement/zone/' + zone)
-        .then(response =>this.equipements =  response.data)
-        .catch(error => console.log(error));
-      },
   },
-  async created() {
+  created() {
     if(this.user.role != 'HOTLINE'){
-          this.$router.push('/');
-        }
-    await axios
-      .post("/historiques/liste")
-      .then(response => {
-        this.historiques = response.data;
-        console.log(response.data.data);  
-      })
-      .catch((error) => console.log(error));
-    await axios
-      .get("/historiques/techs")
-      .then((response) => (this.techs = response.data))
-      .catch((error) => console.log(error));
-    await axios
-      .get("/historiques/hotline")
-      .then(response => {
-        this.histsHotline = response.data;
-        this.loading = false;
-      })
-      .catch((error) => console.log(error));
+      this.$router.push('/');
+    }
+    this.search('HOTLINE');
+    axios.get("/historiques/techs")
+    .then((response) => (this.techs = response.data))
+    .catch((error) => console.log(error));
+    axios.get('/code_pannes/liste-all')
+    .then(response => {
+      this.allCodePanne = response.data
+    })
   },
 };
 </script>

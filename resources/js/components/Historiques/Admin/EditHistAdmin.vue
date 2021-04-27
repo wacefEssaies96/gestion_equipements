@@ -67,7 +67,7 @@
                         <select class="form-control" v-model="tech_id"
                         :class="{'is-invalid':(tech_id != '') ?$v.tech_id.$invalid:'', 'is-valid':!$v.tech_id.$invalid}"
                         >
-                          <option v-for="technicien in techniciens" :key="technicien.user_id" :value="technicien.user_id">
+                          <option v-for="technicien in techniciens" :key="technicien.id" :value="technicien.user_id">
                             {{technicien.user.nom}} {{technicien.user.prenom}}
                           </option>
                         </select>

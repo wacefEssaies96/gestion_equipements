@@ -78,6 +78,7 @@ use App\User;
     Route::get('code-pannes/export', 'CodePanneController@export');
     Route::post('/code-pannes/excel', 'CodePanneController@storeFromFile');
     Route::post('/code_pannes', 'CodePanneController@store');
+    Route::get('/code_pannes/liste-all', 'CodePanneController@getAllCp');
     Route::post('/code_pannes/liste', 'CodePanneController@liste');
     Route::get('/code_pannes/edit/{id}', 'CodePanneController@edit');
     Route::patch('/code_pannes/edit/{id}', 'CodePanneController@update');

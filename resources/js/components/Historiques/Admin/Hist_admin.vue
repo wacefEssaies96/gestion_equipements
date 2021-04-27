@@ -59,21 +59,6 @@
                     />
                   </div>
                 </div>
-                <div class="col">
-                  <div class="from-group">
-                    <label>Zone</label>
-                    <select @change="search" class="form-control" v-model="qZone">
-                      <option value="" selected>Vide</option>
-                      <option value="Assemblage">Assemblage</option>
-                      <option value="Sertissage">Sertissage</option>
-                      <option value="Préparation">Préparation</option>
-                      <option value="Coupe">Coupe</option>
-                      <option value="Controle éléctrique">
-                        Controle éléctrique
-                      </option>
-                    </select>
-                  </div>
-                </div>
               </div>
               <div class="row">
                 <div class="col">
@@ -106,15 +91,46 @@
                   </div>
                 </div>
                 <div class="col">
-                    <label>Categorie</label>
-                    <input type="text" v-model="qCodeCategorie" @keyup="search" class="form-control">
-                  </div>
+                  <label>Categorie</label>
+                  <input type="text" v-model="qCodeCategorie" @keyup="search" class="form-control">
+                </div>
               </div>
-              <div class="col">
-                    <label for="code_machine">Code machine</label>
-                    <input type="text" v-model="qCodeMachine" @keyup="search" class="form-control">
+              <div class="row">
+                <div class="col">
+                  <div class="from-group">
+                    <label>Code panne</label>
+                    <select @change="search" class="form-control" v-model="qCodePanne">
+                      <option value="" selected>Vide</option>
+                      <option
+                        v-for="cp in allCodePanne"
+                        :key="cp.id"
+                        :value="cp.id"
+                      >
+                        {{ cp.code }}
+                      </option>
+                    </select>
                   </div>
-              
+                </div>
+                <div class="col">
+                  <label for="code_machine">Code machine</label>
+                  <input type="text" v-model="qCodeMachine" @keyup="search" class="form-control">
+                </div>
+                 <div class="col">
+                  <div class="from-group">
+                    <label>Zone</label>
+                    <select @change="search" class="form-control" v-model="qZone">
+                      <option value="" selected>Vide</option>
+                      <option value="Assemblage">Assemblage</option>
+                      <option value="Sertissage">Sertissage</option>
+                      <option value="Préparation">Préparation</option>
+                      <option value="Coupe">Coupe</option>
+                      <option value="Controle éléctrique">
+                        Controle éléctrique
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           </template>
@@ -144,9 +160,11 @@
             <th>Heure d'arret</th>
             <th>Description</th>
             <th>Code machine</th>
-            <th>Designation</th>
+            <th>Designation M</th>
             <th>Emplacement</th>
             <th>NSerie</th>
+            <th>Code panne</th>
+            <th>Designation CP</th>
             <th>Type Travaille</th>
             <th>Zone</th>
             <th>BT cloturé</th>
@@ -169,6 +187,8 @@
             <td>{{ historique.designation }}</td>
             <td>{{ historique.emplacement }}</td>
             <td>{{ historique.n_serie }}</td>
+            <td>{{ historique.codePanne }}</td>
+            <td>{{ historique.codePanneDesignation }}</td>
             <td>{{ historique.type_travaille }}</td>
             <td>{{ historique.zone }}</td>
             <td>{{ historique.appelle }}</td>
@@ -229,6 +249,8 @@ export default {
         qAppelle: "",
         qCodeCategorie:"",
         qCodeMachine:"",
+        qCodePanne:"",
+        allCodePanne:'',
         qTech: "",
         q: new FormData(),
         id: '',
@@ -237,7 +259,6 @@ export default {
         codePannes: '',
         hidden:'true',
         loading:true,
-        
       }
     },
     async created(){
@@ -245,14 +266,21 @@ export default {
           this.$router.push('/');
         }
       await axios.post("/historiques/liste")
-      .then(response => this.historiques = response.data)
+      .then(response => {
+        this.historiques = response.data
+        console.log(response.data); 
+      })
       .catch(error => console.log(error))
       await axios.get("/historiques/techs")
       .then(response => {
         this.techs = response.data
-        this.loading = false;
       })
       .catch(error => console.log(error))
+      await axios.get('/code_pannes/liste-all')
+      .then(response => {
+        this.allCodePanne = response.data
+        this.loading = false;
+      })
     },
     methods:{
       getResults(page = 1) {
@@ -300,7 +328,6 @@ export default {
         this.historiques = historiques.data;
         this.toast(value);
       },
-
       search(){
         this.q.append("num_bt", this.qNumBt);
         this.q.append("zone", this.qZone);
@@ -309,36 +336,32 @@ export default {
         this.q.append("appelle", this.qAppelle);
         this.q.append("code_categorie", this.qCodeCategorie)
         this.q.append("code_equip", this.qCodeMachine)
+        this.q.append("code_panne", this.qCodePanne)
         this.q.append("tech_id", this.qTech);
+        this.q.append("type","ADMIN");
 
         axios.post("/historiques/liste", this.q)
         .then(response => this.historiques = response.data)
         .catch(error => console.log(error))
 
       },
-      getHistorique(id){
-        axios.get('/historiques/edit/' + id)
-        .then(response => this.historiqueToEdit = response.data)
+      async getHistorique(id){
+        await axios.get('/historiques/edit/' + id)
+        .then(response => {
+          this.historiqueToEdit = response.data
+        })
         .catch(error => console.log(error));  
-        setTimeout(() => this.getTech(this.historiqueToEdit[0].zone), 2000);
-        setTimeout(() => this.getEquipements(this.historiqueToEdit[0].zone), 2000);
-      },
-      getTech(zone){
-        axios.get("/historiques/techniciens/" + zone)
+        await axios.get("/historiques/techniciens/" + this.historiqueToEdit[0].zone)
         .then(response => this.tech = (response.data)) 
         .catch(error => console.log(error))
-      },        
-      getEquipements(zone){
-        axios.get('/historiques/equipement/zone/' + zone)
+        await axios.get('/historiques/equipement/zone/' + this.historiqueToEdit[0].zone)
         .then(response =>this.equipements =  response.data)
         .catch(error => console.log(error));
-        this.getCodePannes(zone);
-      },
-      getCodePannes(zone){
-        axios.get("/historiques/code-panne/"+zone)
+        await axios.get("/historiques/code-panne/" + this.historiqueToEdit[0].zone)
         .then(response => this.codePannes = response.data)
         .catch(error => console.log(error))
       },
+     
     }
   }
 </script>
