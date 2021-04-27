@@ -27,6 +27,7 @@ class UserController extends Controller
     public function searchUser(Request $request){
 
         $user = User::where('nom','like','%'.request('nom').'%');
+        $user = $user->where ('role','!=','ADMIN');
         $user = $user->where('prenom','like','%'.request('prenom').'%');
         $user = $user->where('tel','like','%'.request('tel').'%');
         $user = $user->where('email','like','%'.request('email').'%');
