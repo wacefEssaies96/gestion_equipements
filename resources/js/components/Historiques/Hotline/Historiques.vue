@@ -123,7 +123,7 @@
                   </div>
               </div>
               <div class="col">
-                    <label for="code__machine">Code machine</label>
+                    <label for="code_machine">Code machine</label>
                     <input type="text" v-model="qCodeMachine" @keyup="search" class="form-control">
                   </div>
               
@@ -149,6 +149,7 @@
               <thead>
                 <tr>
                   <th>Num Bt</th>
+                  <th>Jour</th>
                   <th>Heure de demande</th>
                   <th>Heure de début</th>
                   <th>Heure de fin</th>
@@ -173,6 +174,7 @@
                   :key="histHotline.id"
                 >
                   <td>{{ histHotline.id }}</td>
+                  <td>{{ histHotline.jour }}</td>
                   <td>{{ histHotline.heure_demande }}</td>
                   <td>{{ histHotline.heure_debut }}</td>
                   <td>{{ histHotline.heure_fin }}</td>
@@ -327,7 +329,7 @@
                     <input type="text" v-model="qCodeCategorie" @keyup="search('all')" class="form-control">
                   </div>
                   <div class="col">
-                    <label for="code__machine">Code machine</label>
+                    <label for="code_machine">Code machine</label>
                     <input type="text" placeholder="Code machine" v-model="qCodeMachine" @keyup="search('all')" class="form-control">
                   </div>
                 </div>
@@ -346,6 +348,7 @@
               <thead>
                 <tr>
                   <th>Num Bt</th>
+                  <th>Jour</th>
                   <th>Heure de demande</th>
                   <th>Heure de début</th>
                   <th>Heure de fin</th>
@@ -366,6 +369,7 @@
               <tbody>
                 <tr v-for="historique in historiques.data" :key="historique.id">
                   <td>{{ historique.id }}</td>
+                  <td>{{ historique.jour }}</td>
                   <td>{{ historique.heure_demande }}</td>
                   <td>{{ historique.heure_debut }}</td>
                   <td>{{ historique.heure_fin }}</td>

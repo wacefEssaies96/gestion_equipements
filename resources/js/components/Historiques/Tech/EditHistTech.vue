@@ -25,7 +25,7 @@
                                     <label for="code_panne">Code panne</label>
                                     <v-select v-model="code_panne" :multiple="true" 
                                         :options="options" 
-                                        :get-option-label='option => option.code'
+                                        :get-option-label="option => option.code+' '+option.designation"
                                         :reduce='option => option.id'
                                         :class="{'is-invalid':(code_panne != '') ? $v.code_panne.$invalid:'', 'is-valid':!$v.code_panne.$invalid}"
                                         ></v-select>
@@ -84,20 +84,7 @@
                                 <span v-if="!$v.travaille.required">Veuillez remplir ce champs !</span>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="type_travaille">Type de travaille</label>
-                            <select v-model="type_travaille" class="form-control">
-                                <option value="">Choisir le type de travaille</option>
-                                <option value="C">C</option>
-                                <option value="S">S</option>
-                                <option value="CS">CS</option>
-                                <option value="PS">PS</option>
-                            </select>
-                            <div class="valid-feedback">Validé</div>
-                            <div class="invalid-feedback">
-                                <span v-if="!$v.type_travaille.required">Veuillez remplir ce champs !</span>
-                            </div>
-                        </div>
+
                         <div class="form-group">
                             <template v-if="id.zone == 'Assemblage'">
                                 <label for="num_planche">Num Planche</label>
@@ -147,7 +134,6 @@
             code_panne: '',
             num_planche: '',
             options:[],
-            type_travaille: '',
             nom_support:'',
             hist: this.id,
             document:''
@@ -176,7 +162,6 @@
             piece_rechange: this.piece_rechange,
             code_panne: this.code_panne,
             num_planche: this.num_planche,
-            type_travaille: this.type_travaille,
             nom_support: this.nom_support
         })
         .then(response => this.$emit('historique-updated',response))
@@ -194,9 +179,7 @@
       },
     },
     validations: {
-        type_travaille:{
-            required
-        },
+
         travaille: {
             required
         },

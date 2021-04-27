@@ -27,12 +27,6 @@
           <div class="card-body">
             <div class="row">
               <div class="col">
-                <div class="from-group">
-                  <label>Nom</label>
-                  <input @keyup="search" type="text" v-model="qNom" class="form-control" placeholder="Nom Machine">
-                </div>
-              </div>
-              <div class="col">
                 <div class="form-group">
                   <label>Code Machine</label>
                   <input @keyup="search" type="text" v-model="qCodeMachine" class="form-control" placeholder="Code Machine">
@@ -56,14 +50,28 @@
               <div class="col">
                 <div class="from-group">
                   <label>Désignation</label>
-                    <input @keyup="search" type="text" v-model="qDesignation" class="form-control" placeholder="Désignation">
+                  <input @keyup="search" type="text" v-model="qDesignation" class="form-control" placeholder="Désignation">
                 </div>
               </div>
               <div class="col">
                 <div class="form-group">
-                <label>N° serie</label>
+                  <label>N° serie</label>
                   <input @keyup="search" type="text" v-model="qNserie" class="form-control" placeholder="N° serie">
+                </div>
               </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="from-group">
+                  <label>Categorie</label>
+                  <input @keyup="search" type="text" v-model="qCategorie" class="form-control" placeholder="Categorie">
+                </div>
+              </div>
+              <div class="col">
+                <div class="from-group">
+                  <label>Constructeur</label>
+                  <input @keyup="search" type="text" v-model="qConstructeur" class="form-control" placeholder="Constructeur">
+                </div>
               </div>
             </div>
           </div>
@@ -209,10 +217,11 @@
         equipements: {},
         equipementToEdit: '',
         q: new FormData(),
+        qCategorie:'',
         qDesignation: '',
         qZone: '',
         qNserie: '',
-        qNom: '',
+        qConstructeur: '',
         qCodeMachine: '',
         hidden: 'true',
         id:'',
@@ -260,7 +269,7 @@
         });
       },
       refreshDoc(){
-        console.log('trigred');
+        console.log('triggred');
         this.document = '';
       },
       getDocuments(id,type){
@@ -316,7 +325,8 @@
         }
       },
       search(){
-        this.q.append('nom', this.qNom);
+        this.q.append('code_categorie', this.qCategorie);
+        this.q.append('constructeur', this.qConstructeur);
         this.q.append('zone', this.qZone);
         this.q.append('designation', this.qDesignation);
         this.q.append('n_serie', this.qNserie);

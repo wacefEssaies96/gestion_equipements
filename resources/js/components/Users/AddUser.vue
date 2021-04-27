@@ -1,7 +1,7 @@
 <template>
   <!-- Modal -->
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="exampleModalCenterTitle">Ajouter un nouveau utilisateur</h5>
@@ -39,14 +39,14 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="prenom">Prénom</label>
-                    <input type="text" class="form-control" placeholder="Prénom" v-model="prenom"
-                    :class="{'is-invalid':(prenom != '') ?$v.prenom.$invalid:'', 'is-valid':!$v.prenom.$invalid}">
-                    <div class="valid-feedback">Prénom valide</div>
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" placeholder="Email" v-model="email"
+                    :class="{'is-invalid':(email!='') ? $v.email.$invalid:'', 'is-valid':!$v.email.$invalid}">
+                    <div class="valid-feedback">Email valide</div>
                     <div class="invalid-feedback">
-                      <span v-if="!$v.prenom.required">Veuillez entrer un prénom !</span>
-                      <span v-if="!$v.prenom.minLength">Veuillez entrer au moins 3 caractères !</span>
-                      <span v-if="!$v.prenom.maxLength">Maximum 15 caractères !</span>
+                      <span v-if="!$v.email.required">Veuillez entrer un email !</span>
+                      <span v-if="!$v.email.isUnique">Veuillez entrer un email valide !</span>
+                      <span v-if="!$v.email.isValid">Email déja existant !</span>
                     </div>
                   </div>
                 </div>
@@ -64,6 +64,17 @@
                     </div>
                   </div>
                   <div class="form-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" class="form-control" placeholder="Prénom" v-model="prenom"
+                    :class="{'is-invalid':(prenom != '') ?$v.prenom.$invalid:'', 'is-valid':!$v.prenom.$invalid}">
+                    <div class="valid-feedback">Prénom valide</div>
+                    <div class="invalid-feedback">
+                      <span v-if="!$v.prenom.required">Veuillez entrer un prénom !</span>
+                      <span v-if="!$v.prenom.minLength">Veuillez entrer au moins 3 caractères !</span>
+                      <span v-if="!$v.prenom.maxLength">Maximum 15 caractères !</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label for="tel">Role</label>
                     <select type="text" class="form-control" v-model="role" @change="loadcode"
                     :class="{'is-invalid':(role != '') ?$v.role.$invalid:'', 'is-valid':!$v.role.$invalid}">
@@ -77,85 +88,80 @@
                       <span v-if="!$v.role.required">Veuillez assigner un role !</span>
                     </div>
                   </div>
+
                 </div>
+                  
               </div>
-              <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" placeholder="Email" v-model="email"
-                    :class="{'is-invalid':(email!='') ? $v.email.$invalid:'', 'is-valid':!$v.email.$invalid}">
-                    <div class="valid-feedback">Email valide</div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="mdp">Mot de passe</label>
+                    <input type="password" class="form-control" placeholder="Mot de passe" v-model="password"
+                    :class="{'is-invalid':(password != '') ? $v.password.$invalid: '', 'is-valid': !$v.password.$invalid}" >
+                    <div class="valid-feedback">Mot de passe valide</div>
                     <div class="invalid-feedback">
-                      <span v-if="!$v.email.required">Veuillez entrer un email !</span>
-                      <span v-if="!$v.email.isUnique">Veuillez entrer un email valide !</span>
-                      <span v-if="!$v.email.isValid">Email déja existant !</span>
+                      <span v-if="!$v.password.required">Veuillez entrer un mot de passe !</span>
+                      <span v-if="!$v.password.minLength">Veuillez entrer au moins 6 caractères !</span>
+                      <span v-if="!$v.password.maxLength">Maximum 15 caractères !</span>
                     </div>
                   </div>
-                  <template v-if="role == 'TECHNICIEN'">
-                        <div class="form-group">
-                            <label for="qualification">Qualification</label>
-                            <textarea id="qualification" class="form-control" placeholder="qualification" v-model="qualification"
-                            :class="{'is-invalid':(qualification != '') ?$v.qualification.$invalid:''}"></textarea>
-                            <!-- <div class="valid-feedback">Validé</div> -->
-                            <div class="invalid-feedback">
-                                <span v-if="!$v.qualification.required">Veuillez remplir ce champs !</span>
-                                <span v-if="!$v.qualification.minLength">Veuillez entrer au moins 3 caractères !</span>
-                                <span v-if="!$v.qualification.maxLength">Maximum 190 caractères !</span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="poste">Poste</label>
-                            <select class="form-control" v-model="poste"
-                            :class="{'is-invalid':(poste != '') ?$v.poste.$invalid:''}">
-                              <option value="1">1</option>
-                              <option value="2">2</option>
-                              <option value="3">3</option>
-                            </select>
-                            <!-- <div class="valid-feedback">Validé</div> -->
-                            <div class="invalid-feedback">
-                                <span v-if="!$v.poste.required">Veuillez remplir ce champs !</span>
-                                
-                            </div>
-                        </div>
-                       
-                        <div class="form-group">
-                            <label for="zone">Zone</label>
-                            <select class="form-control" v-model="zone"
-                            :class="{'is-invalid':(zone != '') ? $v.zone.$invalid:''}">
-                                <option value="Assemblage">Assemblage</option>
-                                <option value="Sertissage">Sertissage</option>
-                                <option value="Préparation">Préparation</option>
-                                <option value="Coupe">Coupe</option>
-                                <option value="Controle éléctrique">Controle éléctrique</option>
-                            </select>
-                            <!-- <div class="valid-feedback">Zone validé</div> -->
-                            <div class="invalid-feedback">
-                                <span v-if="!$v.zone.required">Veuillez choisir une zone !</span>
-                            </div>
-                        </div> 
-                  </template>
-              <div class="form-group">
-                <label for="mdp">Mot de passe</label>
-                <input type="password" class="form-control" placeholder="Mot de passe" v-model="password"
-                :class="{'is-invalid':(password != '') ? $v.password.$invalid: '', 'is-valid': !$v.password.$invalid}" >
-                <div class="valid-feedback">Mot de passe valide</div>
-                <div class="invalid-feedback">
-                  <span v-if="!$v.password.required">Veuillez entrer un mot de passe !</span>
-                  <span v-if="!$v.password.minLength">Veuillez entrer au moins 6 caractères !</span>
-                  <span v-if="!$v.password.maxLength">Maximum 15 caractères !</span>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="mdp">Répéter le mot de passe</label>
+                    <input type="password" class="form-control" placeholder="Répéter le mot de passe" v-model="repeatPassword"
+                    :class="{'is-invalid':$v.repeatPassword.$invalid, 'is-valid': (password != '') ? !$v.repeatPassword.$invalid : '' }" >
+                    <div class="valid-feedback">Mot de passe identique !</div>
+                    <div class="invalid-feedback">
+                      <span v-if="!$v.repeatPassword.sameAsPassword">Les mots de passes doivent être identique !</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="form-group">
-                <label for="mdp">Répéter le mot de passe</label>
-                <input type="password" class="form-control" placeholder="Répéter le mot de passe" v-model="repeatPassword"
-                :class="{'is-invalid':$v.repeatPassword.$invalid, 'is-valid': (password != '') ? !$v.repeatPassword.$invalid : '' }" >
-                <div class="valid-feedback">Mot de passe identique !</div>
-                <div class="invalid-feedback">
-                  <span v-if="!$v.repeatPassword.sameAsPassword">Les mots de passes doivent être identique !</span>
+              <template v-if="role == 'TECHNICIEN'">
+                <div class="form-group">
+                  <label for="qualification">Qualification</label>
+                  <textarea id="qualification" class="form-control" placeholder="qualification" v-model="qualification"
+                  :class="{'is-invalid':(qualification != '') ?$v.qualification.$invalid:''}"></textarea>
+                  <!-- <div class="valid-feedback">Validé</div> -->
+                  <div class="invalid-feedback">
+                      <span v-if="!$v.qualification.required">Veuillez remplir ce champs !</span>
+                      <span v-if="!$v.qualification.minLength">Veuillez entrer au moins 3 caractères !</span>
+                      <span v-if="!$v.qualification.maxLength">Maximum 190 caractères !</span>
+                  </div>
                 </div>
-              </div>
+                <div class="form-group">
+                  <label for="poste">Poste</label>
+                  <select class="form-control" v-model="poste"
+                  :class="{'is-invalid':(poste != '') ?$v.poste.$invalid:''}">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                  <!-- <div class="valid-feedback">Validé</div> -->
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.poste.required">Veuillez remplir ce champs !</span>
+                  </div>
+                </div>
+                    
+                <div class="form-group">
+                  <label for="zone">Zone</label>
+                  <select class="form-control" v-model="zone"
+                  :class="{'is-invalid':(zone != '') ? $v.zone.$invalid:''}">
+                    <option value="Assemblage">Assemblage</option>
+                    <option value="Sertissage">Sertissage</option>
+                    <option value="Préparation">Préparation</option>
+                    <option value="Coupe">Coupe</option>
+                    <option value="Controle éléctrique">Controle éléctrique</option>
+                  </select>
+                  <!-- <div class="valid-feedback">Zone validé</div> -->
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.zone.required">Veuillez choisir une zone !</span>
+                  </div>
+                </div> 
+              </template>
             </div>
             <!-- /.card-body -->
-
             <div class="card-footer">
               <button type="submit" class="btn btn-primary">Confirmer</button>
             </div>

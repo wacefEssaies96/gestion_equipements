@@ -109,6 +109,7 @@
           <thead>
             <tr>
               <th>Num Bt</th>
+              <th>Jour</th>
               <th>Heure de demande</th>
               <th>Heure de début</th>
               <th>Heure de fin</th>
@@ -129,6 +130,7 @@
           <tbody>
             <tr v-for="historique in historiques.data" :key="historique.id">
               <td>{{ historique.id }}</td>
+              <td>{{ historique.jour }}</td>
               <td>{{ historique.heure_demande }}</td>
               <td>{{ historique.heure_debut }}</td>
               <td>{{ historique.heure_fin }}</td>

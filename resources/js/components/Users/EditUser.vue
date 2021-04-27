@@ -166,8 +166,6 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             zone: '',
             role:'',
             qualification: '',
-            // h_debut_service: '',
-            // h_fin_service: '',
             password: '',
             repeatPassword: '',
             hidden: 'true',
@@ -180,11 +178,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
             this.email = newVal.email;
             this.role = newVal.role;
             this.tel = newVal.tel;
-            this.password = '';
-            this.repeatPassword = '';
             this.qualification = newVal.qualification;
-            // this.h_debut_service = newVal.h_debut_service;
-            // this.h_fin_service = newVal.h_fin_service;
             this.zone = newVal.zone;
           },
 
@@ -201,14 +195,11 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
               email: this.email,
               role: this.role,
               password: this.password,
-              // h_debut_service: this.h_debut_service,
-              // h_fin_service: this.h_fin_service,
               zone: this.zone,
               qualification: this.qualification
             })
             .then(response => {
                 this.$emit('user-updated',response)
-                console.log(response.data);
             })
             .catch(error => console.log(error));
             this.changermdp('true');

@@ -134,7 +134,7 @@
             </tr>
           </tbody>
         </table>
-        <pagination class="m-auto" :data="users" @pagination-change-page="getResults"></pagination>
+        <!-- <pagination class="m-auto" :limit="5" :data="users" @pagination-change-page="getResults"></pagination> -->
       </div>
     <!-- /.card-body -->
     </div>
@@ -201,7 +201,7 @@
         },
         search(){
           this.q.append('role', this.qRole);
-           this.q.append('code', this.qCode);
+          this.q.append('code', this.qCode);
           this.q.append('nom', this.qNom);
           this.q.append('prenom', this.qPrenom);
           this.q.append('tel', this.qTel);

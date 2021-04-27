@@ -60,7 +60,6 @@
                                             <div class="valid-feedback">emplacement valide</div>
                                             <div class="invalid-feedback">
                                                 <span v-if="!$v.emplacement.required">Veuillez entrer un emplacement !</span>
-                                                <span v-if="!$v.emplacement.minLength">Veuillez entrer au moins 3 caractères !</span>
                                                 <span v-if="!$v.emplacement.maxLength">Maximum 15 caractères !</span>
                                             </div>
                                         </div>
@@ -316,7 +315,6 @@ export default {
     validations: {
         emplacement: {
             required,
-            minLength: minLength('3'),
             maxLength: maxLength('15')
         },
         code: {

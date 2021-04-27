@@ -42,8 +42,11 @@ class EquipementController extends Controller
         if($request->zone != ''){
             $equip = $equip->where('zone', '=', request('zone'));
         }
-        if($request->nom != ''){
-            $equip = $equip->where('nom', 'like', '%'.request('nom').'%');
+        if($request->constructeur != ''){
+            $equip = $equip->where('constructeur', 'like', '%'.request('constructeur').'%');
+        }
+        if($request->code_categorie != ''){
+            $equip = $equip->where('code_categorie', 'like', '%'.request('code_categorie').'%');
         }
         if($request->n_serie != ''){
             $equip = $equip->where('n_serie', 'like', '%'.request('n_serie').'%');

@@ -111,7 +111,7 @@
                         <label for="code_panne">Code panne</label>
                         <v-select v-model="code_panne" :multiple="true" 
                             :options="c" 
-                            :get-option-label='option => option.code'
+                            :get-option-label="option => option.code+' '+option.designation"
                             :reduce='option => option.id'></v-select>
                       </div> 
                     </div>

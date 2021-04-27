@@ -85,10 +85,9 @@ class UserController extends Controller
         $user->role = request('role');
         $user->save();
         $this->createPersonel($request,$user->id);
+
+        return $this->refresh();  
         
-        if($user->role != 'TECHNICIEN'){
-            return $this->refresh();  
-        }
     }
     
     public function update($id){

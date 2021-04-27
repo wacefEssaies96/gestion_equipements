@@ -35,6 +35,8 @@ class HistoriqueController extends Controller
     public function liste(Request $request)
     {
         $hist = Historique::where('historiques.id','like','%'.request('num_bt').'%');
+        $hist = $hist->join('equipements','historiques.code_equip', '=', 'equipements.id')
+        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code');
         if($request->zone != ''){
             $hist = $hist->where('historiques.zone', '=', request('zone'));
         }
@@ -44,15 +46,20 @@ class HistoriqueController extends Controller
         if($request->tech_id != null){
             $hist = $hist->where('historiques.tech_id', '=', request('tech_id'));
         }
-        if($request->jour != ''){
-            $hist = $hist->whereDate('historiques.jour', request('jour'));
+        if($request->date_debut != ''){
+            $hist = $hist->whereTime('historiques.heure_debut', request('date_debut'));
+        }
+        if($request->date_fin != ''){
+            $hist = $hist->whereTime('historiques.heure_fin', request('date_fin'));
         }
         if($request->code_categorie != ''){
-            $hist = $hist->where('equipements.code_categorie', request('code_categorie'));
+            $hist = $hist->where('equipements.code_categorie','like', '%'.request('code_categorie').'%');
         }
-        $hist = $hist->join('equipements','historiques.code_equip', '=', 'equipements.id')
-        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code')
-        ->paginate(10);
+        if($request->code_equip != ''){
+            $hist = $hist->where('equipements.code','like','%'.request('code_equip').'%');
+        }
+       
+        $hist = $hist->paginate(10);
         return response()->json($hist);
     }
     public function listeHotline(Request $request)
@@ -174,7 +181,6 @@ class HistoriqueController extends Controller
         $hist->travaille = request('travaille');
         $hist->piece_rechange = request('piece_rechange');
         $hist->appelle = 'Cloturé';
-        $hist->type_travaille = request('type_travaille');
         $hist->save();
         $userid = Auth::id();
         $technicien = Technicien::where('user_id', '=', $userid)->first();
