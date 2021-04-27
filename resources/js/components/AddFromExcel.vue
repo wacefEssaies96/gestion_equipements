@@ -4,6 +4,8 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
+                        <div :class="{'overlay':l}"><!--class="overlay" -->
+                        <i :class="{'fas fa-2x fa-sync fa-spin':l}"></i><!--class="fas fa-2x fa-sync fa-spin" --></div>
                         <h5 class="modal-title" id="addFromExcelTitle">Ajouter des données via un fichier excel</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -31,7 +33,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button hidden type="submit" id="submitAddFile" class="btn btn-primary" @click="storeFile" data-dismiss="modal"></button>
+                        <button type="submit" hidden id="closeModal" data-dismiss="modal"></button>
+                        <button hidden type="submit" id="submitAddFile" class="btn btn-primary" @click="storeFile"></button>
                     </div>
                 </div>   
             </div>
@@ -43,6 +46,7 @@ export default {
     data(){
         return{
             file: null,
+            l: false,
         }
     },
 
@@ -54,17 +58,26 @@ export default {
             this.file = e.target.files[0];
         },
         storeFile(){
+            this.l = true;
             let form = new FormData();
             form.append('file', this.file);
             const config= {headers:{'Content-Type': 'multipart/form-data'}};
             if(this.type == "codePanne"){
                 axios.post('/code-pannes/excel',form ,config)
-                .then(response => this.$emit('codePanne-added',response))
+                .then(response => {
+                    this.$emit('codePanne-added',response)
+                    this.l = false;     
+                    document.getElementById('closeModal').click();
+                })
                 .catch(error => console.log(error));
             }
             if(this.type == "equipement"){
                 axios.post('/equipements/excel',form ,config)
-                .then(response => this.$emit('codePanne-added',response))
+                .then(response => {
+                    this.$emit('codePanne-added',response)
+                    this.l = false; 
+                    document.getElementById('closeModal').click();
+                })
                 .catch(error => console.log(error));
             }
         }
