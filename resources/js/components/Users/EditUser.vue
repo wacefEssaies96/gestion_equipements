@@ -19,100 +19,121 @@
               <!-- form start -->
               <form @submit.prevent="checkEditForm">
                     <div class="card-body">
-                        <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="nom">Nom</label>
-                                <input type="text" class="form-control" placeholder="Nom" v-model="nom" 
-                                    :class="{'is-invalid':$v.nom.$invalid,'is-valid':!$v.nom.$invalid}">
-                                <div class="valid-feedback">Nom valide</div>
-                                <div class="invalid-feedback">
-                                    <span v-if="!$v.nom.required">Veuillez entrer un nom !</span>
-                                    <span v-if="!$v.nom.minLength">Veuillez entrer au moins 3 caractères !</span>
-                                    <span v-if="!$v.nom.maxLength">Maximum 15 caractères !</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                            <label for="prenom">Prénom</label>
-                            <input type="text" class="form-control" placeholder="Prénom" v-model="prenom"
-                            :class="{'is-invalid':$v.prenom.$invalid, 'is-valid':!$v.prenom.$invalid}">
-                            <div class="valid-feedback">Prénom valide</div>
-                            <div class="invalid-feedback">
-                                <span v-if="!$v.prenom.required">Veuillez entrer un prénom !</span>
-                                <span v-if="!$v.prenom.minLength">Veuillez entrer au moins 3 caractères !</span>
-                                <span v-if="!$v.prenom.maxLength">Maximum 15 caractères !</span>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                            <label for="tel">Téléphone</label>
-                            <input type="text" class="form-control" placeholder="Numéro de téléphone" v-model="tel"
-                            :class="{'is-invalid':$v.tel.$invalid, 'is-valid':!$v.tel.$invalid}">
-                            <div class="valid-feedback">Numéro de téléphone valide</div>
-                            <div class="invalid-feedback">
-                                <span v-if="!$v.tel.required">Veuillez entrer un numéro de téléphone !</span>
-                                <span v-if="!$v.tel.isUnique">Veuillez entrer seulement des chiffres !</span>
-                                <span v-if="!$v.tel.minLength">Veuillez entrer 8 chiffre ! (********)</span>
-                                <span v-if="!$v.tel.maxLength">Veuillez entrer 8 chiffre ! (********)</span>
-                            </div>
-                            </div>
-                             <div class="form-group">
-                                <label for="role">Role</label>
-                                <select class="form-control" v-model="role"
-                                :class="{'is-invalid':(role != '') ?$v.role.$invalid:'', 'is-valid':!$v.role.$invalid}">
-                                  <option value="TECHNICIEN">Technicien</option>
-                                  <option value="PRODUCTION">Production</option>
-                                  <option value="HOTLINE">Hotline</option>
-                                  <option value="RESPONSABLE">Responsable</option>
-                                </select>
-                                <div class="valid-feedback">Role valide</div>
-                                <div class="invalid-feedback">
-                                <span v-if="!$v.role.required">Veuillez assigner un role !</span>
-                                </div>
-                            </div>
+                    <div class="row">
+                <div class="col-sm-6">
+                   <div class="form-group">
+                    <label for="code">Code</label>
+                    <input type="text" class="form-control" placeholder="Code" disabled="true" v-model="code"
+                      :class="{'is-invalid':(code != '') ? $v.code.$invalid:''}">
+                    
+                  </div>
+                  <div class="form-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" class="form-control" placeholder="Nom" v-model="nom" 
+                      :class="{'is-invalid':(nom != '') ? $v.nom.$invalid:'','is-valid':!$v.nom.$invalid}">
+                    <div class="valid-feedback">Nom valide</div>
+                    <div class="invalid-feedback">
+                      <span v-if="!$v.nom.required">Veuillez entrer un nom !</span>
+                      <span v-if="!$v.nom.minLength">Veuillez entrer au moins 3 caractères !</span>
+                      <span v-if="!$v.nom.maxLength">Maximum 15 caractères !</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" placeholder="Email" v-model="email"
+                    :class="{'is-invalid':(email!='') ? $v.email.$invalid:'', 'is-valid':!$v.email.$invalid}">
+                    <div class="valid-feedback">Email valide</div>
+                    <div class="invalid-feedback">
+                      <span v-if="!$v.email.required">Veuillez entrer un email !</span>
+                      <span v-if="!$v.email.isUnique">Veuillez entrer un email valide !</span>
+                      <span v-if="!$v.email.isValid">Email déja existant !</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="tel">Téléphone</label>
+                    <input type="text" class="form-control" placeholder="Numéro de téléphone" v-model="tel"
+                    :class="{'is-invalid':(tel != '') ?$v.tel.$invalid:'', 'is-valid':!$v.tel.$invalid}">
+                    <div class="valid-feedback">Numéro de téléphone valide</div>
+                    <div class="invalid-feedback">
+                      <span v-if="!$v.tel.required">Veuillez entrer un numéro de téléphone !</span>
+                      <span v-if="!$v.tel.isUnique">Veuillez entrer seulement des chiffres !</span>
+                      <span v-if="!$v.tel.minLength">Veuillez entrer 8 chiffre ! (********)</span>
+                      <span v-if="!$v.tel.maxLength">Veuillez entrer 8 chiffre ! (********)</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" class="form-control" placeholder="Prénom" v-model="prenom"
+                    :class="{'is-invalid':(prenom != '') ?$v.prenom.$invalid:'', 'is-valid':!$v.prenom.$invalid}">
+                    <div class="valid-feedback">Prénom valide</div>
+                    <div class="invalid-feedback">
+                      <span v-if="!$v.prenom.required">Veuillez entrer un prénom !</span>
+                      <span v-if="!$v.prenom.minLength">Veuillez entrer au moins 3 caractères !</span>
+                      <span v-if="!$v.prenom.maxLength">Maximum 15 caractères !</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="tel">Role</label>
+                    <select type="text" class="form-control" v-model="role"
+                    :class="{'is-invalid':(role != '') ?$v.role.$invalid:'', 'is-valid':!$v.role.$invalid}">
+                      <option value="TECHNICIEN">Technicien</option>
+                      <option value="PRODUCTION">Production</option>
+                      <option value="HOTLINE">Hotline</option>
+                      <option value="RESPONSABLE">Responsable</option>
+                    </select>
+                    <div class="valid-feedback">Role valide</div>
+                    <div class="invalid-feedback">
+                      <span v-if="!$v.role.required">Veuillez assigner un role !</span>
+                    </div>
+                  </div>
 
-                        </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" placeholder="Email" v-model="email"
-                            :class="{'is-invalid':$v.email.$invalid, 'is-valid':!$v.email.$invalid}">
-                            <div class="valid-feedback">Email valide</div>
-                            <div class="invalid-feedback">
-                                <span v-if="!$v.email.required">Veuillez entrer un email !</span>
-                                <span v-if="!$v.email.isUnique">Veuillez entrer un email valide !</span>
-                            </div>
-                        </div>
-                        <template v-if="role == 'TECHNICIEN'">
-                        <div class="form-group">
-                            <label for="qualification">Qualification</label>
-                            <textarea class="form-control" placeholder="qualification" v-model="qualification"
-                            :class="{'is-invalid':$v.qualification.$invalid}"></textarea>
-                            <!-- <div class="valid-feedback">Validé</div> -->
-                            <div class="invalid-feedback">
-                                <span v-if="!$v.qualification.required">Veuillez remplir ce champs !</span>
-                                <span v-if="!$v.qualification.minLength">Veuillez entrer au moins 3 caractères !</span>
-                                <span v-if="!$v.qualification.maxLength">Maximum 190 caractères !</span>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="zone">Zone</label>
-                            <select class="form-control" v-model="zone"
-                            :class="{'is-invalid':$v.zone.$invalid}">
-                                <option value="Assemblage">Assemblage</option>
-                                <option value="Sertissage">Sertissage</option>
-                                <option value="Préparation">Préparation</option>
-                                <option value="Coupe">Coupe</option>
-                                <option value="Controle éléctrique">Controle éléctrique</option>
-                            </select>
-                            <!-- <div class="valid-feedback">Zone validé</div> -->
-                            <div class="invalid-feedback">
-                                <span v-if="!$v.password.required">Veuillez choisir une zone !</span>
-                            </div>
-                        </div> 
-                        </template>
+                </div>
+                  
+              </div>
+                          <template v-if="role == 'TECHNICIEN'">
+                <div class="form-group">
+                  <label for="qualification">Qualification</label>
+                  <textarea  class="form-control" placeholder="qualification" v-model="qualification"
+                  :class="{'is-invalid':(qualification != '') ?$v.qualification.$invalid:''}"></textarea>
+                  <!-- <div class="valid-feedback">Validé</div> -->
+                  <div class="invalid-feedback">
+                      <span v-if="!$v.qualification.required">Veuillez remplir ce champs !</span>
+                      <span v-if="!$v.qualification.minLength">Veuillez entrer au moins 3 caractères !</span>
+                      <span v-if="!$v.qualification.maxLength">Maximum 190 caractères !</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="poste">Poste</label>
+                  <select class="form-control" v-model="poste"
+                  :class="{'is-invalid':(poste != '') ?$v.poste.$invalid:''}">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                  <!-- <div class="valid-feedback">Validé</div> -->
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.poste.required">Veuillez remplir ce champs !</span>
+                  </div>
+                </div>
+                    
+                <div class="form-group">
+                  <label for="zone">Zone</label>
+                  <select class="form-control" v-model="zone"
+                  :class="{'is-invalid':(zone != '') ? $v.zone.$invalid:''}">
+                    <option value="Assemblage">Assemblage</option>
+                    <option value="Sertissage">Sertissage</option>
+                    <option value="Préparation">Préparation</option>
+                    <option value="Coupe">Coupe</option>
+                    <option value="Controle éléctrique">Controle éléctrique</option>
+                  </select>
+                  <!-- <div class="valid-feedback">Zone validé</div> -->
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.zone.required">Veuillez choisir une zone !</span>
+                  </div>
+                </div> 
+              </template>
                       <a href="#" @click="changermdp('false')">Changer le mot de passe</a>
                   <template v-if="hidden === 'false'">
                     <div class="form-group">
@@ -159,12 +180,14 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
       props: ['userToEdit'],
       data: function(){
           return{
+            code: '',
             nom: '',
             prenom: '',
             email: '',
             tel: '',
             zone: '',
             role:'',
+            poste:'',
             qualification: '',
             password: '',
             repeatPassword: '',
@@ -173,11 +196,13 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
         },
         watch:{
           userToEdit(newVal){
+            this.code = newVal.code;
             this.nom = newVal.nom;
             this.prenom = newVal.prenom;
             this.email = newVal.email;
             this.role = newVal.role;
             this.tel = newVal.tel;
+            this.poste = newVal.poste;
             this.qualification = newVal.qualification;
             this.zone = newVal.zone;
           },
@@ -189,6 +214,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
           },
           update(){
             axios.patch('/users/edit/' + this.userToEdit.id, {
+              code: this.code,
               nom: this.nom,
               prenom: this.prenom,
               tel: this.tel,
@@ -196,6 +222,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
               role: this.role,
               password: this.password,
               zone: this.zone,
+              poste: this.poste,
               qualification: this.qualification
             })
             .then(response => {
@@ -215,6 +242,9 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
           },
       },
       validations: {
+         code: {
+
+         },
           nom: {
             required,
             minLength: minLength('3'),
@@ -233,12 +263,9 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
           zone: {
             //   required
           },
-          // h_debut_service: {
-          //   //   required
-          // },
-          // h_fin_service: {
-          //   //   required
-          // },
+          poste: {
+            //   required
+          },
           role: {
               required
           },

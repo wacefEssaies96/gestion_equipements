@@ -56,6 +56,10 @@
                             <h5>zone</h5>
                             <p class="text-secondary">{{userShow.zone}}</p>
                         </div>
+                         <div class="col-6">
+                            <h5>Poste</h5>
+                            <p class="text-secondary">{{userShow.poste}}</p>
+                        </div>
                         <div class="col-6">
                             <h5>Qualification</h5>
                             <p class="text-secondary">{{userShow.qualification}}</p>
