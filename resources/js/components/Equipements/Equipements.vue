@@ -81,20 +81,28 @@
         <h3 class="card-title">Liste de tous les equipements</h3>
         <div class="card-tools">
           <template v-if="accessData.userName == null">
-            <a href="/signin" class="btn btn-outline-info"><i class="nav-icon fas fa-cloud"></i> Se connecter à OneDrive</a> 
+            <a href="/signin" class="btn btn-success">
+              <i class="fas fa-sign-in-alt" title="Se connecter à OneDrive"/>
+              <i class="nav-icon fas fa-cloud"/>
+            </a> 
           </template>
           <template v-if="accessData.userName != null">
-            <h4>Bienvenue  {{ accessData.userName }} !</h4>
-            <a href="/signout" class="btn btn-outline-info">Se déconnecter de OneDrive</a>
-            <button class="btn btn-outline-info" data-toggle="modal" data-target="#addList">Ajouter via Onedrive</button>
+            <h4 class="font-weight-bold text-success">Bienvenue <u> {{ accessData.userName }}  ! </u></h4>
+            <a href="/signout" class="btn btn-danger">
+              <i class="fas fa-sign-out-alt" title="Se déconnecter de OneDrive"></i>
+              <i class="nav-icon fas fa-cloud"/>
+            </a>
+            <button class="btn btn-outline-info" data-toggle="modal" data-target="#addList">
+              <i class="fas fa-file-download" title="Ajouter via Onedrive"></i>
+            </button>
             <AddList @list-added="refreshAdded"></AddList>
           </template>
-          <button @click="exportData()" class="btn btn-outline-info">
-            Exporter les données
+          <button @click="exportData()" class="btn btn-secondary">
+             <i class="fas fa-download" title="Exporter les données"></i>
           </button>
           <!-- Button trigger modal -->
-          <button class="btn btn-outline-info" data-toggle="modal" data-target="#addFromExcel">
-          Ajouter via fichier excel
+          <button class="btn btn-secondary" data-toggle="modal" data-target="#addFromExcel">
+            <i class="fas fa-upload" title="Ajouter via fichier excel"></i>
           </button>
         <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
         Ajouter un nouveau equipement

@@ -85,7 +85,7 @@
               <router-link to="/hist-admin" class="nav-link">
                 <i class="nav-icon fas fa-history"></i>
                 <p>
-                  Historiques
+                  Interventions
                 </p>
               </router-link>
             </li>
@@ -95,7 +95,7 @@
             <router-link to="/hist-hotline" class="nav-link">
               <i class="nav-icon fas fa-history"></i>
               <p>
-                Historiques
+                Interventions
               </p>
             </router-link>
           </li>
@@ -105,7 +105,7 @@
             <router-link to="/hist-technicien" class="nav-link">
               <i class="nav-icon fas fa-history"></i>
               <p>
-                Historiques
+                Interventions
               </p>
             </router-link>
           </li>
