@@ -110,7 +110,7 @@
             </router-link>
           </li>
           @endif
-          @if (Auth::user()->role == "PRODUCTION")
+          @if (Auth::user()->role == "PRODUCTION" || Auth::user()->role == "ADMIN")
           <li class="nav-item">
             <router-link to='/feedbacks' class="nav-link">
             <i class="nav-icon far fa-comment-alt"></i>

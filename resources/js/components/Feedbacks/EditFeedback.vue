@@ -21,15 +21,7 @@
                  <div class="card-body">
                         <div class="row">
                           <div class="col-sm-6">
-                            <div class="form-group">
-                          <label for="jour">Jour</label>
-                          <input type="date" class="form-control" placeholder="Jour" v-model="jour"
-                          :class="{'is-invalid':$v.jour.$invalid, 'is-valid':!$v.jour.$invalid}">
-                          <div class="valid-feedback">Jour validé</div>
-                          <div class="invalid-feedback">
-                            <span v-if="!$v.jour.required">Veuillez remplir ce champs !</span>
-                          </div>
-                        </div>
+
                            <div class="form-group">
                             <label for="zone">Zone</label>
                             <select class="form-control" v-model="zone"
@@ -52,7 +44,7 @@
                               <select class="form-control" v-model="code_machine"
                               :class="{'is-invalid':$v.code_machine.$invalid, 'is-valid':!$v.code_machine.$invalid}">
                                   <option v-for="equipement in e" :key="equipement.id" :value="equipement.id">
-                                      {{equipement.nom}}
+                                      {{equipement.designation}}
                                   </option>
                               </select>
                             <div class="valid-feedback">equipement validé</div>
@@ -96,7 +88,6 @@ import { required } from 'vuelidate/lib/validators';
       props: ['feedbackToEdit','equipements'],
       data(){
           return{
-            jour: '',
             zone: '',
             e: {},
             commentaire: '',
@@ -105,7 +96,6 @@ import { required } from 'vuelidate/lib/validators';
         },
         watch:{
           feedbackToEdit(newVal){
-            this.jour = newVal.jour;
             this.zone = newVal.zone;
             this.commentaire = newVal.commentaire;
             this.code_machine = newVal.code_equip
@@ -115,9 +105,7 @@ import { required } from 'vuelidate/lib/validators';
           }
         },
        validations: {
-      jour: {
-        required,
-      },
+
       zone: {
         required,
       },
@@ -132,7 +120,6 @@ import { required } from 'vuelidate/lib/validators';
     methods: {
     update(){
       axios.patch('/feedbacks/edit/' + this.feedbackToEdit.id, {
-          jour: this.jour,
           zone: this.zone,
           code_equip: this.code_machine,
           commentaire: this.commentaire,

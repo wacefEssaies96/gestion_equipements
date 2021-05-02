@@ -86,7 +86,7 @@
             <tr v-for="feedback in feedbacks.data" :key="feedback.id">
               <td>{{ feedback.jour}}</td>
               <td>{{ feedback.zone }}</td>
-              <td>{{ feedback.nom }}</td>
+              <td>{{ feedback.designation }}</td>
               <td>{{ feedback.commentaire }}</td>
               <td>
                 <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getFeedback(feedback.id)">
@@ -137,9 +137,6 @@
         }
       },
       created(){
-        if(this.user.role != 'PRODUCTION'){
-          this.$router.push('/');
-        }
         axios.get("/feedbacks/liste")
         .then(response => {
           this.feedbacks = response.data
@@ -170,7 +167,7 @@
         },
 
         setId(id){
-            this.id = id
+          this.id = id
         },
         toast(value){
           this.$swal.fire({

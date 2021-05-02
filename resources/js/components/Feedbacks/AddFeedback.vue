@@ -22,13 +22,7 @@
                  <div class="card-body">
                         
                          <div class="form-group">
-                              <label for="jour">Jour</label>
-                              <input type="date" class="form-control" placeholder="Jour" v-model="jour"
-                              :class="{'is-invalid':(jour != '') ?$v.jour.$invalid:'', 'is-valid':!$v.jour.$invalid}">
-                              <div class="valid-feedback">Jour validé</div>
-                              <div class="invalid-feedback">
-                                <span v-if="!$v.jour.required">Veuillez remplir ce champs !</span>
-                              </div>
+                            
                         
                              <div class="form-group">
                             <label for="zone">Zone</label>
@@ -53,7 +47,7 @@
                             <select class="form-control" v-model="equipement"
                             :class="{'is-invalid':(equipement != '') ? $v.equipement.$invalid:'', 'is-valid':!$v.equipement.$invalid}">
                                 <option v-for="equip in e" :key="equip.id" :value="equip.id">
-                                    {{equip.nom}}
+                                    {{equip.designation}}
                                 </option>
                             </select>
                             <div class="valid-feedback">Equipement validé</div>
@@ -98,7 +92,7 @@ import { required} from 'vuelidate/lib/validators';
   export default {
     data(){
       return{
-        jour: '',
+
         zone: '',
         equipement: '',
         commentaire: '',
@@ -106,9 +100,7 @@ import { required} from 'vuelidate/lib/validators';
       }
     },
     validations: {
-      jour: {
-        required,
-      },
+
       zone: {
         required,
       },
@@ -132,7 +124,7 @@ import { required} from 'vuelidate/lib/validators';
       },
       feedbackStore(){
         axios.post('/feedbacks',{
-            jour: this.jour,
+
             zone: this.zone,
             equipement: this.equipement,
             commentaire: this.commentaire,
@@ -150,7 +142,7 @@ import { required} from 'vuelidate/lib/validators';
         
       },
       refreshData(){
-        this.jour = '';
+
         this.zone = '';
         this.equipement = '';
         this.commentaire= '';

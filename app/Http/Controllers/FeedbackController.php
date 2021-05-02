@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Feedback;
 use App\Equipement;
 use App\Production;
@@ -23,7 +24,7 @@ class FeedbackController extends Controller
     public function store(Request $request)
     {
         $feedback = new Feedback();
-        $feedback->jour= request('jour');
+        $feedback->jour= Carbon::now('Africa/Tunis');
         $feedback->zone = request('zone');
         $feedback->code_equip = request('equipement');
         $feedback->commentaire = request('commentaire');
@@ -42,7 +43,6 @@ class FeedbackController extends Controller
     public function update($id)
     {
         $feedback = Feedback::find($id);
-        $feedback->jour = request('jour');
         $feedback->zone = request('zone');
         $feedback->code_equip = request('code_equip');
         $feedback->commentaire = request('commentaire');
@@ -63,7 +63,7 @@ class FeedbackController extends Controller
     public function refresh(){
         $feedback = Feedback::
         join('equipements', 'code_equip', '=', 'equipements.id')
-        ->select('feedback.*', 'equipements.nom')
+        ->select('feedback.*', 'equipements.designation')
         ->paginate(10);
         return response()->json($feedback);
     }
