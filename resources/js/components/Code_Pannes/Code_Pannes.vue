@@ -58,12 +58,12 @@
       <div class="card-header">
         <h3 class="card-title">Liste de tous les codes pannes</h3>
         <div class="card-tools">
-          <button @click="exportData()" class="btn btn-outline-info">
-            Exporter les données
+          <button @click="exportData()" class="btn btn-secondary">
+            <i class="fas fa-download" title="Exporter les données"></i>
           </button>
           <!-- Button trigger modal -->
-          <button class="btn btn-outline-info" data-toggle="modal" data-target="#addFromExcel">
-          Ajouter via fichier excel
+          <button class="btn btn-secondary" data-toggle="modal" data-target="#addFromExcel">
+            <i class="fas fa-upload" title="Ajouter via fichier excel"></i>
           </button>
           <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
           Ajouter un nouveau code panne

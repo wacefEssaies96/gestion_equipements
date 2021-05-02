@@ -6,12 +6,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Historiques</h1>
+            <h1>Interventions</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
-              <li class="breadcrumb-item active">Historiques</li>
+              <li class="breadcrumb-item active">Interventions</li>
             </ol>
           </div>
         </div>
@@ -20,12 +20,12 @@
     <div>
       <template v-if="hidden == 'false'"
         ><button @click="viewAll('true')">
-          Afficher tous les historiques
+          Afficher tous les interventions
         </button></template
       >
       <template v-if="hidden == 'true'"
         ><button @click="viewAll('false')">
-          Afficher les historiques du hotline
+          Afficher les interventions du hotline
         </button></template
       >
       <template v-if="hidden == 'false'">
@@ -39,7 +39,7 @@
               <div class="row">
                 <div class="col">
                   <div class="from-group">
-                    <label>Num Bt</label>
+                    <label>N°Bt</label>
                     <input
                       @keyup="search('HOTLINE')"
                       type="text"
@@ -147,11 +147,11 @@
           </div>
           </template>
           <div class="card-header">
-            <h3 class="card-title">Liste de tous historiques du hotline</h3>
+            <h3 class="card-title">Liste de tous les interventions d'hotline</h3>
             <div class="card-tools">
               <!-- Button trigger modal -->
               <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
-              Ajouter un nouveau historique
+              Ajouter un nouveau intervention
               </button>
               <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>
             </div>
@@ -164,26 +164,26 @@
             <table class="table table-hover text-nowrap">
               <thead>
                 <tr>
-                  <th>Num Bt</th>
+                  <th>N°Bt</th>
                   <th>Jour</th>
                   <th>Heure de demande</th>
-                  <th>Heure de début</th>
-                  <th>Heure de fin</th>
-                  <th>Heure d'attente</th>
-                  <th>Heure d'arret</th>
-                  <th>Description</th>
+                  <th>Type Travaille</th>
                   <th>Code machine</th>
                   <th>Designation M</th>
+                  <th>N°Serie</th>
                   <th>Emplacement</th>
-                  <th>NSerie</th>
+                  <th>Description</th>
+                  <th>Zone</th>
+                  <th>H.début</th>
+                  <th>H.fin</th>
                   <th>Code panne</th>
                   <th>Designation CP</th>
-                  <th>Type Travaille</th>
-                  <th>Zone</th>
-                  <th>BT cloturé</th>
                   <th>Travaille éffectué</th>
                   <th>Pièce de rechange</th>
-                  <th>Actions</th>
+                  <th>H.d'arret</th>
+                  <th>H.d'attente</th>
+                  <th>BT cloturé</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -194,22 +194,22 @@
                   <td>{{ histHotline.id }}</td>
                   <td>{{ histHotline.jour }}</td>
                   <td>{{ histHotline.heure_demande }}</td>
-                  <td>{{ histHotline.heure_debut }}</td>
-                  <td>{{ histHotline.heure_fin }}</td>
-                  <td>{{ histHotline.heure_attente }}</td>
-                  <td>{{ histHotline.heure_arret }}</td>
-                  <td>{{ histHotline.description_demande }}</td>
+                  <td>{{ histHotline.type_travaille }}</td>
                   <td>{{ histHotline.code_equip }}</td>
                   <td>{{ histHotline.designation }}</td>
-                  <td>{{ histHotline.emplacement }}</td>
                   <td>{{ histHotline.n_serie }}</td>
+                  <td>{{ histHotline.emplacement }}</td>
+                  <td>{{ histHotline.description_demande }}</td>
+                  <td>{{ histHotline.zone }}</td>
+                  <td>{{ histHotline.heure_debut }}</td>
+                  <td>{{ histHotline.heure_fin }}</td>
                   <td>{{ histHotline.codePanne }}</td>
                   <td>{{ histHotline.codePanneDesignation }}</td>
-                  <td>{{ histHotline.type_travaille }}</td>
-                  <td>{{ histHotline.zone }}</td>
-                  <td>{{ histHotline.appelle }}</td>
                   <td>{{ histHotline.travaille }}</td>
                   <td>{{ histHotline.piece_rechange }}</td>
+                  <td>{{ histHotline.heure_arret }}</td>
+                  <td>{{ histHotline.heure_attente }}</td>
+                  <td>{{ histHotline.appelle }}</td>
                   <td>
                     <button
                       type="button"

@@ -6,23 +6,23 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Historiques</h1>
+            <h1>Interventions</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Acceuil</a></li>
-              <li class="breadcrumb-item active">Historiques</li>
+              <li class="breadcrumb-item active">Interventions</li>
             </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
-  <template v-if="hidden == 'false'"><button @click="viewAll('true')">Afficher tous les historiques</button></template>
-  <template v-if="hidden == 'true'"><button @click="viewAll('false')">Afficher les historiques du technicien</button></template>
+  <template v-if="hidden == 'false'"><button @click="viewAll('true')">Afficher tous les interventions</button></template>
+  <template v-if="hidden == 'true'"><button @click="viewAll('false')">Afficher les interventions du technicien</button></template>
     <template v-if="hidden == 'false'">
       <div class="card m-lg-4">
       <div class="card-header">
-        <h3 class="card-title">Liste de tous les historiques du technicien</h3>
+        <h3 class="card-title">Liste de tous les interventions du technicien</h3>
         <div class="card-tools">
     
         </div>
@@ -32,47 +32,49 @@
         <table class="table table-hover text-nowrap">
           <thead>
             <tr>
-              <th>Num Bt</th>
+              <th>N°Bt</th>
+              <th>Jour</th>
               <th>Heure de demande</th>
-              <th>Heure de début</th>
-              <th>Heure de fin</th>
-              <th>Heure d'attente</th>
-              <th>Heure d'arret</th>
-              <th>Description</th>
+              <th>Type Travaille</th>
               <th>Code machine</th>
               <th>Designation M</th>
+              <th>N°Serie</th>
               <th>Emplacement</th>
-              <th>NSerie</th>
-              <th>Code panne</th>
-              <th>Designation CP</th>              
-              <th>Type Travaille</th>
+              <th>Description</th>
               <th>Zone</th>
-              <th>BT cloturé</th>
+              <th>H.début</th>
+              <th>H.fin</th>
+              <th>Code panne</th>
+              <th>Designation CP</th>
               <th>Travaille éffectué</th>
               <th>Pièce de rechange</th>
-              <th>Actions</th>
+              <th>H.d'arret</th>
+              <th>H.d'attente</th>
+              <th>BT cloturé</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="historique in histsTech.data" :key="historique.id">
-              <td>{{ historique.id }}</td>
-              <td>{{ historique.heure_demande }}</td>
-              <td>{{ historique.heure_debut }}</td>
-              <td>{{ historique.heure_fin }}</td>
-              <td>{{ historique.heure_attente }}</td>
-              <td>{{ historique.heure_arret }}</td>
-              <td>{{ historique.description_demande }}</td>
-              <td>{{ historique.code_equip }}</td>
-              <td>{{ historique.designation }}</td>
-              <td>{{ historique.emplacement }}</td>
-              <td>{{ historique.n_serie }}</td>
-              <td>{{ historique.codePanne }}</td>
-              <td>{{ historique.codePanneDesignation }}</td>
-              <td>{{ historique.type_travaille }}</td>
-              <td>{{ historique.zone }}</td>
-              <td>{{ historique.appelle }}</td>
-              <td>{{ historique.travaille }}</td>
-              <td>{{ historique.piece_rechange }}</td>
+               <td>{{ historique.id }}</td>
+                <td>{{ historique.jour }}</td>
+                <td>{{ historique.heure_demande }}</td>
+                <td>{{ historique.type_travaille }}</td>
+                <td>{{ historique.code_equip }}</td>
+                <td>{{ historique.designation }}</td>
+                <td>{{ historique.n_serie }}</td>
+                <td>{{ historique.emplacement }}</td>
+                <td>{{ historique.description_demande }}</td>
+                <td>{{ historique.zone }}</td>
+                <td>{{ historique.heure_debut }}</td>
+                <td>{{ historique.heure_fin }}</td>
+                <td>{{ historique.codePanne }}</td>
+                <td>{{ historique.codePanneDesignation }}</td>
+                <td>{{ historique.travaille }}</td>
+                <td>{{ historique.piece_rechange }}</td>
+                <td>{{ historique.heure_arret }}</td>
+                <td>{{ historique.heure_attente }}</td>
+                <td>{{ historique.appelle }}</td>
                 <td> 
                   <template v-if="historique.valide == false">
                     <button type="button" class="btn btn-primary" @click="confirmAppelle(historique.id);">
@@ -102,7 +104,7 @@
     <template v-if="hidden == 'true'">
       <div class="card m-lg-4">
       <div class="card-header">
-        <h3 class="card-title">Liste de tous les historiques</h3>
+        <h3 class="card-title">Liste de tous les interventions</h3>
         <div class="card-tools">
           
         </div>
@@ -112,25 +114,25 @@
         <table class="table table-hover text-nowrap">
           <thead>
             <tr>
-              <th>Num Bt</th>
+              <th>N°Bt</th>
               <th>Jour</th>
               <th>Heure de demande</th>
-              <th>Heure de début</th>
-              <th>Heure de fin</th>
-              <th>Heure d'attente</th>
-              <th>Heure d'arret</th>
-              <th>Description</th>
+              <th>Type Travaille</th>
               <th>Code machine</th>
-              <th>Designation</th>
+              <th>Designation M</th>
+              <th>N°Serie</th>
               <th>Emplacement</th>
-              <th>NSerie</th>
+              <th>Description</th>
+              <th>Zone</th>
+              <th>H.début</th>
+              <th>H.fin</th>
               <th>Code panne</th>
               <th>Designation CP</th>
-              <th>Type Travaille</th>
-              <th>Zone</th>
-              <th>BT cloturé</th>
               <th>Travaille éffectué</th>
               <th>Pièce de rechange</th>
+              <th>H.d'arret</th>
+              <th>H.d'attente</th>
+              <th>BT cloturé</th>
             </tr>
           </thead>
           <tbody>
@@ -138,22 +140,22 @@
               <td>{{ historique.id }}</td>
               <td>{{ historique.jour }}</td>
               <td>{{ historique.heure_demande }}</td>
-              <td>{{ historique.heure_debut }}</td>
-              <td>{{ historique.heure_fin }}</td>
-              <td>{{ historique.heure_attente }}</td>
-              <td>{{ historique.heure_arret }}</td>
-              <td>{{ historique.description_demande }}</td>
+              <td>{{ historique.type_travaille }}</td>
               <td>{{ historique.code_equip }}</td>
               <td>{{ historique.designation }}</td>
-              <td>{{ historique.emplacement }}</td>
               <td>{{ historique.n_serie }}</td>
+              <td>{{ historique.emplacement }}</td>
+              <td>{{ historique.description_demande }}</td>
+              <td>{{ historique.zone }}</td>
+              <td>{{ historique.heure_debut }}</td>
+              <td>{{ historique.heure_fin }}</td>
               <td>{{ historique.codePanne }}</td>
               <td>{{ historique.codePanneDesignation }}</td>
-              <td>{{ historique.type_travaille }}</td>
-              <td>{{ historique.zone }}</td>
-              <td>{{ historique.appelle }}</td>
               <td>{{ historique.travaille }}</td>
               <td>{{ historique.piece_rechange }}</td>
+              <td>{{ historique.heure_arret }}</td>
+              <td>{{ historique.heure_attente }}</td>
+              <td>{{ historique.appelle }}</td>
             </tr> 
           </tbody>
         </table>

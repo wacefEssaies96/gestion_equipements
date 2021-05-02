@@ -27,7 +27,7 @@
               <div class="row">
                 <div class="col">
                   <div class="from-group">
-                    <label>Num Bt</label>
+                    <label>N°Bt</label>
                     <input
                       @keyup="search"
                       type="text"
@@ -151,26 +151,26 @@
       <table class="table table-hover text-nowrap">
         <thead>
           <tr>
-            <th>Num Bt</th>
+            <th>N°Bt</th>
             <th>Jour</th>
             <th>Heure de demande</th>
-            <th>Heure de début</th>
-            <th>Heure de fin</th>
-            <th>Heure d'attente</th>
-            <th>Heure d'arret</th>
-            <th>Description</th>
+            <th>Type Travaille</th>
             <th>Code machine</th>
             <th>Designation M</th>
+            <th>N°Serie</th>
             <th>Emplacement</th>
-            <th>NSerie</th>
+            <th>Description</th>
+            <th>Zone</th>
+            <th>H.début</th>
+            <th>H.fin</th>
             <th>Code panne</th>
             <th>Designation CP</th>
-            <th>Type Travaille</th>
-            <th>Zone</th>
-            <th>BT cloturé</th>
             <th>Travaille éffectué</th>
             <th>Pièce de rechange</th>
-            <th>Action</th>
+            <th>H.d'arret</th>
+            <th>H.d'attente</th>
+            <th>BT cloturé</th>
+           <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -178,22 +178,22 @@
             <td>{{ historique.id }}</td>
             <td>{{ historique.jour }}</td>
             <td>{{ historique.heure_demande }}</td>
-            <td>{{ historique.heure_debut }}</td>
-            <td>{{ historique.heure_fin }}</td>
-            <td>{{ historique.heure_attente }}</td>
-            <td>{{ historique.heure_arret }}</td>
-            <td>{{ historique.description_demande }}</td>
+            <td>{{ historique.type_travaille }}</td>
             <td>{{ historique.code_equip }}</td>
             <td>{{ historique.designation }}</td>
-            <td>{{ historique.emplacement }}</td>
             <td>{{ historique.n_serie }}</td>
+            <td>{{ historique.emplacement }}</td>
+            <td>{{ historique.description_demande }}</td>
+            <td>{{ historique.zone }}</td>
+            <td>{{ historique.heure_debut }}</td>
+            <td>{{ historique.heure_fin }}</td>
             <td>{{ historique.codePanne }}</td>
             <td>{{ historique.codePanneDesignation }}</td>
-            <td>{{ historique.type_travaille }}</td>
-            <td>{{ historique.zone }}</td>
-            <td>{{ historique.appelle }}</td>
             <td>{{ historique.travaille }}</td>
             <td>{{ historique.piece_rechange }}</td>
+            <td>{{ historique.heure_arret }}</td>
+            <td>{{ historique.heure_attente }}</td>
+            <td>{{ historique.appelle }}</td>
             <td> 
                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getHistorique(historique.id);">
               <i class="fas fa-edit" title="Modifier"/>
