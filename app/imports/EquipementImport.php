@@ -36,6 +36,7 @@ class EquipementImport implements ToModel,WithHeadingRow{
             "emplacement" => $row["Code_Emp"] ?? $row["code_emp"], 
             "constructeur" => $row["Code_Const"] ?? $row["code_const"],
             "code_categorie" => $row["Code_Cat"] ?? $row["code_cat"],
+            "desi_cat" => $row["DesignCat"] ?? $row["designcat"],
             "n_serie" => $row["N_Serie"] ?? $row["n_serie"],
             "date_acq" => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row["date_acq"])),
             "etat" => $row["etat"],

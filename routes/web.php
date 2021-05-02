@@ -7,15 +7,19 @@ use App\User;
     Route::get('/getCount', 'HomeController@getCount');
     Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::get('/onedrive', function()
-    {
-        return redirect('/#/equipements');
-    });
     Route::get('/mark-as-read/{user}', function(User $user)
     {
         $user->unreadNotifications->markAsRead();
         return response()->json('Marked as read');
     });
+
+    //analyse
+    Route::post('/analyse/nbr-arret/zone','ChartController@nbrArretZone');
+    Route::post('/analyse/nbr-arret','ChartController@nbrArret');
+
+    Route::post('/analyse/duree-arret/zone','ChartController@dureeArretZone');
+    Route::post('/analyse/duree-arret','ChartController@dureeArret');
+
 
     //chat
     Route::get('/contacts', 'MessageController@get');
@@ -40,7 +44,11 @@ use App\User;
     Route::get('/users/verifemail/{value}', 'UserController@verifEmail');
     Route::post('/users/search', 'UserController@searchuser');
     Route::get('/historiques/ht','UserController@getUserId');
-
+    
+    //onedrive
+    Route::get('/onedrive', function(){
+        return redirect('/#/equipements');
+    });
     Route::get('/getAccessData', 'HomeController@welcome');
     Route::get('/signin', 'AuthController@signin');
     Route::get('/callback', 'AuthController@callback');

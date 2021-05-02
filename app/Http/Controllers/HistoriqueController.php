@@ -29,23 +29,24 @@ class HistoriqueController extends Controller
     }
 
     public function listeTech(){
-        return $this->refreshTech();
+        $request = new Request();
+        $request->merge([
+            'type' => 'TECH'
+        ]);
+        return $this->liste($request);
     }
 
     public function liste(Request $request)
     {
         $hist = Historique::join('equipements','historiques.code_equip', '=', 'equipements.id')
-        ->leftJoin('code_panne_in_hists','historiques.id', '=', 'code_panne_in_hists.hist') 
-        ->leftJoin('code_pannes','code_panne_in_hists.code_panne', '=', 'code_pannes.id')
-        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code','code_panne_in_hists.code_panne','code_pannes.code AS codePanne','code_pannes.designation AS codePanneDesignation')
+        ->select('historiques.*','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code')
         ->where('historiques.id','like','%'.request('num_bt').'%');
 
         if($request->type == "HOTLINE"){
             $hist = $hist->where('historiques.hotline_id', '=', Auth::id());
         }
-        
-        if($request->code_panne != ''){
-            $hist = $hist->where('code_panne_in_hists.code_panne', '=', request('code_panne'));
+        if($request->type == "TECH"){
+            $hist = $hist->where('tech_id','=',Auth::id())->where('heure_fin','=',null);
         }
         if($request->zone != ''){
             $hist = $hist->where('historiques.zone', '=', request('zone'));
@@ -69,7 +70,38 @@ class HistoriqueController extends Controller
             $hist = $hist->where('historiques.code_equip','like', '%'.request('code_equip').'%');
         }
         $hist = $hist->paginate(10);
-
+        
+        $arrayCpIds = [];
+        foreach($hist as $item){
+            $codepanneid = CodePanneInHist::where('hist', '=', $item->id)->get();
+            array_push($arrayCpIds,$codepanneid);
+        }
+        $arrayCp = [];
+        foreach($arrayCpIds as $item){
+            foreach($item as $i){
+                $cp = CodePanne::where('id', '=', $i->code_panne)->get();
+                foreach($cp as $x){
+                    $x->setAttribute("hist",$i->hist);
+                }
+                array_push($arrayCp,$cp);
+            }
+        }
+        for($i = 0 ; $i < count($hist) ; $i++){
+            $hist[$i]->setAttribute("codePanne",[]);
+            $hist[$i]->setAttribute("codePanneDesignation",[]);
+            $cp = $hist[$i]['codePanne'];
+            $cpDesignation = $hist[$i]['codePanneDesignation'];
+            for($j=0 ; $j<count($arrayCp) ; $j++){
+                for($k=0 ; $k<count($arrayCp[$j]) ; $k++){
+                    if($hist[$i]['id'] == $arrayCp[$j][$k]['hist']){
+                        array_push($cp,$arrayCp[$j][$k]['code']);
+                        $hist[$i]['codePanne'] = $cp;
+                        array_push($cpDesignation,$arrayCp[$j][$k]['designation']);
+                        $hist[$i]['codePanneDesignation'] = $cpDesignation;
+                    }
+                }
+            }
+        }
         return response()->json($hist);
     }
 
@@ -96,37 +128,35 @@ class HistoriqueController extends Controller
                 $hist->travaille = request('travaille');
                 $hist->piece_rechange = request('piece_rechange');
             }
-        }
-        $hist->save();
-        
-        if(request('code_panne') != null){
-            $codePanne = request('code_panne');
-            foreach($codePanne as $item){
-                $cp = new CodePanneInHist();
-                $cp->hist = $hist->id;
-                $cp->code_panne = $item;
-                $cp->save();
+            if(request('code_panne') != null){
+                $codePanne = request('code_panne');
+                foreach($codePanne as $item){
+                    $cp = new CodePanneInHist();
+                    $cp->hist = $hist->id;
+                    $cp->code_panne = $item;
+                    $cp->save();
+                }
+            }
+            if($hist->zone == 'Assemblage'){
+                $histAssemblage = new HistAssemblage();
+                $histAssemblage->num_planche = request('num_planche');
+                $histAssemblage->historique_id = $hist->id;
+                $histAssemblage->save();
+            }
+            if($hist->zone == 'Sertissage'){
+                $histAssemblage = new HistSertissage();
+                $histAssemblage->hist_id = $hist->id;
+                $histAssemblage->save();
+            }
+            if($hist->zone == 'Controle éléctrique'){
+                $histElectrique = new HistElectrique();
+                $histElectrique->nom_support = request('nom_support');
+                $histElectrique->hist_id = $hist->id;
+                $histElectrique->save();
             }
         }
-        
-        if($hist->zone == 'Assemblage'){
-            $histAssemblage = new HistAssemblage();
-            $histAssemblage->num_planche = request('num_planche');
-            $histAssemblage->historique_id = $hist->id;
-            $histAssemblage->save();
-        }
-        if($hist->zone == 'Sertissage'){
-            $histAssemblage = new HistSertissage();
-            $histAssemblage->hist_id = $hist->id;
-            $histAssemblage->save();
-        }
-        if($hist->zone == 'Controle éléctrique'){
-            $histElectrique = new HistElectrique();
-            $histElectrique->nom_support = request('nom_support');
-            $histElectrique->hist_id = $hist->id;
-            $histElectrique->save();
-        }
-        
+        $hist->save();
+
         $technicien = User::find(request('tech_id'));
         Notification::send($technicien, new HistoriqueAdded($hist));
 
@@ -137,11 +167,15 @@ class HistoriqueController extends Controller
         where('id', '=', $hist->hotline_id)
         ->first();
         Notification::send($hotline,new AppelleNonCloture($hist));
-
+        
+        $request = new Request();
         if(Auth::user()->role == 'HOTLINE'){
-            return $this->getHotlineHistoriques();
+            $request->merge([
+                'type' => 'HOTLINE'
+            ]);
+            return $this->liste($request);
         }
-        return $this->refresh();
+        return $this->liste($request);
     }
 
     public function updatefortech($id){
@@ -180,9 +214,13 @@ class HistoriqueController extends Controller
 
         $users = User::where('id', '=', $hist->hotline_id)->first();
         Notification::send($users, new TechEditedHist($hist));
-        
-        return $this->refreshTech();
+        $request = new Request();
+        $request->merge([
+            'type' => 'TECH'
+        ]);
+        return $this->liste($request);
     }
+
     public function confirmAppelle($id){
         $hist = Historique::find($id);
         if($hist->heure_debut == null){
@@ -201,8 +239,11 @@ class HistoriqueController extends Controller
             
             $users = User::where('id', '=', $hist->hotline_id)->first();
             Notification::send($users, new TechConfirmedHist($hist));
-
-            return $this->refreshTech();
+            $request = new Request();
+            $request->merge([
+                'type' => 'TECH'
+            ]);
+            return $this->liste($request);
         }
         return response()->json('erreur');
     }
@@ -243,10 +284,10 @@ class HistoriqueController extends Controller
         $technicien->save();
 
         $hist->tech_id = request('tech_id');
-        if(Auth::user()->role == "ADMIN"){ 
-            $hist->appelle = request('appelle');
+        if(Auth::user()->role == "ADMIN"){
             if( request('travaille') != '' && request('piece_rechange') != ''){ 
-                $hist->valide = true; 
+                $hist->appelle = 'Cloturé';
+                $hist->valide = true;
                 $hist->heure_fin = Carbon::now('Africa/Tunis');
                 $hist->heure_debut = Carbon::now('Africa/Tunis');
                 $hist->travaille = request('travaille');
@@ -278,12 +319,14 @@ class HistoriqueController extends Controller
             }
         }
         $hist->save();
-
+        $request = new Request();
         if(Auth::user()->role == 'HOTLINE'){
-            return $this->getHotlineHistoriques();
+            $request->merge([
+                'type' => 'HOTLINE'
+            ]);
+            return $this->liste($request);
         }
-        return $this->refresh();
-        
+        return $this->liste($request);
     }
 
     public function destroy($id)
@@ -293,37 +336,14 @@ class HistoriqueController extends Controller
         $technicien->status = 'DISPONIBLE';
         $technicien->save();
         $hist->delete();
+        $request = new Request();
         if(Auth::user()->role == 'HOTLINE'){
-            return $this->getHotlineHistoriques();
+            $request->merge([
+                'type' => 'HOTLINE'
+            ]);
+            return $this->liste($request);
         }
-        return $this->refresh();
-
-    }
-    
-    public function refresh(){
-        $historiques = Historique::join('equipements','historiques.code_equip', '=', 'equipements.id')
-        ->leftJoin('code_panne_in_hists','historiques.id', '=', 'code_panne_in_hists.hist')
-        ->leftJoin('code_pannes','code_panne_in_hists.code_panne', '=', 'code_pannes.id')
-        ->select('historiques.*','code_panne_in_hists.code_panne','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code','code_pannes.code AS codePanne','code_pannes.designation AS codePanneDesignation')
-        ->paginate(10);
-        return response()->json($historiques);
-    }
-
-    public function refreshTech(){
-        $historiques = Historique::join('equipements','historiques.code_equip', '=', 'equipements.id')
-        ->leftJoin('code_panne_in_hists','historiques.id', '=', 'code_panne_in_hists.hist')
-        ->leftJoin('code_pannes','code_panne_in_hists.code_panne', '=', 'code_pannes.id')
-        ->select('historiques.*','code_panne_in_hists.code_panne','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code','code_pannes.code AS codePanne','code_pannes.designation AS codePanneDesignation')
-        ->where('tech_id','=',Auth::id())->where('heure_fin','=',null)->paginate(10);
-        return response()->json($historiques);
-    }
-    public function getHotlineHistoriques(){
-        $hist = Historique::join('equipements','historiques.code_equip', '=', 'equipements.id')
-        ->leftJoin('code_panne_in_hists','historiques.id', '=', 'code_panne_in_hists.hist')
-        ->leftJoin('code_pannes','code_panne_in_hists.code_panne', '=', 'code_pannes.id')
-        ->select('historiques.*','code_panne_in_hists.code_panne','equipements.designation','equipements.n_serie','equipements.emplacement','equipements.code_categorie','equipements.code','code_pannes.code AS codePanne','code_pannes.designation AS codePanneDesignation')
-        ->where('hotline_id', '=', Auth::id())->paginate(10);
-        return response()->json($hist);
+        return $this->liste($request);
     }
 
     public function getHistSertissage($id){

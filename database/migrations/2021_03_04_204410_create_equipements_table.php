@@ -20,6 +20,7 @@ class CreateEquipementsTable extends Migration
             $table->string('code_section')->nullable();
             $table->string('emplacement')->nullable();
             $table->string('code_categorie')->nullable();
+            $table->string('desi_cat')->nullable();
             $table->date('date_acq')->default(now('Africa/Tunis'));
             $table->string('n_serie')->nullable();
             $table->string('constructeur')->nullable();

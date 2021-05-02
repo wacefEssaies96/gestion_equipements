@@ -62,6 +62,7 @@ class EquipementController extends Controller
     {
         $equipement = new Equipement();
         $equipement->code_categorie = request('code_categorie');
+        $equipement->desi_cat = request('desi_cat');
         $equipement->emplacement = request('emplacement');
         $equipement->date_acq = request('date_acq');
         $equipement->constructeur = request('constructeur');
@@ -120,6 +121,7 @@ class EquipementController extends Controller
                 $equipement->image = $filename;
             }
         }
+        $equipement->desi_cat = request('desi_cat');
         $equipement->code_categorie = request('code_categorie');
         $equipement->emplacement = request('emplacement');
         $equipement->date_acq = request('date_acq');

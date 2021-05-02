@@ -97,7 +97,7 @@
                       <select class="form-control" v-model="code_equip"
                       :class="{'is-invalid':(code_equip != '') ? $v.code_equip.$invalid:'', 'is-valid':!$v.code_equip.$invalid}">
                           <option v-for="e in equipements_list" :key="e.id" :value="e.id">
-                              {{e.code}}
+                            {{e.code}}
                           </option>
                       </select>
                       <div class="valid-feedback">Validé</div>
