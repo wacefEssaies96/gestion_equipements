@@ -23,10 +23,15 @@
                 <div class="col-sm-6">
                    <div class="form-group">
                     <label for="code">Code</label>
-                    <input type="text" class="form-control" placeholder="Code" disabled="true" v-model="code"
-                      :class="{'is-invalid':(code != '') ? $v.code.$invalid:''}">
-                    <!-- <div class="valid-feedback">Code valide</div> -->
+                    <input type="text" class="form-control" placeholder="Code"  v-model="code"
+                      :class="{'is-invalid':(code != '') ? $v.code.$invalid:'','is-valid':!$v.code.$invalid}">
+                    <div class="valid-feedback">Code valide</div>
+                    <div class="invalid-feedback">
+                      <span v-if="!$v.code.required">Veuillez entrer un code !</span>
+                      <span v-if="!$v.code.isUnique">Code déja existant!</span>   
                   </div>
+                  </div>
+                
                   <div class="form-group">
                     <label for="nom">Nom</label>
                     <input type="text" class="form-control" placeholder="Nom" v-model="nom" 
@@ -76,7 +81,7 @@
                   </div>
                   <div class="form-group">
                     <label for="tel">Role</label>
-                    <select type="text" class="form-control" v-model="role" @change="loadcode"
+                    <select type="text" class="form-control" v-model="role" 
                     :class="{'is-invalid':(role != '') ?$v.role.$invalid:'', 'is-valid':!$v.role.$invalid}">
                       <option value="TECHNICIEN">Technicien</option>
                       <option value="PRODUCTION">Production</option>
@@ -197,6 +202,13 @@ export default {
   },
   validations: {
      code:{
+        required,
+            async isUnique(value){
+              if(value==='') return true;
+              const response = await axios.get('/users/verifcode/'+value)
+              .catch(error => console.log(error));
+              if(response.data.length == 0) return true;
+            }
     },
     nom: {
       required,
@@ -291,12 +303,7 @@ export default {
         .catch(error => console.log(error));
         this.refreshData();
     },
-     loadcode(e) {
-        axios.get('/users/next/' + e.target.value.toLowerCase())
-        .then( e => {
-          this.code = e.data
-        })
-    },
+   
     refreshData(){
         this.code = '';
         this.nom = '';

@@ -23,8 +23,13 @@
                 <div class="col-sm-6">
                    <div class="form-group">
                     <label for="code">Code</label>
-                    <input type="text" class="form-control" placeholder="Code" disabled="true" v-model="code"
-                      :class="{'is-invalid':(code != '') ? $v.code.$invalid:''}">
+                    <input type="text" class="form-control" placeholder="Code"  v-model="code"
+                      :class="{'is-invalid':(code != '') ? $v.code.$invalid:'' ,'is-valid':!$v.code.$invalid}">
+                      <div class="valid-feedback">Code valide</div>
+                    <div class="invalid-feedback">
+                      <span v-if="!$v.code.required">Veuillez entrer un code !</span>
+                      <span v-if="!$v.code.isUnique">Code déja existant!</span>   
+                  </div>
                     
                   </div>
                   <div class="form-group">
@@ -243,6 +248,7 @@ import { required, minLength,maxLength, sameAs } from 'vuelidate/lib/validators'
       },
       validations: {
          code: {
+           required,
 
          },
           nom: {

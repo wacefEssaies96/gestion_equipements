@@ -23,11 +23,16 @@ class UserController extends Controller
         $user = User::where('email','=',$value)->get();
         return response()->json($user);
     }
+    public function verifCode($value){
+        $user = User::where('code','=',$value)->get();
+        return response()->json($user);
+    }
 
     public function searchUser(Request $request){
 
         $user = User::where('nom','like','%'.request('nom').'%');
         $user = $user->where ('role','!=','ADMIN');
+        $user = $user->where('code','like','%'.request('code').'%');
         $user = $user->where('prenom','like','%'.request('prenom').'%');
         $user = $user->where('tel','like','%'.request('tel').'%');
         $user = $user->where('email','like','%'.request('email').'%');
@@ -46,33 +51,7 @@ class UserController extends Controller
     public function getUserId(){
         return response()->json(Auth::id());
     }
-    public function nextId(Request $request, $kind) {
-        $prefix = '';
-        $result = null;
-        if($kind == 'technicien') {
-            $result = Technicien::max('id');
-            $prefix = 'TECH';
-        }
-        else if($kind ==  'hotline')  {
-            $result = Hotline::max('id');
-            $prefix = 'HOT';
-        }
-        else if($kind ==  'responsable')  {
-            $result = Responsable::max('id');
-            $prefix = 'RESP';
-        }
-        else if($kind ==  'production')  {
-            $result = Production::max('id');
-            $prefix = 'PROD';
-        }
-        else{
-            return  null;
-        }
-        if($result == null)
-            return  $prefix . '1';
-        else 
-            return $prefix . ($result + 1);
-    }
+   
     public function store(Request $request)
     {
         $user = new User();
