@@ -139,7 +139,8 @@
       <div class="card-tools">
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
-        Ajouter un nouveau intervention
+        <i class="fas fa-plus" title=" Ajouter une nouvelle intervention"></i>
+        
         </button>
         <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>
       </div>

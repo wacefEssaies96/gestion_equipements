@@ -64,7 +64,8 @@
         <div class="card-tools">
           <!-- Button trigger modal -->
           <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
-          Ajouter un nouveau feedback
+            <i class="fas fa-comment-medical" title=" Ajouter un feedback"></i>
+         
           </button>
           <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>
         </div>
