@@ -37,6 +37,11 @@
                   <label>Zone</label>
                   <select v-model="qZone" @change="search" class="form-control">
                     <option value="">Vide</option>
+                    <option value="Assemblage">Assemblage</option>
+                    <option value="Sertissage">Sertissage</option>
+                    <option value="Préparation">Préparation</option>
+                    <option value="Coupe">Coupe</option>
+                    <option value="Controle éléctrique">Controle éléctrique</option>
                   </select>
                 </div>
               </div>

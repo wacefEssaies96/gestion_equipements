@@ -1,6 +1,6 @@
 <template>
   <!-- DIRECT CHAT -->
-  <div class="card direct-chat direct-chat-primary w-25 h-70" style="position: fixed; bottom: 0px; right: 10px;">
+  <div class="card direct-chat direct-chat-primary" style="position: fixed; bottom: 0px; right: 10px;">
     <div class="card-header">
       <h3 class="card-title">Direct Chat</h3>
 
@@ -47,16 +47,16 @@
         </div>
         <input hidden type="text" v-model="userContact2" disabled>
       <!-- Contacts are loaded here -->
-      <div class="direct-chat-contacts">
+      <div class="direct-chat-contacts float-right">
         <ul class="contacts-list">
           <li v-for="(contact, index) in contacts" :key="contact.id" @click="selectContact(index, contact)">
               <a href="#">
               <img class="contacts-list-img" src="dist/img/user1-128x128.jpg" alt="User Avatar">
               <div class="contacts-list-info">
-                  <span class="contacts-list-name">
+                  <p class="contacts-list-name">
                   {{contact.nom}} {{contact.prenom}}
                   <!-- <small class="contacts-list-date float-right">2/28/2015</small> -->
-                  </span>
+                  </p>
                   <!-- <span class="contacts-list-msg">How have you been? I was...</span> -->
               </div>
               <!-- /.contacts-list-info -->

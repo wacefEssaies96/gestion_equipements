@@ -145,22 +145,22 @@
               <td><img :src="equipement.image" style="width:100px; height:100px"></td>
               <td>
                 <div class="row">
-                  <button @click="getDocuments(equipement.id,'ins_c')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                  <button @click="getDocuments(equipement.id,'ins_c')" class="btn btn-outline-info">
                   <i class="fas fa-file-pdf"></i> Instruction 1ér niveau
                   </button>
                 </div>
                 <div class="row">
-                  <button @click="getDocuments(equipement.id,'ins_p')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                  <button @click="getDocuments(equipement.id,'ins_p')" class="btn btn-outline-info">
                   <i class="fas fa-file-pdf"></i> Instruction préventive
                   </button>
                 </div>
                 <div class="row">
-                  <button @click="getDocuments(equipement.id,'dossier_technique')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                  <button @click="getDocuments(equipement.id,'dossier_technique')" class="btn btn-outline-info">
                   <i class="fas fa-file-pdf"></i> Dossier technique
                   </button> 
                 </div>
                 <div class="row">
-                  <button @click="getDocuments(equipement.id,'liste_pr')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                  <button @click="getDocuments(equipement.id,'liste_pr')" class="btn btn-outline-info">
                   <i class="fas fa-file-pdf"></i> Liste PR
                   </button>
                 </div>
@@ -188,7 +188,7 @@
             </tr>
           </tbody>
         </table>
-
+        <button hidden id="openPdf" data-toggle="modal" data-target="#viewpdf"></button>
         <pagination class="m-auto" 
           :data="equipements" 
           @pagination-change-page="getResults"
@@ -277,14 +277,27 @@
         });
       },
       refreshDoc(){
-        console.log('triggred');
         this.document = '';
       },
       getDocuments(id,type){
+        this.loading = true;
         axios.get('/equipements/document/'+id+'/'+type)
         .then(response => {
-            this.document = response.data
-          })
+          this.document = response.data
+          if(response.data != 'introuvable'){
+            document.getElementById('openPdf').click();
+          }else{
+            this.$swal.fire({
+              icon: 'warning',
+              title: "Aucun document disponible !",
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 5000
+            });
+          }
+          this.loading = false;
+        })
         .catch(error => console.log(error))
       },
       getResults(page = 1) {

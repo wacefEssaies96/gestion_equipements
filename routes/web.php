@@ -64,13 +64,6 @@ use App\User;
     Route::get('/download/data/{id}', 'OneDriveController@downloadEquipementData');
     Route::get('/download/file/{id}/{file}', 'OneDriveController@downloadFile');
     Route::post('/importDataFromExcel','EquipementController@importDataFromExcel');
-
-    //Zone
-    Route::post('/zones', 'ZoneController@store');
-    Route::post('/zones/liste', 'ZoneController@liste');
-    Route::get('/zones/edit/{id}', 'ZoneController@edit');
-    Route::patch('/zones/edit/{id}', 'ZoneController@update');
-    Route::delete('/zones/{id}', 'ZoneController@destroy');
  
     //Feedback
     Route::post('/feedbacks', 'FeedbackController@store');

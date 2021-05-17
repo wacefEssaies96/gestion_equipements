@@ -52,29 +52,28 @@
                         <label for="documents">Documents des équipements</label>
                         <div class="row">
                             <div class="col-sm-6">
-                                <a href="" @click="getDocuments(id.code_equip,'ins_c')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                                <a href="" @click="getDocuments(id.code_equip,'ins_c')" class="btn btn-outline-info">
                                 <i class="fas fa-file-pdf"></i> Instruction 1ér niveau
                                 </a>
                             </div>
                             <div class="col-sm-6">
-                                <a href="" @click="getDocuments(id.code_equip,'ins_p')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                                <a href="" @click="getDocuments(id.code_equip,'ins_p')" class="btn btn-outline-info">
                                 <i class="fas fa-file-pdf"></i> Instruction préventive
                                 </a>
                             </div>
                             <div class="col-sm-6">
-                                <a href="" @click="getDocuments(id.code_equip,'dossier_technique')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                                <a href="" @click="getDocuments(id.code_equip,'dossier_technique')" class="btn btn-outline-info">
                                 <i class="fas fa-file-pdf"></i> Dossier technique
                                 </a>
                             </div>
                             <div class="col-sm-6">
-                                <a href="" @click="getDocuments(id.code_equip,'liste_pr')" class="btn btn-outline-info" data-toggle="modal" data-target="#viewpdf">
+                                <a href="" @click="getDocuments(id.code_equip,'liste_pr')" class="btn btn-outline-info">
                                 <i class="fas fa-file-pdf"></i> Liste PR
                                 </a>
                             </div>
                         </div>
                         <ViewPdf v-bind:path="document.document"></ViewPdf>
-                        
-                           
+                        <button hidden id="openPdf" data-toggle="modal" data-target="#viewpdf"></button>
                         <div class="form-group">
                             <label for="travaille">Travaille effectué</label>
                             <textarea class="form-control" placeholder="Travaille éffectué" v-model="travaille"
@@ -152,8 +151,19 @@
         getDocuments(id,type){
         axios.get('/equipements/document/'+id+'/'+type)
         .then(response => {
-          this.document = response.data
-          })
+          if(response.data != 'introuvable'){
+            document.getElementById('openPdf').click();
+          }else{
+            this.$swal.fire({
+              icon: 'warning',
+              title: "Aucun document disponible, veuillez contactez l'administrateur !",
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 5000
+            });
+          }
+        })
         .catch(error => console.log(error))
       },
       update(){
@@ -179,7 +189,6 @@
       },
     },
     validations: {
-
         travaille: {
             required
         },

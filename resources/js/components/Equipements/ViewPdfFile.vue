@@ -60,16 +60,10 @@ export default {
     },
     watch:{
         path(newVal){
-            if(this.path == '') {
-                alert('Vide !');
-                document.getElementById('closeViewPdf').click();
-            }
-            else{
-                this.loadingTask = pdf.createLoadingTask(newVal);
-                this.loadingTask.promise.then(pdf => {
-                    this.numPages = pdf.numPages;
-                });
-            }
+            this.loadingTask = pdf.createLoadingTask(newVal);
+            this.loadingTask.promise.then(pdf => {
+                this.numPages = pdf.numPages;
+            });
         }
     },
 

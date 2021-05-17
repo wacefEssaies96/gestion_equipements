@@ -63,15 +63,7 @@
                   Equipements
                 </p>
               </router-link>
-            </li>  
-            <li class="nav-item">
-              <router-link to='/zones' class="nav-link">
-                <i class="nav-icon fas fa-industry"></i>
-                <p>
-                  Zones
-                </p>
-              </router-link>
-            </li>     
+            </li>       
             <li class="nav-item">
               <router-link to='/code_pannes' class="nav-link">
                 <i class="nav-icon fas fa-file-code"></i>

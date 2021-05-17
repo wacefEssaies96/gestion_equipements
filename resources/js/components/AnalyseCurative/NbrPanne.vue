@@ -7,7 +7,7 @@
       </h3>
       <div class="card-tools">
         <ul class="nav nav-pills ml-auto">
-          <li class="nav-item">
+          <li class="nav-item pt-2">
                 <div class="form-group">
                     <label>Zone</label>
                     <select class="form-control" v-model="zone" @change="countCategorieParZone()">
@@ -21,7 +21,7 @@
               </div>
           </li>
           <template v-if="zone!=''">
-            <li class="nav-item">
+            <li class="nav-item pt-2">
                 <div class="form-group">
                     <label>Categorie</label>
                     <select class="form-control" v-model="categorie" @change="countEquipement()">
@@ -37,7 +37,6 @@
       <div class="card-body">
         <div class="tab-content p-0">
             <BarChart :chartData="datacollection" :options="options"></BarChart>
-         
         </div>
       </div>
       <!-- /.card-body -->

@@ -7,16 +7,16 @@
       </h3>
       <div class="card-tools">
         <ul class="nav nav-pills ml-auto">
-          <li class="nav-item">
+          <li class="nav-item pt-2">
               <a class="nav-link active" href="#revenue-chart" @click="setChoice('zone')" data-toggle="tab">Zone</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item pt-2">
               <a class="nav-link" href="#sales-chart" @click="setChoice('equipement')" data-toggle="tab">Equipement</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item pt-2">
               <a class="nav-link" href="#sales-chart" @click="setChoice('categorie')" data-toggle="tab">Categorie</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item pt-2">
               <a class="nav-link" href="#sales-chart" @click="setChoice('codePanne')" data-toggle="tab">Code pannes</a>
           </li>
         </ul>

@@ -1,12 +1,11 @@
 module.exports = {
-    globDirectory: 'public/',
-    globPatterns: [
-        '**/*.json'
-    ],
-    ignoreURLParametersMatching: [
-        /^utm_/,
-        /^fbclid$/
-    ],
-    swSrc: 'resources/sw.js',
-    swDest: 'public/sw.js'
+	globDirectory: 'public/',
+	globPatterns: [
+		'**/*.txt'
+	],
+	ignoreURLParametersMatching: [
+		/^utm_/,
+		/^fbclid$/
+	],
+	swDest: 'public/sw.js'
 };

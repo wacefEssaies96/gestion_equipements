@@ -19,7 +19,6 @@ Vue.component('navbar', require('./components/Layout/NavBar.vue').default);
 import Vue from 'vue';
 import dashboard from './components/Dashboard.vue';
 import feedbacks from './components/Feedbacks/Feedbacks.vue';
-import zones from './components/Zones/Zones.vue';
 import equipements from './components/Equipements/Equipements.vue';
 import code_pannes from './components/Code_Pannes/Code_Pannes.vue';
 import histAdmin from './components/Historiques/Admin/Hist_admin.vue';
@@ -32,7 +31,6 @@ import globalChat from './components/Chat/GlobalChat.vue';
 const routes = [
     { path: '/', component: dashboard },
     { path: '/feedbacks', component: feedbacks },
-    { path: '/zones', component: zones },
     { path: '/equipements', component: equipements },
     { path: '/code_pannes', component: code_pannes },
     { path: '/hist-admin', component: histAdmin },

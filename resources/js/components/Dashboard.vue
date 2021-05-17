@@ -42,7 +42,6 @@
             <div class="small-box bg-success">
               <div class="inner">
                 <h3>{{data[0]}}</h3>
-
                 <p>Nombre des hotlines</p>
               </div>
               <div class="icon">
@@ -57,7 +56,6 @@
             <div class="small-box bg-warning">
               <div class="inner">
                 <h3>{{data[1]}}</h3>
-
                 <p>Nombre des responsables</p>
               </div>
               <div class="icon">
@@ -72,7 +70,6 @@
             <div class="small-box bg-danger">
               <div class="inner">
                 <h3>{{data[3]}}</h3>
-
                 <p>Nombre des Productions</p>
               </div>
               <div class="icon">
