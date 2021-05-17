@@ -128,34 +128,37 @@ class HistoriqueController extends Controller
                 $hist->travaille = request('travaille');
                 $hist->piece_rechange = request('piece_rechange');
             }
-            if(request('code_panne') != null){
-                $codePanne = request('code_panne');
-                foreach($codePanne as $item){
-                    $cp = new CodePanneInHist();
-                    $cp->hist = $hist->id;
-                    $cp->code_panne = $item;
-                    $cp->save();
-                }
-            }
-            if($hist->zone == 'Assemblage'){
-                $histAssemblage = new HistAssemblage();
-                $histAssemblage->num_planche = request('num_planche');
-                $histAssemblage->historique_id = $hist->id;
-                $histAssemblage->save();
-            }
-            if($hist->zone == 'Sertissage'){
-                $histAssemblage = new HistSertissage();
-                $histAssemblage->hist_id = $hist->id;
-                $histAssemblage->save();
-            }
-            if($hist->zone == 'Controle éléctrique'){
-                $histElectrique = new HistElectrique();
-                $histElectrique->nom_support = request('nom_support');
-                $histElectrique->hist_id = $hist->id;
-                $histElectrique->save();
-            }
+            
         }
         $hist->save();
+
+        if(request('code_panne') != null){
+            $codePanne = request('code_panne');
+            foreach($codePanne as $item){
+                $cp = new CodePanneInHist();
+                $cp->hist = $hist->id;
+                $cp->code_panne = $item;
+                $cp->save();
+            }
+        }
+        
+        if($hist->zone == 'Assemblage'){
+            $histAssemblage = new HistAssemblage();
+            $histAssemblage->num_planche = request('num_planche');
+            $histAssemblage->historique_id = $hist->id;
+            $histAssemblage->save();
+        }
+        if($hist->zone == 'Sertissage'){
+            $histAssemblage = new HistSertissage();
+            $histAssemblage->hist_id = $hist->id;
+            $histAssemblage->save();
+        }
+        if($hist->zone == 'Controle éléctrique'){
+            $histElectrique = new HistElectrique();
+            $histElectrique->nom_support = request('nom_support');
+            $histElectrique->hist_id = $hist->id;
+            $histElectrique->save();
+        }
 
         $technicien = User::find(request('tech_id'));
         Notification::send($technicien, new HistoriqueAdded($hist));

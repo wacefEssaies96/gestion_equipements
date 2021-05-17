@@ -20,6 +20,12 @@ use App\User;
     Route::post('/analyse/duree-arret/zone','ChartController@dureeArretZone');
     Route::post('/analyse/duree-arret','ChartController@dureeArret');
 
+    Route::post('/analyse/nbr-categorie/zone', 'ChartController@nbrCategorieZone');
+    Route::post('/analyse/count-categorie/zone', 'ChartController@countCategorie');
+    Route::post('/analyse/count-equipement', 'ChartController@countEquipement');
+
+    
+
 
     //chat
     Route::get('/contacts', 'MessageController@get');

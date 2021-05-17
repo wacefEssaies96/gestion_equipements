@@ -30,20 +30,20 @@ import users from './components/Users/Users.vue'
 import globalChat from './components/Chat/GlobalChat.vue';
 
 const routes = [
-    {path : '/',component : dashboard},
-    {path : '/feedbacks',component : feedbacks},
-    {path : '/zones',component : zones},
-    {path : '/equipements',component : equipements},
-    {path : '/code_pannes',component : code_pannes},
-    {path : '/hist-admin',component : histAdmin},
-    {path : '/hist-hotline',component : histHotline},
-    {path : '/hist-technicien',component : histTechnicien},
-    {path : '/onedrive',component : onedrive},
-    {path : '/users', component: users},
-    {path : '/chat', component: globalChat},
+    { path: '/', component: dashboard },
+    { path: '/feedbacks', component: feedbacks },
+    { path: '/zones', component: zones },
+    { path: '/equipements', component: equipements },
+    { path: '/code_pannes', component: code_pannes },
+    { path: '/hist-admin', component: histAdmin },
+    { path: '/hist-hotline', component: histHotline },
+    { path: '/hist-technicien', component: histTechnicien },
+    { path: '/onedrive', component: onedrive },
+    { path: '/users', component: users },
+    { path: '/chat', component: globalChat },
 ];
 
-const router = new VueRouter({routes});
+const router = new VueRouter({ routes });
 
 const app = new Vue({
     el: '#app',

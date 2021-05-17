@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+require('mix-html-builder');
 require('dotenv').config();
 /*
  |--------------------------------------------------------------------------

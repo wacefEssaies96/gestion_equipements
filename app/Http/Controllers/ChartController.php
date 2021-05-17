@@ -11,6 +11,134 @@ use App\CodePanneInHist;
 
 class ChartController extends Controller
 {
+    public function countEquipement(Request $request){
+
+        $data = [];
+        $labels = [];
+        $counts = [];
+        $codes = [];
+        $count = [];
+        
+        $equip = Equipement::select('id','zone' ,'code','desi_cat', 'designation')
+        ->where('zone', '=', $request->zone)
+        ->where('desi_cat', '=', $request->categorie)
+        ->orderBy('zone','asc')
+        ->orderBy('desi_cat','asc')
+        ->get();
+
+        for($i = 0 ; $i < count($equip) ; $i++){
+
+            array_push($labels,$equip[$i]->code);
+            array_push($counts,[]);
+            $codepannes = [];
+
+            $hist = Historique::select('id')->where('code_equip', '=', $equip[$i]->id)->get();
+           
+            foreach($hist as $item){
+                $cp = CodePanneInHist::
+                select('code_panne')
+                ->where('hist', '=', $item->id)
+                ->get();
+                array_push($counts[$i],$cp);
+            }
+            
+            for($j = 0 ; $j < count($counts[$i]) ; $j++){
+                for($k = 0 ; $k < count($counts[$i][$j]) ; $k++){
+                    array_push($codepannes,$counts[$i][$j][$k]->code_panne);
+                }
+            }
+            sort($codepannes);
+            $counts[$i] = [];
+            array_push($counts[$i],$codepannes);
+
+            if(!empty($counts[$i][0])){
+                $values = array_count_values($counts[$i][0]);
+                arsort($values);
+                $popular = array_slice($values, 0, 1, true);
+                $id = array_keys($popular);
+
+                $code = CodePanne::where('id','=',$id)->first();
+                foreach($popular as $item){
+                    array_push($codes,$code->designation);
+                    array_push($count,$item);
+                }
+            }else{
+                array_push($codes,'NULL');
+                array_push($count,0);
+            }
+        }
+        
+        array_push($data,$labels);
+        array_push($data,$codes);
+        array_push($data,$count);
+        array_push($data,"Code panne le plus fréquent ");  
+        return response()->json($data);
+
+    }
+    public function countCategorie(Request $request){
+        $data = [];
+        $labels = [];
+        $counts = [];
+        
+        $hist = Equipement::select('zone' ,'desi_cat', 'designation')
+        ->where('zone', '=', $request->zone)
+        ->orderBy('zone','asc')
+        ->orderBy('desi_cat','asc')
+        ->get();
+        for($i = 0 ; $i < count($hist) ; $i++){
+            if ($i == 0){
+                array_push($labels,$hist[$i]->desi_cat);
+                array_push($counts,1); 
+            }
+            else{
+                if($hist[$i-1]->desi_cat == $hist[$i]->desi_cat){
+                    // if($hist[$i-1]->designation != $hist[$i]->designation){
+                        $counts[count($counts)-1] += 1;
+                    // }
+                } 
+                else{
+                    array_push($labels,$hist[$i]->desi_cat);
+                    array_push($counts,1);
+                }
+            }
+        }
+
+        array_push($data,$labels);
+        array_push($data,$counts);
+        array_push($data,"Nombre des équipements dans la zone ".$request->zone);  
+        return response()->json($data);
+    }
+    public function nbrCategorieZone(){
+        $data = [];
+        $labels = [];
+        $counts = [];
+        
+        $hist = Equipement::select('zone' ,'desi_cat')->orderBy('zone','asc')->orderBy('desi_cat','asc')->get();
+
+        for($i = 0 ; $i < count($hist) ; $i++){
+            if ($i == 0){
+                array_push($labels,$hist[$i]->zone);
+                array_push($counts,1); 
+            }
+            else{
+                if($hist[$i-1]->zone == $hist[$i]->zone){
+                    if($hist[$i-1]->desi_cat != $hist[$i]->desi_cat){
+                        $counts[count($counts)-1] += 1;
+                    }
+                } 
+                else{
+                    array_push($labels,$hist[$i]->zone);
+                    array_push($counts,1);
+                }
+            }
+        }
+
+        array_push($data,$labels);
+        array_push($data,$counts);
+        array_push($data,"Nombre de categorie par zone");  
+        return response()->json($data);
+    }
+
     public function nbrArretZone(Request $request){
         $data = [];
         $assemblage = Historique::where('zone','=','Assemblage')->count();
