@@ -77,7 +77,7 @@
         <div class="card-tools">
           <!-- Button trigger modal -->
           <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
-          Ajouter un nouveau utilisateur
+             <i class="fas fa-user-plus" title="Ajouter un nouvel utilisateur"></i>
           </button>
           <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>
         </div>
