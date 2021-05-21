@@ -1,7 +1,6 @@
 <template>
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-
     <!-- Content Header (Page header) -->
     <section class="content-header" :class="{'loading':loading}">
       <div class="container-fluid">
@@ -83,7 +82,7 @@
           <template v-if="accessData.userName == null">
             <a href="/signin" class="btn btn-success">
               <i class="fas fa-sign-in-alt" title="Se connecter à OneDrive"/>
-              <i class="nav-icon fas fa-cloud"/>
+              <i class="nav-icon fas fa-cloud"/> Onedrive
             </a> 
           </template>
           <template v-if="accessData.userName != null">
@@ -105,29 +104,26 @@
             <i class=" fas fa-download" title="Ajouter via fichier excel"> Importer</i>
           </button>
         <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
-          <i class="fas fa-plus" title=" Ajouter un nouvel équipement"></i>
+          <i class="fas fa-plus" title=" Ajouter un nouvel équipement">  Ajouter</i>
         </button>
           <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>
         </div>
       </div>
       <!-- /.card-header -->
     <AddEquipement @equipement-added="refreshAdded" v-bind:isConnected="isConnected"></AddEquipement>
-    <AddFromExcel v-bind:type="'equipement'" @codePanne-added="refreshAdded"></AddFromExcel>   
-    <ViewPdf @closed="refreshDoc" v-bind:path="document.document"></ViewPdf>
+    <AddFromExcel v-bind:type="'equipement'" @codePanne-added="refreshAdded"></AddFromExcel>
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-nowrap">
           <thead>
             <tr>
               <th>Code_machine</th>
               <th>Designation</th>
-              <th>Emplacement</th>
               <th>Code catégorie</th>
               <th>Date d'acquisition</th>
               <th>N°serie</th>
               <th>Constructeur</th>
               <th>Etat</th>
               <th>Image</th>
-              <th>Document</th>
               <th>Zone</th>  
               <th>Action</th>
             </tr>
@@ -136,35 +132,12 @@
             <tr v-for="equipement in equipements.data" :key="equipement.id">
               <td>{{ equipement.code }}</td>
               <td>{{ equipement.designation }}</td>
-              <td>{{ equipement.emplacement }}</td>
               <td>{{ equipement.code_categorie }}</td>
               <td>{{ equipement.date_acq }}</td>
               <td>{{ equipement.n_serie }}</td>
               <td>{{ equipement.constructeur }}</td>
               <td>{{ equipement.etat }}</td>
               <td><img :src="equipement.image" style="width:100px; height:100px"></td>
-              <td>
-                <div class="row">
-                  <button @click="getDocuments(equipement.id,'ins_c')" class="btn btn-outline-info">
-                  <i class="fas fa-file-pdf"></i> Instruction 1ér niveau
-                  </button>
-                </div>
-                <div class="row">
-                  <button @click="getDocuments(equipement.id,'ins_p')" class="btn btn-outline-info">
-                  <i class="fas fa-file-pdf"></i> Instruction préventive
-                  </button>
-                </div>
-                <div class="row">
-                  <button @click="getDocuments(equipement.id,'dossier_technique')" class="btn btn-outline-info">
-                  <i class="fas fa-file-pdf"></i> Dossier technique
-                  </button> 
-                </div>
-                <div class="row">
-                  <button @click="getDocuments(equipement.id,'liste_pr')" class="btn btn-outline-info">
-                  <i class="fas fa-file-pdf"></i> Liste PR
-                  </button>
-                </div>
-              </td>
               <td>{{ equipement.zone }}</td>
               <td>
                 <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getEquipement(equipement.id)" title="Modifier">
@@ -183,7 +156,6 @@
                 <ShowEquipement
                     v-bind:equipementShow="equipementToEdit">
                  </ShowEquipement>
-
               </td>
             </tr>
           </tbody>
@@ -205,7 +177,6 @@
   import EditEquipement from './EditEquipement';
   import ShowEquipement from './ShowEquipement';
   import DeleteEquipement from './DeleteEquipement';
-  import ViewPdf from './ViewPdfFile.vue';
   import AddList from '../OneDrive/AddFileList';
   import AddFromExcel from '../AddFromExcel';
 
@@ -215,7 +186,6 @@
       EditEquipement,
       ShowEquipement,
       DeleteEquipement,
-      ViewPdf,
       AddList,
       AddFromExcel
     },
@@ -275,30 +245,6 @@
             document.body.appendChild(link)
             link.click()
         });
-      },
-      refreshDoc(){
-        this.document = '';
-      },
-      getDocuments(id,type){
-        this.loading = true;
-        axios.get('/equipements/document/'+id+'/'+type)
-        .then(response => {
-          this.document = response.data
-          if(response.data != 'introuvable'){
-            document.getElementById('openPdf').click();
-          }else{
-            this.$swal.fire({
-              icon: 'warning',
-              title: "Aucun document disponible !",
-              toast: true,
-              position: 'top-end',
-              showConfirmButton: false,
-              timer: 5000
-            });
-          }
-          this.loading = false;
-        })
-        .catch(error => console.log(error))
       },
       getResults(page = 1) {
         axios.post('/equipements/liste?page=' + page)

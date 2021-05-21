@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-            <p>Voulez-vous vraiment supprimer cet intervention ?&hellip;</p>
+            <p>Voulez-vous vraiment supprimer cette intervention ?&hellip;</p>
             </div>
             <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Non</button>

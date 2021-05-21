@@ -16,31 +16,33 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Messages Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" @click="markAsRead" data-toggle="dropdown" href="#">
-          <i class="far fa-comments"></i>
-          <span class="badge badge-danger navbar-badge">{{unreadMessages.length}}</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <a href="#" class="dropdown-item" v-for="message in unreadMessages" :key="message.id" @click="showChat(message.data.reciever)">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  {{message.data.reciever.nom}} {{message.data.reciever.prenom}}
-                  <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">{{message.data.newMessage.text}}</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
+      <template v-if="user.role == 'TECHNICIEN'">
+        <li class="nav-item dropdown">
+          <a class="nav-link" @click="markAsRead" data-toggle="dropdown" href="#">
+            <i class="far fa-comments"></i>
+            <span class="badge badge-danger navbar-badge">{{unreadMessages.length}}</span>
           </a>
-          <div class="dropdown-divider"></div>
-          <router-link to="/chat" class="dropdown-item dropdown-footer">Voir tous les messages</router-link>
-        </div>
-      </li>
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <a href="#" class="dropdown-item" v-for="message in unreadMessages" :key="message.id" @click="showChat(message.data.reciever)">
+              <!-- Message Start -->
+              <div class="media">
+                <img src="Images/worker5.png" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                <div class="media-body">
+                  <h3 class="dropdown-item-title">
+                    {{message.data.reciever.nom}} {{message.data.reciever.prenom}}
+                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                  </h3>
+                  <p class="text-sm">{{message.data.newMessage.text}}</p>
+                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                </div>
+              </div>
+              <!-- Message End -->
+            </a>
+            <div class="dropdown-divider"></div>
+            <router-link to="/chat" class="dropdown-item dropdown-footer">Voir tous les messages</router-link>
+          </div>
+        </li>
+      </template>
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a @click="markAsRead" class="nav-link" data-toggle="dropdown" href="#">

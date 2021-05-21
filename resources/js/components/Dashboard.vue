@@ -121,12 +121,6 @@ import NbrPanne from './AnalyseCurative/NbrPanne';
         }
       },
       created(){
-        if(this.user.role == 'TECHNICIEN'){
-          this.$router.push('/hist-technicien');
-        }
-        if(this.user.role == 'HOTLINE'){
-          this.$router.push('/hist-hotline');
-        }
         axios.get('/getCount')
           .then(response =>  this.data = response.data)
           .catch(error => console.log(error));

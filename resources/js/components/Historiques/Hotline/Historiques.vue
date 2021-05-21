@@ -25,7 +25,7 @@
       >
       <template v-if="hidden == 'true'"
         ><button @click="viewAll('false')">
-          Afficher les interventions du hotline
+          Afficher les interventions de l'hotline
         </button></template
       >
       <template v-if="hidden == 'false'">
@@ -151,7 +151,7 @@
             <div class="card-tools">
               <!-- Button trigger modal -->
               <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
-                <i class="fas fa-plus" title=" Ajouter une nouvelle intervention"></i>
+                <i class="fas fa-plus" title="Ajouter une nouvelle intervention"> Ajouter</i>
              
               </button>
               <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>

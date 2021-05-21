@@ -22,7 +22,7 @@
     <!-- Conversations are loaded here -->
     <div class="card-body">
       <h3>{{ contact ? contact.nom : 'Selectionner un utilisateur' }}</h3>
-        <div class="direct-chat-messages">
+        <div ref="feed" class="direct-chat-messages">
           <!-- Message. Default to the left -->
           <div class="direct-chat-msg" v-for="message in messages" :key="message.id" :class="{'right ' : message.from == user.id}">
               <div class="direct-chat-infos clearfix">
@@ -36,7 +36,7 @@
                   </span>
               </div>
               <!-- /.direct-chat-infos -->
-              <img class="direct-chat-img" src="dist/img/user1-128x128.jpg" alt="message user image">
+              <img class="direct-chat-img" src="Images/worker5.png" alt="message user image">
               <!-- /.direct-chat-img -->
               <div class="direct-chat-text">
                   {{message.text}}
@@ -51,7 +51,7 @@
         <ul class="contacts-list">
           <li v-for="(contact, index) in contacts" :key="contact.id" @click="selectContact(index, contact)">
               <a href="#">
-              <img class="contacts-list-img" src="dist/img/user1-128x128.jpg" alt="User Avatar">
+              <img class="contacts-list-img" src="Images/worker5.png" alt="User Avatar">
               <div class="contacts-list-info">
                   <p class="contacts-list-name">
                   {{contact.nom}} {{contact.prenom}}
@@ -119,6 +119,12 @@
 
     methods:{
 
+      scrollToBottom(){
+        setTimeout(()=>{
+          this.$refs.feed.scrollTop = this.$refs.feed.scrollHeight - this.$refs.feed.clientHeight;
+        },50);
+      },
+
       saveNewMessage(message) {
         this.messages.push(message);
       },
@@ -131,7 +137,7 @@
             contact_id: this.contact.id,
             text: text
         }).then((response) => {
-          this.saveNewMessage(response.data)
+          this.saveNewMessage(response.data);
         })
       },
 

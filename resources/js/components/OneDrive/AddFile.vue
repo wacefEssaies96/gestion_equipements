@@ -3,8 +3,8 @@
   <div class="modal fade" id="addInstructionsEquip" tabindex="-1" role="dialog" aria-labelledby="addInstructionsEquipTitle" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
-        <div :class="{'overlay':l}"><!--class="overlay" -->
-          <i :class="{'fas fa-2x fa-sync fa-spin':l}"></i><!--class="fas fa-2x fa-sync fa-spin" -->
+        <div :class="{'overlay':l}">
+          <i :class="{'fas fa-2x fa-sync fa-spin':l}"></i>
         </div>
       <div class="modal-header">
           <h5 class="modal-title" id="addInstructionsEquipTitle">Ajouter un document vie Onedrive</h5>

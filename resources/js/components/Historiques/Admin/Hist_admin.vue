@@ -6,12 +6,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>interventions</h1>
+            <h1>Interventions</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><router-link to="/">Acceuil</router-link></li>
-              <li class="breadcrumb-item active">interventions</li>
+              <li class="breadcrumb-item active">Interventions</li>
             </ol>
           </div>
         </div>
@@ -139,7 +139,7 @@
       <div class="card-tools">
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
-        <i class="fas fa-plus" title=" Ajouter une nouvelle intervention"></i>
+        <i class="fas fa-plus" title="Ajouter une nouvelle intervention"> Ajouter</i>
         
         </button>
         <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>

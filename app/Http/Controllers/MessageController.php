@@ -13,7 +13,7 @@ use Notification;
 class MessageController extends Controller
 {
     public function get(){
-        $users = User::where('id', '!=', Auth::id())->get();
+        $users = User::where('id', '!=', Auth::id())->where('role','=','TECHNICIEN')->get();
         return response()->json($users);
     }
 

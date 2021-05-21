@@ -66,7 +66,7 @@
             <i class="fas fa-download" title="Ajouter via fichier excel"> Importer</i>
           </button>
           <button class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
-            <i class="fas fa-plus" title=" Ajouter un nouveau code panne"></i>
+            <i class="fas fa-plus" title=" Ajouter un nouveau code panne"> Ajouter</i>
           
           </button>
           <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>

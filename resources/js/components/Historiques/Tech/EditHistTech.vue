@@ -17,6 +17,8 @@
                     </div>
                     <!-- /.card-header -->
                 <!-- form start -->
+                <ViewPdf @closed="refreshDoc" v-bind:path="document.document"></ViewPdf>
+                <button hidden id="openPdf" data-toggle="modal" data-target="#viewpdf"></button>
                 <form @submit.prevent="checkEditForm">
                     <div class="card-body">
                         <div class="row">
@@ -52,28 +54,26 @@
                         <label for="documents">Documents des équipements</label>
                         <div class="row">
                             <div class="col-sm-6">
-                                <a href="" @click="getDocuments(id.code_equip,'ins_c')" class="btn btn-outline-info">
+                                <a href="#" @click="getDocuments(id.code_equip,'ins_c')" class="btn btn-outline-info">
                                 <i class="fas fa-file-pdf"></i> Instruction 1ér niveau
                                 </a>
                             </div>
                             <div class="col-sm-6">
-                                <a href="" @click="getDocuments(id.code_equip,'ins_p')" class="btn btn-outline-info">
+                                <a href="#" @click="getDocuments(id.code_equip,'ins_p')" class="btn btn-outline-info">
                                 <i class="fas fa-file-pdf"></i> Instruction préventive
                                 </a>
                             </div>
                             <div class="col-sm-6">
-                                <a href="" @click="getDocuments(id.code_equip,'dossier_technique')" class="btn btn-outline-info">
+                                <a href="#" @click="getDocuments(id.code_equip,'dossier_technique')" class="btn btn-outline-info">
                                 <i class="fas fa-file-pdf"></i> Dossier technique
                                 </a>
                             </div>
                             <div class="col-sm-6">
-                                <a href="" @click="getDocuments(id.code_equip,'liste_pr')" class="btn btn-outline-info">
+                                <a href="#" @click="getDocuments(id.code_equip,'liste_pr')" class="btn btn-outline-info">
                                 <i class="fas fa-file-pdf"></i> Liste PR
                                 </a>
                             </div>
                         </div>
-                        <ViewPdf v-bind:path="document.document"></ViewPdf>
-                        <button hidden id="openPdf" data-toggle="modal" data-target="#viewpdf"></button>
                         <div class="form-group">
                             <label for="travaille">Travaille effectué</label>
                             <textarea class="form-control" placeholder="Travaille éffectué" v-model="travaille"
@@ -152,6 +152,7 @@
         axios.get('/equipements/document/'+id+'/'+type)
         .then(response => {
           if(response.data != 'introuvable'){
+            this.document = response.data
             document.getElementById('openPdf').click();
           }else{
             this.$swal.fire({
@@ -165,6 +166,9 @@
           }
         })
         .catch(error => console.log(error))
+      },
+      refreshDoc(){
+        this.document = '';
       },
       update(){
         axios.patch('/histtech/edit/' + this.hist.id, {
