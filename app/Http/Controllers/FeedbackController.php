@@ -16,9 +16,18 @@ class FeedbackController extends Controller
         $this->middleware('auth');
     }
     
-    public function liste()
+    public function liste(Request $request)
     {
-        return $this->refresh();
+        if(count($request->all()) < 1) return $this->refresh();
+        else{
+            $feedbacks = Feedback::join('equipements', 'code_equip', '=', 'equipements.id')->select('feedback.*','equipements.designation');
+            if($request->jour != '') $feedbacks = $feedbacks->whereDate('feedback.jour','like','%'.$request->jour.'%');
+            if($request->zone != '') $feedbacks = $feedbacks->where('feedback.zone','=',$request->zone);
+            if($request->equipement != '') $feedbacks = $feedbacks->where('equipements.designation','like','%'.$request->equipement.'%');
+            $feedbacks = $feedbacks->paginate();
+            return response()->json($feedbacks);
+        }
+
     }
 
     public function store(Request $request)
@@ -38,8 +47,6 @@ class FeedbackController extends Controller
         $feedback = Feedback::find($id);
         return response()->json($feedback);
     }
-
-   
     public function update($id)
     {
         $feedback = Feedback::find($id);
@@ -49,8 +56,6 @@ class FeedbackController extends Controller
         $feedback->save();
         return $this->refresh();
     }
-
-    
     public function destroy($id)
     {
         $feedback = Feedback::find($id);

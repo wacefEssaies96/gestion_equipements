@@ -18,122 +18,106 @@
       </div><!-- /.container-fluid -->
     </section>
   <div class="card m-lg-4">
-          <template v-if="hidden == 'false'">
-            <div class="card m-lg-4">
-            <div class="card-body">
-              <div class="card-header">
-                <h3 class="card-title">Recherche</h3>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <div class="from-group">
-                    <label>N°Bt</label>
-                    <input
-                      @keyup="search"
-                      type="text"
-                      v-model="qNumBt"
-                      class="form-control"
-                      placeholder="Num Bt"
-                    />
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="form-group">
-                    <label>Heure début</label>
-                    <input
-                      @change="search"
-                      type="time"
-                      v-model="qDateDebut"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="form-group">
-                    <label>Heure fin</label>
-                    <input
-                      @change="search"
-                      type="time"
-                      v-model="qDateFin"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <div class="from-group">
-                    <label>Technicien</label>
-                    <select @change="search" class="form-control" v-model="qTech">
-                      <option value="" selected>Vide</option>
-                      <option
-                        v-for="tech in techs"
-                        :key="tech.id"
-                        :value="tech.id"
-                      >
-                        {{ tech.nom }} {{ tech.prenom }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="form-group">
-                    <label>BT cloturé</label>
-                    <select
-                      @change="search"
-                      class="form-control"
-                      v-model="qAppelle"
-                    >
-                      <option value="" selected>Vide</option>
-                      <option value="Cloturé">Cloturé</option>
-                      <option value="Non cloturé">Non cloturé</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col">
-                  <label>Categorie</label>
-                  <input type="text" v-model="qCodeCategorie" @keyup="search" class="form-control">
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <div class="from-group">
-                    <label>Code panne</label>
-                    <select @change="search" class="form-control" v-model="qCodePanne">
-                      <option value="" selected>Vide</option>
-                      <option
-                        v-for="cp in allCodePanne"
-                        :key="cp.id"
-                        :value="cp.id"
-                      >
-                        {{ cp.code }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col">
-                  <label for="code_machine">Code machine</label>
-                  <input type="text" v-model="qCodeMachine" @keyup="search" class="form-control">
-                </div>
-                 <div class="col">
-                  <div class="from-group">
-                    <label>Zone</label>
-                    <select @change="search" class="form-control" v-model="qZone">
-                      <option value="" selected>Vide</option>
-                      <option value="Assemblage">Assemblage</option>
-                      <option value="Sertissage">Sertissage</option>
-                      <option value="Préparation">Préparation</option>
-                      <option value="Coupe">Coupe</option>
-                      <option value="Controle éléctrique">
-                        Controle éléctrique
-                      </option>
-                    </select>
-                  </div>
-                </div>
-              </div>
+    <template v-if="hidden == 'false'">
+      <div class="card m-lg-4">
+      <div class="card-body">
+        <div class="card-header">
+          <h3 class="card-title">Recherche</h3>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="from-group">
+              <label>N°Bt</label>
+              <input
+                @keyup="search"
+                type="text"
+                v-model="qNumBt"
+                class="form-control"
+                placeholder="Num Bt"
+              />
             </div>
           </div>
-          </template>
+          <div class="col">
+            <div class="form-group">
+              <label>Heure début</label>
+              <input
+                @change="search"
+                type="time"
+                v-model="qDateDebut"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label>Heure fin</label>
+              <input
+                @change="search"
+                type="time"
+                v-model="qDateFin"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col">
+            <div class="from-group">
+              <label>Zone</label>
+              <select @change="search" class="form-control" v-model="qZone">
+                <option value="" selected>Vide</option>
+                <option value="Assemblage">Assemblage</option>
+                <option value="Sertissage">Sertissage</option>
+                <option value="Préparation">Préparation</option>
+                <option value="Coupe">Coupe</option>
+                <option value="Controle éléctrique">
+                  Controle éléctrique
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="from-group">
+              <label>Technicien</label>
+              <select @change="search" class="form-control" v-model="qTech">
+                <option value="" selected>Vide</option>
+                <option
+                  v-for="tech in techs"
+                  :key="tech.id"
+                  :value="tech.id"
+                >
+                  {{ tech.nom }} {{ tech.prenom }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <label for="code_machine">Code machine</label>
+            <input type="text" v-model="qCodeMachine" @keyup="search" class="form-control">
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label>BT cloturé</label>
+              <select
+                @change="search"
+                class="form-control"
+                v-model="qAppelle"
+              >
+                <option value="" selected>Vide</option>
+                <option value="Cloturé">Cloturé</option>
+                <option value="Non cloturé">Non cloturé</option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <label>Categorie</label>
+            <input type="text" v-model="qCodeCategorie" @keyup="search" class="form-control">
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    </template>
     <div class="card-header">
       <h3 class="card-title">Liste de tous les interventions</h3>
       <div class="card-tools">
@@ -154,7 +138,11 @@
           <tr>
             <th>N°Bt</th>
             <th>Jour</th>
-            <th>Heure de demande</th>
+            <th>H.demande</th>
+            <th>H.début</th>
+            <th>H.fin</th>
+            <th>H.d'arret</th>
+            <th>H.d'attente</th>
             <th>Type Travaille</th>
             <th>Code machine</th>
             <th>Designation M</th>
@@ -162,14 +150,10 @@
             <th>Emplacement</th>
             <th>Description</th>
             <th>Zone</th>
-            <th>H.début</th>
-            <th>H.fin</th>
             <th>Code panne</th>
             <th>Designation CP</th>
             <th>Travaille éffectué</th>
             <th>Pièce de rechange</th>
-            <th>H.d'arret</th>
-            <th>H.d'attente</th>
             <th>BT cloturé</th>
            <th>Action</th>
           </tr>
@@ -179,21 +163,21 @@
             <td>{{ historique.id }}</td>
             <td>{{ historique.jour }}</td>
             <td>{{ historique.heure_demande }}</td>
+            <td>{{ historique.heure_debut }}</td>
+            <td>{{ historique.heure_fin }}</td>
+            <td>{{ historique.heure_arret }}</td>
+            <td>{{ historique.heure_attente }}</td>
             <td>{{ historique.type_travaille }}</td>
-            <td>{{ historique.code_equip }}</td>
+            <td>{{ historique.code }}</td>
             <td>{{ historique.designation }}</td>
             <td>{{ historique.n_serie }}</td>
             <td>{{ historique.emplacement }}</td>
             <td>{{ historique.description_demande }}</td>
             <td>{{ historique.zone }}</td>
-            <td>{{ historique.heure_debut }}</td>
-            <td>{{ historique.heure_fin }}</td>
             <td>{{ historique.codePanne }}</td>
             <td>{{ historique.codePanneDesignation }}</td>
             <td>{{ historique.travaille }}</td>
             <td>{{ historique.piece_rechange }}</td>
-            <td>{{ historique.heure_arret }}</td>
-            <td>{{ historique.heure_attente }}</td>
             <td>{{ historique.appelle }}</td>
             <td> 
                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getHistorique(historique.id);">
@@ -269,7 +253,6 @@ export default {
       await axios.post("/historiques/liste")
       .then(response => {
         this.historiques = response.data
-        console.log(response.data); 
       })
       .catch(error => console.log(error))
       await axios.get("/historiques/techs")

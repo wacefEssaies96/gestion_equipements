@@ -29,7 +29,7 @@
                 <div class="col">
                   <div class="from-group">
                     <label>Jour</label>
-                    <input @keyup="search" type="date" v-model="qJour" class="form-control" placeholder="Jour">
+                    <input @change="search" type="date" v-model="qJour" class="form-control" placeholder="Jour">
                   </div>
                 </div>
                <div class="col">
@@ -45,21 +45,12 @@
                   </select>
                 </div>
               </div>
-
               <div class="col">
                 <div class="form-group">
                   <label>Equipement</label>
                   <input @keyup="search" type="text" v-model="qEquipement" class="form-control" placeholder="Equipement">
                 </div>
               </div>
-               
-                <div class="col">
-                <div class="form-group">
-                  <label>Commentaire</label>
-                  <input @keyup="search" type="textArea" v-model="qCommentaire" class="form-control" placeholder="Commentaire">
-                </div>
-              </div>
-                
               </div>
             </div>
           </div>
@@ -143,11 +134,11 @@
         }
       },
       created(){
-        axios.get("/feedbacks/liste")
+        axios.post("/feedbacks/liste")
         .then(response => {
           this.feedbacks = response.data
           this.loading = false;
-          })
+        })
         .catch(error => console.log(error))
       },
       methods:{
@@ -211,21 +202,16 @@
           }
         },
         search(){
-        //   this.q.append('role', 'PRODUCTION');
           this.q.append('jour', this.qJour);
           this.q.append('zone', this.qZone);
           this.q.append('equipement', this.qEquipement);
-          this.q.append('commentaire', this.qCommentaire);
-
-        //   axios.post("/feedbacks/search", this.q)
-        //   .then(response => this.feedbacks = response.data)
-        //   .catch(error => console.log(error))
-
+          axios.post("/feedbacks/liste", this.q)
+          .then(response => this.feedbacks = response.data)
+          .catch(error => console.log(error))
         },
         refresh(feedbacks){
           this.feedbacks = feedbacks.data; 
         },
-
       }
     }
 </script>

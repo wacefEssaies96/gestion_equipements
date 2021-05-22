@@ -29,13 +29,13 @@
                 <div class="from-group">
                   <label>Nom</label>
                   <input @keyup="search" type="text" v-model="qNom" class="form-control" placeholder="Nom">
-                </div>              <div class="col">
+                </div>
+              </div>
+              <div class="col">
                 <div class="from-group">
                   <label>Code</label>
                   <input @keyup="search" type="text" v-model="qCode" class="form-control" placeholder="Code">
                 </div>
-              </div>
-
               </div>
               <div class="col">
                 <div class="form-group">
@@ -43,7 +43,8 @@
                   <input @keyup="search" type="text" v-model="qPrenom" class="form-control" placeholder="Prenom">
                 </div>
               </div>
-            
+            </div>
+            <div class="row">
               <div class="col">
                 <div class="from-group">
                   <label>Tel</label>

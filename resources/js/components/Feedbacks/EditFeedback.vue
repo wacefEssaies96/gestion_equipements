@@ -54,7 +54,7 @@
                         </div>  
                         <div class="form-group">
                             <label for="commentaire">Commentaire</label>
-                            <textarea id="commentaire" class="form-control" placeholder="commentaire" v-model="commentaire"
+                            <textarea class="form-control" placeholder="commentaire" v-model="commentaire"
                             :class="{'is-invalid':(commentaire != '') ?$v.commentaire.$invalid:'', 'is-valid':!$v.commentaire.$invalid}"></textarea>
                             <div class="valid-feedback">Validé</div>
                             <div class="invalid-feedback">

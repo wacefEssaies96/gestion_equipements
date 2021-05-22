@@ -24,17 +24,10 @@ use App\User;
     Route::post('/analyse/count-categorie/zone', 'ChartController@countCategorie');
     Route::post('/analyse/count-equipement', 'ChartController@countEquipement');
 
-    
-
-
     //chat
     Route::get('/contacts', 'MessageController@get');
     Route::get('/conversation/{id}', 'MessageController@getConversation');
     Route::post('/conversation/send', 'MessageController@send');
-
-    //desactiver un user
-    Route::get('/users/{id}/enable', 'UserController@enable');
-    Route::get('/users/{id}/disable', 'UserController@disable');
 
     //users
     Route::get('/users', 'UserController@liste');
@@ -43,12 +36,15 @@ use App\User;
     Route::delete('/users/{id}', 'UserController@destroy');
     Route::patch('/users/edit/{id}', 'UserController@update');
     Route::get('/users/verifcode/{value}', 'UserController@verifCode');
+    Route::post('/users/search', 'UserController@searchuser');
+    //desactiver un user
+    Route::get('/users/{id}/enable', 'UserController@enable');
+    Route::get('/users/{id}/disable', 'UserController@disable');
 
     Route::get('/historiques/techniciens/{zone}', 'UserController@getTechniciens');
     Route::get('/historiques/hotline', 'HistoriqueController@getHotlineHistoriques');
     Route::get('/historiques/techs', 'UserController@getAllTechs');
     Route::get('/users/verifemail/{value}', 'UserController@verifEmail');
-    Route::post('/users/search', 'UserController@searchuser');
     Route::get('/historiques/ht','UserController@getUserId');
     
     //onedrive
@@ -67,7 +63,7 @@ use App\User;
  
     //Feedback
     Route::post('/feedbacks', 'FeedbackController@store');
-    Route::get('/feedbacks/liste', 'FeedbackController@liste');
+    Route::post('/feedbacks/liste', 'FeedbackController@liste');
     Route::get('/feedbacks/edit/{id}', 'FeedbackController@edit');
     Route::patch('/feedbacks/edit/{id}', 'FeedbackController@update');
     Route::delete('/feedbacks/{id}', 'FeedbackController@destroy');

@@ -67,7 +67,7 @@ class HistoriqueController extends Controller
             $hist = $hist->where('equipements.code_categorie','like', '%'.request('code_categorie').'%');
         }
         if($request->code_equip != ''){
-            $hist = $hist->where('historiques.code_equip','like', '%'.request('code_equip').'%');
+            $hist = $hist->where('equipements.code','like', '%'.request('code_equip').'%');
         }
         $hist = $hist->paginate(10);
         

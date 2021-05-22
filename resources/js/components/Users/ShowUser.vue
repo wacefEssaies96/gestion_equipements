@@ -20,47 +20,44 @@
               </div>
               <div class="card-body">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col">
                             <h5>Code</h5>
                             <p class="text-secondary">{{userShow.code}}</p>
                         </div>
-                         <div class="col-6">
+                         <div class="col">
                             <h5>Nom</h5>
                             <p class="text-secondary">{{userShow.nom}}</p>
                         </div>
-                        <div class="col-6">
+                        <div class="col">
                             <h5>Prénom</h5>
                             <p class="text-secondary">{{userShow.prenom}}</p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col">
                             <h5>Email</h5>
                             <p class="text-secondary">{{userShow.email}}</p>
                         </div>
-                        <div class="col-6">
+                        <div class="col">
                             <h5>Téléphone</h5>
                             <p class="text-secondary">{{userShow.tel}}</p>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
+                        <div class="col">
                             <h5>Role</h5>
                             <p class="text-secondary">{{userShow.role}}</p>
                         </div>
-                     
                     </div>
                 <template v-if="userShow.role == 'TECHNICIEN'">
                     <div class="row">
-                           <div class="col-6">
+                           <div class="col">
                             <h5>zone</h5>
                             <p class="text-secondary">{{userShow.zone}}</p>
                         </div>
-                         <div class="col-6">
+                         <div class="col">
                             <h5>Poste</h5>
                             <p class="text-secondary">{{userShow.poste}}</p>
                         </div>
-                        <div class="col-6">
+                        <div class="col">
                             <h5>Qualification</h5>
                             <p class="text-secondary">{{userShow.qualification}}</p>
                         </div>

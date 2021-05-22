@@ -58,7 +58,7 @@
                           </div>
                         <div class="form-group">
                             <label for="commentaire">Commentaire</label>
-                            <textarea id="commentaire" class="form-control" placeholder="commentaire" v-model="commentaire"
+                            <textarea class="form-control" placeholder="commentaire" v-model="commentaire"
                             :class="{'is-invalid':(commentaire != '') ?$v.commentaire.$invalid:'', 'is-valid':!$v.commentaire.$invalid}"></textarea>
                             <div class="valid-feedback">Validé</div>
                             <div class="invalid-feedback">
@@ -100,7 +100,6 @@ import { required} from 'vuelidate/lib/validators';
       }
     },
     validations: {
-
       zone: {
         required,
       },
@@ -109,8 +108,7 @@ import { required} from 'vuelidate/lib/validators';
       },
       commentaire: {
         required,
-      },
-    
+      }
     },
     methods:{
       checkAddForm(){
@@ -124,11 +122,9 @@ import { required} from 'vuelidate/lib/validators';
       },
       feedbackStore(){
         axios.post('/feedbacks',{
-
-            zone: this.zone,
-            equipement: this.equipement,
-            commentaire: this.commentaire,
-           
+          zone: this.zone,
+          equipement: this.equipement,
+          commentaire: this.commentaire,
         })
         .then(response => this.$emit('feedback-added',response)) 
         .catch(error => console.log(error));
@@ -139,14 +135,12 @@ import { required} from 'vuelidate/lib/validators';
         axios.get('/historiques/equipement/zone/' + zone)
         .then(response =>this.e =  response.data)
         .catch(error => console.log(error));
-        
       },
       refreshData(){
-
         this.zone = '';
         this.equipement = '';
+        this.e = '';
         this.commentaire= '';
-        
       },
     }
   }
