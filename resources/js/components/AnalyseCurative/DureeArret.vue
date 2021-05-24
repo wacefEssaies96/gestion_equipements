@@ -2,22 +2,26 @@
     <div class="card">
       <div class="card-header">
       <h3 class="card-title">
-        <i class="fas fa-chart-bar mr-1"></i>
-        Durée d'arret
+        <i class="fas fa-chart-bar mr-1"></i> Durée d'arret
       </h3>
       <div class="card-tools">
         <ul class="nav nav-pills ml-auto">
           <li class="nav-item pt-2">
-              <a class="nav-link active" href="#revenue-chart" @click="setChoice('zone')" data-toggle="tab">Zone</a>
+              <a class="nav-link active" href="#" @click="setChoice('zone')" data-toggle="tab">Zone</a>
           </li>
           <li class="nav-item pt-2">
-              <a class="nav-link" href="#sales-chart" @click="setChoice('equipement')" data-toggle="tab">Equipement</a>
+              <a class="nav-link" href="#" @click="setChoice('equipement')" data-toggle="tab">Equipement</a>
           </li>
           <li class="nav-item pt-2">
-              <a class="nav-link" href="#sales-chart" @click="setChoice('categorie')" data-toggle="tab">Categorie</a>
+              <a class="nav-link" href="#" @click="setChoice('categorie')" data-toggle="tab">Categorie</a>
           </li>
           <li class="nav-item pt-2">
-              <a class="nav-link" href="#sales-chart" @click="setChoice('codePanne')" data-toggle="tab">Code pannes</a>
+              <a class="nav-link" href="#" @click="setChoice('codePanne')" data-toggle="tab">Code pannes</a>
+          </li>
+          <li class="nav-item pt-2">
+            <a @click="exportData()" class="nav-link">
+              <i class="fas fa-upload" title="Exporter les données"></i>
+            </a>
           </li>
         </ul>
       </div>
@@ -55,24 +59,47 @@ export default {
       datacollection: null,
       datacollectionequip: null,
       options : null,
+      array: [],
+      exportedData: []
     }
   },
   created() {
     axios.post('/analyse/duree-arret/zone')
     .then(response => {
-      this.fillData(response.data)
+      this.fillData(response.data);
+      this.array = response.data;
     })
     .catch(error => console.log(error))
   },
   methods: {
+    exportData(){
+      this.exportedData = [];
+      for(var i = 0 ; i<this.array[1].length ; i++){
+        var object = {'label':this.array[0][i], "duree d'arret":this.array[1][i]};
+        this.exportedData.push(object);
+      }
+      axios.post('/export-data',{data : this.exportedData}, {responseType: 'blob'})
+      .then(response => {
+            const url = URL.createObjectURL(new Blob([response.data], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            }))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', "dureearret")
+            document.body.appendChild(link)
+            link.click()
+        })
+      .catch(error => console.log(error))
+    },
     getDataFromLaravel(){
-      axios.post('/analyse/duree-arret',{
-      type : this.choice
-    })
-    .then(response => {
-      this.fillDataForEquipement(response.data);
-    })
-    .catch(error => console.log(error))
+        axios.post('/analyse/duree-arret',{
+        type : this.choice
+      })
+      .then(response => {
+        this.fillDataForEquipement(response.data);
+        this.array = response.data;
+      })
+      .catch(error => console.log(error))
     },
     setChoice(c){
       this.choice = c

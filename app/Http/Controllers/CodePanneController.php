@@ -22,7 +22,7 @@ class CodePanneController extends Controller
         return $this->refresh();
     }
     public function export() {
-        return Excel::download(new CodePanneExport, 'disney.xlsx');
+        return Excel::download(new CodePanneExport, 'CodePannes.xlsx');
     }
     public function fetchingData(){
         $codePannes = CodePanne::all();

@@ -16,6 +16,7 @@ use App\User;
     //analyse
     Route::post('/analyse/nbr-arret/zone','ChartController@nbrArretZone');
     Route::post('/analyse/nbr-arret','ChartController@nbrArret');
+    Route::post('/export-data','ChartController@export');
 
     Route::post('/analyse/duree-arret/zone','ChartController@dureeArretZone');
     Route::post('/analyse/duree-arret','ChartController@dureeArret');

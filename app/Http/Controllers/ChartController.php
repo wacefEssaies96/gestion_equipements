@@ -8,9 +8,15 @@ use App\Technicien;
 use App\Historique;
 use App\CodePanne;
 use App\CodePanneInHist;
+use App\Exports\DureeArretExport;
+use Excel;
 
 class ChartController extends Controller
 {
+    public function export(Request $request){
+        $export = $request->data;
+        return Excel::download(new DureeArretExport($export), 'dureearret.xlsx');
+    }
     public function countEquipement(Request $request){
 
         $data = [];

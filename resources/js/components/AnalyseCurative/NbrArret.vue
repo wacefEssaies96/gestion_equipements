@@ -19,6 +19,11 @@
           <li class="nav-item pt-2">
               <a class="nav-link" href="#sales-chart" @click="setChoice('codePanne')" data-toggle="tab">Code pannes</a>
           </li>
+          <li class="nav-item pt-2">
+            <a @click="exportData()" class="nav-link">
+              <i class="fas fa-upload" title="Exporter les données"></i>
+            </a>
+          </li>
         </ul>
       </div>
       </div><!-- /.card-header -->
@@ -54,23 +59,57 @@ export default {
       choice : 'zone',
       datacollection: null,
       datacollectionequip: null,
-      options : null
+      options : null,
+      array: [],
+      exportedData: []
     }
   },
   created() {
     axios.post('/analyse/nbr-arret/zone')
-    .then(response => this.fillData(response.data))
+    .then(response => {
+      this.fillData(response.data);
+      this.array = response.data;
+    })
     .catch(error => console.log(error))
   },
   methods: {
+    exportData(){
+      this.exportedData = [];
+      if(this.choice == 'zone'){
+        var array = ['Assemblage', 'Sertissage', 'Controle éléctrique','Coupe','Préparation'];
+        for(var i = 0 ; i<this.array.length ; i++){
+          var object = {'label':array[i], "duree d'arret":this.array[i]};
+          this.exportedData.push(object);
+        }
+      }
+      
+      else{
+        for(var i = 0 ; i<this.array[1].length ; i++){
+          var object = {'label':this.array[0][i], "duree d'arret":this.array[1][i]};
+          this.exportedData.push(object);
+        }
+      }
+      
+      axios.post('/export-data',{data : this.exportedData}, {responseType: 'blob'})
+      .then(response => {
+            const url = URL.createObjectURL(new Blob([response.data], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            }))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', "dureearret")
+            document.body.appendChild(link)
+            link.click()
+        })
+      .catch(error => console.log(error))
+    },
     getDataFromLaravel(){
       axios.post('/analyse/nbr-arret',{
       type : this.choice
-    })
-    .then(response => {
-      this.fillDataForEquipement(response.data);
-    })
-    .catch(error => console.log(error))
+      }).then(response => {
+        this.fillDataForEquipement(response.data);
+        this.array = response.data;
+      }).catch(error => console.log(error))
     },
     setChoice(c){
       this.choice = c

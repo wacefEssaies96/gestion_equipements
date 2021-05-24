@@ -31,6 +31,11 @@
                 </div>
             </li>
           </template>
+          <li class="nav-item pt-2">
+            <a @click="exportData()" class="nav-link">
+              <i class="fas fa-upload" title="Exporter les données"></i>
+            </a>
+          </li>
         </ul>
       </div>
       </div><!-- /.card-header -->
@@ -51,23 +56,48 @@ export default {
     PieChart
   },
   data(){
-    return {
-        equips:[],
-        cats:[],
-        datacollection: null,
-        options : null,
-        zone:'',
-        categorie:'',
-        equipement:''
-    }
-  },
+        return {
+            equips:[],
+            cats:[],
+            datacollection: null,
+            options : null,
+            zone:'',
+            categorie:'',
+            equipement:'',
+            array: [],
+            exportedData: []
+        }
+    },
     created() {
         this.getNbrCat();
     },
     methods: {
+        exportData(){
+            this.exportedData = [];
+            console.log(this.array);
+            for(var i = 0 ; i<this.array[1].length ; i++){
+                var object = {'label':this.array[0][i], "duree d'arret":this.array[1][i]};
+                this.exportedData.push(object);
+            }
+            axios.post('/export-data',{data : this.exportedData}, {responseType: 'blob'})
+            .then(response => {
+                const url = URL.createObjectURL(new Blob([response.data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                }))
+                const link = document.createElement('a')
+                link.href = url
+                link.setAttribute('download', "analyse")
+                document.body.appendChild(link)
+                link.click()
+            })
+            .catch(error => console.log(error))
+        },
         getNbrCat(){
             axios.post('/analyse/nbr-categorie/zone')
-            .then(response => {this.fillData(response.data);})
+            .then(response => {
+                this.fillData(response.data);
+                this.array = response.data;    
+            })
             .catch(error => console.log(error))
         },
         countEquipement(){
@@ -76,10 +106,13 @@ export default {
             }
             else{
                 axios.post('/analyse/count-equipement',{
-                zone : this.zone,
-                categorie : this.categorie
+                    zone : this.zone,
+                    categorie : this.categorie
                 })
-                .then(response => this.fillDataForEquipement(response.data))
+                .then(response => {
+                    this.fillDataForEquipement(response.data);
+                    this.array = response.data; 
+                })
                 .catch(error => console.log(error));
             }
         },
@@ -93,7 +126,8 @@ export default {
                 })
                 .then(response => {
                     this.fillData(response.data);
-                    this.cats = response.data[0]; 
+                    this.cats = response.data[0];
+                    this.array = response.data; 
                 })
                 .catch(error => console.log(error))
             }
