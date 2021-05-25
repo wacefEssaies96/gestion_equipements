@@ -196,7 +196,7 @@
                 @historique-updated="refreshEdited">
               </EditHistAdmin> 
               <ShowHistAdmin
-                v-bind:historiqueShow="historiqueToEdit">
+                v-bind:historiqueShow="historiqueShow">
               </ShowHistAdmin>
             </td>
           </tr> 
@@ -244,6 +244,7 @@ export default {
         codePannes: '',
         hidden:'true',
         loading:true,
+        historiqueShow:''
       }
     },
     async created(){
@@ -292,7 +293,7 @@ export default {
           position: 'top-end',
           showConfirmButton: false,
           timer: 5000
-          });
+        });
       },
       setId(id){
         this.id = id
@@ -327,22 +328,28 @@ export default {
         axios.post("/historiques/liste", this.q)
         .then(response => this.historiques = response.data)
         .catch(error => console.log(error))
-
       },
       async getHistorique(id){
         await axios.get('/historiques/edit/' + id)
         .then(response => {
           this.historiqueToEdit = response.data
+          this.historiqueShow = response.data[0]
         })
         .catch(error => console.log(error));  
         await axios.get("/historiques/techniciens/" + this.historiqueToEdit[0].zone)
-        .then(response => this.tech = (response.data)) 
+        .then(response => {
+          this.tech = response.data
+        }) 
         .catch(error => console.log(error))
         await axios.get('/historiques/equipement/zone/' + this.historiqueToEdit[0].zone)
-        .then(response =>this.equipements =  response.data)
+        .then(response =>{
+          this.equipements =  response.data;
+        })
         .catch(error => console.log(error));
         await axios.get("/historiques/code-panne/" + this.historiqueToEdit[0].zone)
-        .then(response => this.codePannes = response.data)
+        .then(response => {
+          this.codePannes = response.data;
+        })
         .catch(error => console.log(error))
       },
      
