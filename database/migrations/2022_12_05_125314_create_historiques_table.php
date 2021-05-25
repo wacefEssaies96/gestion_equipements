@@ -28,7 +28,7 @@ class CreateHistoriquesTable extends Migration
             $table->enum('appelle',['Cloturé','Non cloturé'])->nullable();
             $table->boolean('valide')->nullable();
             $table->enum('zone', ['Sertissage', 'Assemblage','Coupe','Préparation','Controle éléctrique'])->nullable();
-            $table->bigInteger('tech_id')->unsigned();
+            $table->bigInteger('tech_id')->unsigned()->nullable();
             $table->enum('type_travaille',['C','PS','S','CS']);
             $table->bigInteger('code_equip')->unsigned()->nullable();
             $table->string('description_demande')->nullable();
@@ -37,7 +37,7 @@ class CreateHistoriquesTable extends Migration
             $table->string('travaille')->nullable();
             $table->string('piece_rechange')->nullable();
 
-            $table->bigInteger('hotline_id')->unsigned();
+            $table->bigInteger('hotline_id')->unsigned()->nullable();
             $table->foreign('hotline_id')->references('id')->on('users');
             $table->foreign('tech_id')->references('id')->on('users');
             $table->foreign('code_equip')->references('id')->on('equipements');

@@ -20,12 +20,25 @@ use App\Notifications\HistoriqueAdded;
 use App\Notifications\TechConfirmedHist;
 use App\Notifications\TechEditedHist;
 use App\Notifications\AppelleNonCloture;
+use App\imports\InterventionImport;
+use App\Exports\InterventionExport;
+use Excel;
 
 class HistoriqueController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function export() {
+        return Excel::download(new InterventionExport, 'interventions.xlsx');
+    }
+
+    public function storeFromFile(Request $request){
+        $path = $request->file;
+        Excel::import(new InterventionImport, $path);
+        return $this->liste($request);
     }
 
     public function listeTech(){

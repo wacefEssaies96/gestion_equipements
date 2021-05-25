@@ -96,6 +96,8 @@ use App\User;
     Route::delete('/feedbacks/{id}', 'FeedbackController@destroy');
 
     //Hitorique
+    Route::get('historiques/export', 'HistoriqueController@export');
+    Route::post('/historiques/excel', 'HistoriqueController@storeFromFile');
     Route::get('/hist/tech/liste', 'HistoriqueController@listeTech');  
     Route::post('/historiques/liste', 'HistoriqueController@liste');
     Route::post('/historiques/liste/hotline', 'HistoriqueController@listeHotline'); 

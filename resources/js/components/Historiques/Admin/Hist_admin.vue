@@ -114,7 +114,6 @@
             <input type="text" v-model="qCodeCategorie" @keyup="search" class="form-control">
           </div>
         </div>
-        
       </div>
     </div>
     </template>
@@ -122,6 +121,12 @@
       <h3 class="card-title">Liste de tous les interventions</h3>
       <div class="card-tools">
         <!-- Button trigger modal -->
+        <button @click="exportData()" class="btn btn-secondary">
+          <i class="fas fa-upload" title="Exporter les données"> Exporter</i>
+        </button>
+        <button class="btn btn-secondary" data-toggle="modal" data-target="#addFromExcel">
+          <i class="fas fa-download" title="Ajouter via fichier excel"> Importer</i>
+        </button>
         <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
         <i class="fas fa-plus" title="Ajouter une nouvelle intervention"> Ajouter</i>
         
@@ -131,7 +136,7 @@
     </div>
     <!-- /.card-header -->
   <AddHistAdmin @historique-added="refreshAdded"></AddHistAdmin>  
-  
+  <AddFromExcel v-bind:type="'historiques'" @historique-added="refreshAdded"></AddFromExcel>
     <div class="card-body table-responsive p-0">
       <table class="table table-hover text-nowrap">
         <thead>
@@ -213,12 +218,14 @@
   import EditHistAdmin from './EditHistAdmin';
   import ShowHistAdmin from './ShowHistAdmin';
   import DeleteHist from '../DeleteHistoriques';
+  import AddFromExcel from '../../AddFromExcel';
 export default {
     components:{
       AddHistAdmin,
       EditHistAdmin,
       ShowHistAdmin,
-      DeleteHist
+      DeleteHist,
+      AddFromExcel
     },
   props:['user'],
     data(){
@@ -268,6 +275,19 @@ export default {
       })
     },
     methods:{
+      exportData(){
+        axios.get('historiques/export', {responseType: 'blob'})
+        .then((response) => {
+            const url = URL.createObjectURL(new Blob([response.data], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            }))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', 'InterventionsListe')
+            document.body.appendChild(link)
+            link.click()
+        });
+      },
       getResults(page = 1) {
         axios.post('/historiques/liste?page=' + page)
         .then(response => {

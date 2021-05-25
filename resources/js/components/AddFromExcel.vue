@@ -63,6 +63,7 @@ export default {
             form.append('file', this.file);
             const config= {headers:{'Content-Type': 'multipart/form-data'}};
             if(this.type == "codePanne"){
+                console.log(form.file);
                 axios.post('/code-pannes/excel',form ,config)
                 .then(response => {
                     this.$emit('codePanne-added',response)
@@ -75,6 +76,16 @@ export default {
                 axios.post('/equipements/excel',form ,config)
                 .then(response => {
                     this.$emit('codePanne-added',response)
+                    this.l = false; 
+                    document.getElementById('closeModal').click();
+                })
+                .catch(error => console.log(error));
+            }
+            if(this.type == "historiques"){
+                console.log(form);
+                axios.post('/historiques/excel',form ,config)
+                .then(response => {
+                    this.$emit('historique-added-added',response)
                     this.l = false; 
                     document.getElementById('closeModal').click();
                 })
