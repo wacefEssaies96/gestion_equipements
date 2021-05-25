@@ -20,7 +20,7 @@ use App\Notifications\HistoriqueAdded;
 use App\Notifications\TechConfirmedHist;
 use App\Notifications\TechEditedHist;
 use App\Notifications\AppelleNonCloture;
-use App\imports\InterventionImport;
+use App\Imports\InterventionImport;
 use App\Exports\InterventionExport;
 use Excel;
 

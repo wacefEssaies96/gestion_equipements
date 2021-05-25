@@ -208,7 +208,7 @@
           this.q.append('tel', this.qTel);
           this.q.append('email', this.qEmail);
 
-          axios.post("http://localhost:8000/users/search", this.q)
+          axios.post("/users/search", this.q)
           .then(response => this.users = response.data)
           .catch(error => console.log(error))
 

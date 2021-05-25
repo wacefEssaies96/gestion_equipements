@@ -274,7 +274,7 @@ export default {
             required,
             async isUnique(value){
                 if(value==='') return true;
-                const response = await axios.get('http://localhost:8000/equipements/'+value)
+                const response = await axios.get('/equipements/'+value)
                 .catch(error => console.log(error));
                 if(response.data.length == 0) return true;
             }
