@@ -53,32 +53,36 @@
           <span class="dropdown-item dropdown-header">{{unreadNotifications.length}} Notifications</span>
           <div v-for="notification in unreadNotifications" :key="notification.id">
             <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <template v-if="notification.data.createdHist">
-                <i class="fas fa-file mr-2"></i> Vous avez une nouvelle <br>
-                interventions créer à {{notification.data.createdHist.heure_demande}} .
-                <span class="float-right text-muted text-sm"></span>
-              </template>
-              <template v-if="notification.data.confirmedHist">
-                <i class="fas fa-file mr-2"></i> Un technicien à confirmé <br>
-                l'appelle {{notification.data.confirmedHist.id}} .
-                <span class="float-right text-muted text-sm"></span>
-              </template>
-              <template v-if="notification.data.editedHist">
-                <i class="fas fa-file mr-2"></i> Un technicien à rempli <br>
-                l'appelle {{notification.data.editedHist.id}} .
-                <span class="float-right text-muted text-sm"></span>
-              </template>
-              <template v-if="notification.data.appelleNonCloture">
-                <i class="fas fa-file mr-2"></i> L'appelle {{notification.data.appelleNonCloture.id}} reste non cloturé.
-                <span class="float-right text-muted text-sm"></span>
-              </template>   
-            </a>
+            <template v-if="user.role == 'TECHNICIEN'">
+              <router-link class="dropdown-item" to="/hist-technicien">
+                <template v-if="notification.data.createdHist">
+                  <router-link to="/hist-technicien"><i class="fas fa-file mr-2"></i> Vous avez une nouvelle <br>
+                  interventions créer à {{notification.data.createdHist.heure_demande}}.</router-link>
+                  <span class="float-right text-muted text-sm"></span>
+                </template>
+              </router-link>
+            </template>
+            <template v-else>
+              <a href="#" class="dropdown-item">
+                <template v-if="notification.data.confirmedHist">
+                  <i class="fas fa-file mr-2"></i> Le technicien à confirmé <br>
+                  l'appelle {{notification.data.confirmedHist.id}} .
+                  <span class="float-right text-muted text-sm"></span>
+                </template>
+                <template v-if="notification.data.editedHist">
+                  <i class="fas fa-file mr-2"></i> Le technicien à rempli <br>
+                  l'appelle {{notification.data.editedHist.id}} .
+                  <span class="float-right text-muted text-sm"></span>
+                </template>
+                <template v-if="notification.data.appelleNonCloture">
+                  <i class="fas fa-file mr-2"></i> L'appelle {{notification.data.appelleNonCloture.id}} reste non cloturé.
+                  <span class="float-right text-muted text-sm"></span>
+                </template>   
+              </a>
+            </template>
           </div>
           <div class="dropdown-divider"></div>
-          <!-- <a href="#" class="dropdown-item dropdown-footer"
-            >See All Notifications</a
-          > -->
+          <router-link to="/notifications" class="dropdown-item dropdown-footer">Voir toutes les notifications</router-link>
         </div>
       </li>
       <li class="nav-item">

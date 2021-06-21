@@ -27,6 +27,7 @@ import histTechnicien from './components/Historiques/Tech/Hist_tech.vue';
 import onedrive from './components/OneDrive/index.vue';
 import users from './components/Users/Users.vue'
 import globalChat from './components/Chat/GlobalChat.vue';
+import notifications from './components/AllNotifications.vue';
 
 const routes = [
     { path: '/', component: dashboard },
@@ -39,6 +40,7 @@ const routes = [
     { path: '/onedrive', component: onedrive },
     { path: '/users', component: users },
     { path: '/chat', component: globalChat },
+    { path: '/notifications', component: notifications },
 ];
 
 const router = new VueRouter({ routes });

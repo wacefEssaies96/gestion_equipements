@@ -397,8 +397,6 @@
                   <th>Designation</th>
                   <th>Emplacement</th>
                   <th>NSerie</th>
-                  <th>Code panne</th>
-                  <th>Designation CP</th>
                   <th>Type Travaille</th>
                   <th>Zone</th>
                   <th>BT cloturé</th>
@@ -420,8 +418,6 @@
                   <td>{{ historique.designation }}</td>
                   <td>{{ historique.emplacement }}</td>
                   <td>{{ historique.n_serie }}</td>
-                  <td>{{ historique.codePanne }}</td>
-                  <td>{{ historique.codePanneDesignation }}</td>
                   <td>{{ historique.type_travaille }}</td>
                   <td>{{ historique.zone }}</td>
                   <td>{{ historique.appelle }}</td>

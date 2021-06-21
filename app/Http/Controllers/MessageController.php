@@ -8,6 +8,7 @@ use App\User;
 use App\Message;
 use App\Notifications\ChatMessage;
 use Notification;
+use DB;
 
 
 class MessageController extends Controller
@@ -40,5 +41,9 @@ class MessageController extends Controller
         $reciever = User::find($message->from);
         Notification::send($user, new ChatMessage($message,$reciever));
         return response()->json($message);
+    }
+    public function seeAllNotifications(Request $request){
+        $notifications = DB::table('notifications')->where('notifiable_id',$request->id)->get();
+        return response()->json($notifications);
     }
 }

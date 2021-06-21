@@ -124,9 +124,9 @@
         <button @click="exportData()" class="btn btn-secondary">
           <i class="fas fa-upload" title="Exporter les données"> Exporter</i>
         </button>
-        <button class="btn btn-secondary" data-toggle="modal" data-target="#addFromExcel">
+        <!-- <button class="btn btn-secondary" data-toggle="modal" data-target="#addFromExcel">
           <i class="fas fa-download" title="Ajouter via fichier excel"> Importer</i>
-        </button>
+        </button> -->
         <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
         <i class="fas fa-plus" title="Ajouter une nouvelle intervention"> Ajouter</i>
         
@@ -155,8 +155,6 @@
             <th>Emplacement</th>
             <th>Description</th>
             <th>Zone</th>
-            <th>Code panne</th>
-            <th>Designation CP</th>
             <th>Travaille éffectué</th>
             <th>Pièce de rechange</th>
             <th>BT cloturé</th>
@@ -179,8 +177,6 @@
             <td>{{ historique.emplacement }}</td>
             <td>{{ historique.description_demande }}</td>
             <td>{{ historique.zone }}</td>
-            <td>{{ historique.codePanne }}</td>
-            <td>{{ historique.codePanneDesignation }}</td>
             <td>{{ historique.travaille }}</td>
             <td>{{ historique.piece_rechange }}</td>
             <td>{{ historique.appelle }}</td>

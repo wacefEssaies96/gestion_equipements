@@ -126,8 +126,6 @@
               <th>Zone</th>
               <th>H.début</th>
               <th>H.fin</th>
-              <th>Code panne</th>
-              <th>Designation CP</th>
               <th>Travaille éffectué</th>
               <th>Pièce de rechange</th>
               <th>H.d'arret</th>
@@ -149,8 +147,6 @@
               <td>{{ historique.zone }}</td>
               <td>{{ historique.heure_debut }}</td>
               <td>{{ historique.heure_fin }}</td>
-              <td>{{ historique.codePanne }}</td>
-              <td>{{ historique.codePanneDesignation }}</td>
               <td>{{ historique.travaille }}</td>
               <td>{{ historique.piece_rechange }}</td>
               <td>{{ historique.heure_arret }}</td>
@@ -229,6 +225,9 @@
       refreshEdited(historiques) {
         var value = "Historique a été modifié avec succées";
         this.histsTech = historiques.data;
+        axios.post("/historiques/liste")
+        .then(response => this.historiques = response.data)
+        .catch(error => console.log(error))
         this.toast(value);
       },
       getResults(page = 1) {

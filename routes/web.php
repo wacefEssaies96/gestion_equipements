@@ -13,6 +13,8 @@ use App\User;
         return response()->json('Marked as read');
     });
 
+    Route::post('/view-all-notifications', 'MessageController@seeAllNotifications');
+
     //analyse
     Route::post('/analyse/nbr-arret/zone','ChartController@nbrArretZone');
     Route::post('/analyse/nbr-arret','ChartController@nbrArret');
