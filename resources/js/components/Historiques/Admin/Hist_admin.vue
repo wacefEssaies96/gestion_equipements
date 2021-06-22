@@ -127,10 +127,11 @@
         <!-- <button class="btn btn-secondary" data-toggle="modal" data-target="#addFromExcel">
           <i class="fas fa-download" title="Ajouter via fichier excel"> Importer</i>
         </button> -->
+        <template v-if="user.role == 'ADMIN'">
         <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#exampleModalCenter">
         <i class="fas fa-plus" title="Ajouter une nouvelle intervention"> Ajouter</i>
         
-        </button>
+        </button></template>
         <button class="btn btn-outline-info" @click="showSearch"><i class="fas fa-search"></i></button>
       </div>
     </div>
@@ -158,7 +159,9 @@
             <th>Travaille éffectué</th>
             <th>Pièce de rechange</th>
             <th>BT cloturé</th>
-           <th>Action</th>
+            <template v-if="user.role == 'ADMIN'">
+              <th>Action</th>
+            </template>
           </tr>
         </thead>
         <tbody>
@@ -180,6 +183,7 @@
             <td>{{ historique.travaille }}</td>
             <td>{{ historique.piece_rechange }}</td>
             <td>{{ historique.appelle }}</td>
+            <template v-if="user.role == 'ADMIN'">
             <td> 
                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#editModal" @click="getHistorique(historique.id);">
               <i class="fas fa-edit" title="Modifier"/>
@@ -199,7 +203,7 @@
               <ShowHistAdmin
                 v-bind:historiqueShow="historiqueShow">
               </ShowHistAdmin>
-            </td>
+            </td></template>
           </tr> 
         </tbody>
       </table>
@@ -251,24 +255,27 @@ export default {
       }
     },
     async created(){
-      if(this.user.role != 'ADMIN'){
-          this.$router.push('/');
-        }
-      await axios.post("/historiques/liste")
-      .then(response => {
-        this.historiques = response.data
-      })
-      .catch(error => console.log(error))
-      await axios.get("/historiques/techs")
-      .then(response => {
-        this.techs = response.data
-      })
-      .catch(error => console.log(error))
-      await axios.get('/code_pannes/liste-all')
-      .then(response => {
-        this.allCodePanne = response.data
-        this.loading = false;
-      })
+      console.log(this.user.role);
+      if(this.user.role == 'ADMIN' || this.user.role == 'RESPONSABLE'){
+        await axios.post("/historiques/liste")
+        .then(response => {
+          this.historiques = response.data
+        })
+        .catch(error => console.log(error))
+        await axios.get("/historiques/techs")
+        .then(response => {
+          this.techs = response.data
+        })
+        .catch(error => console.log(error))
+        await axios.get('/code_pannes/liste-all')
+        .then(response => {
+          this.allCodePanne = response.data
+          this.loading = false;
+        })    
+      }
+      else{
+        this.$router.push('/');
+      }
     },
     methods:{
       exportData(){

@@ -84,6 +84,14 @@
                 </p>
               </router-link>
             </li>
+            <li class="nav-item">
+              <router-link to='/feedbacks' class="nav-link">
+              <i class="nav-icon far fa-comment-alt"></i>
+                <p>
+                  Feedback
+                </p>
+              </a>
+            </li>
           @endif
           @if (Auth::user()->role == "HOTLINE")
           <li class="nav-item">
@@ -105,7 +113,7 @@
             </router-link>
           </li>
           @endif
-          @if (Auth::user()->role == "PRODUCTION" || Auth::user()->role == "ADMIN")
+          @if (Auth::user()->role == "PRODUCTION")
           <li class="nav-item">
             <router-link to='/feedbacks' class="nav-link">
             <i class="nav-icon far fa-comment-alt"></i>
@@ -114,6 +122,16 @@
               </p>
             </a>
           </li> 
+          @endif
+          @if (Auth::user()->role == "RESPONSABLE")
+          <li class="nav-item">
+            <router-link to="/hist-admin" class="nav-link">
+              <i class="nav-icon fas fa-history"></i>
+              <p>
+                Interventions
+              </p>
+            </router-link>
+          </li>
           @endif
         </ul>
         
