@@ -162,7 +162,7 @@
                                         </div>
                                     </div>
                                 <label>Ajouter des documents via OneDrive</label>
-                                    <template v-if="connected == false">
+                                    <template v-if="isConnected == false">
                                         <p class="text text-danger">Vous devez être connecté à OneDrive !</p>
                                     </template> 
                                     <div class="row">
@@ -170,7 +170,7 @@
                                             <a href="#" class="btn btn-outline-info" 
                                             data-toggle="modal" 
                                             data-target="#EditFile"
-                                            :class="{'disabled' : !connected}"
+                                            :class="{'disabled' : !isConnected}"
                                             @click="setType('liste_pr')"
                                             >
                                             liste PR
@@ -181,7 +181,7 @@
                                             <a href="#" class="btn btn-outline-info" 
                                             data-toggle="modal" 
                                             data-target="#EditFile"
-                                            :class="{'disabled' : !connected}"
+                                            :class="{'disabled' : !isConnected}"
                                             @click="setType('ins_p')"     
                                             >
                                             Ins.M.Préventive
@@ -192,7 +192,7 @@
                                             <a href="#" class="btn btn-outline-info" 
                                             data-toggle="modal" 
                                             data-target="#EditFile"
-                                            :class="{'disabled' : !connected}"
+                                            :class="{'disabled' : !isConnected}"
                                             @click="setType('dossier_technique')"     
                                             >
                                             Dossier Technique
@@ -203,7 +203,7 @@
                                             <a href="#" class="btn btn-outline-info" 
                                             data-toggle="modal" 
                                             data-target="#EditFile"
-                                            :class="{'disabled' : !connected}"
+                                            :class="{'disabled' : !isConnected}"
                                             @click="setType('ins_c')"    
                                             >
                                             Ins.M.1ér niveau

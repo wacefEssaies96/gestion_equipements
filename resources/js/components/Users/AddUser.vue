@@ -84,7 +84,7 @@
                     <select type="text" class="form-control" v-model="role" 
                     :class="{'is-invalid':(role != '') ?$v.role.$invalid:'', 'is-valid':!$v.role.$invalid}">
                       <option value="TECHNICIEN">Technicien</option>
-                      <option value="PRODUCTION">Production</option>
+                      <option value="PRODUCTION">Agent de production</option>
                       <option value="HOTLINE">Hotline</option>
                       <option value="RESPONSABLE">Responsable</option>
                     </select>

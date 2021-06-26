@@ -21,9 +21,11 @@
         <!-- /.card-header -->
         <!-- form start -->
           <div class="card-body">
-            <a class="btn-sm btn-secondary mb-4" @click="goBack()">
-              <i class="fas fa-backward"></i>
-              Revenir en arrière</a>
+            <template v-if="showGoBack == true">
+              <a class="btn-sm btn-secondary mb-4" @click="goBack()">
+                <i class="fas fa-backward"></i>
+                Revenir en arrière</a>
+            </template>
             <template v-if="files.length == 0">
                 <h3 class="mt-4">Ce dossier est vide !</h3>
             </template>
@@ -80,6 +82,7 @@ export default {
         counter:0,
         type: '',
         l:false,
+        showGoBack : false
       }
     },
     watch:{
@@ -109,7 +112,8 @@ export default {
           axios.get("/getalldata")
           .then(response => {
             this.files = response.data
-            this.l = false;  
+            this.l = false; 
+            this.showGoBack = false; 
           })
           .catch(error => console.log(error))
           this.previous = [];
@@ -120,6 +124,7 @@ export default {
           .then(response => {
             this.files = response.data;
             this.l = false;  
+            this.showGoBack = true;
           })
           .catch(error => console.log(error))
           this.previous.pop();
@@ -134,6 +139,7 @@ export default {
         .then(response => {
           this.files = response.data;
           this.l = false
+          this.showGoBack = true;
         })
         .catch(error => console.log(error))
       },

@@ -56,7 +56,7 @@
             <div class="small-box bg-warning">
               <div class="inner">
                 <h3>{{data[1]}}</h3>
-                <p>Nombre des responsables</p>
+                <p>Nombre des agents de production</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>

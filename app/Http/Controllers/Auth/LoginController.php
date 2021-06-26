@@ -33,13 +33,15 @@ class LoginController extends Controller
     {
         if(Auth::user()->etat == 0){
             Auth::logout();
+            // return response("User can't perform this action.", 401);
             abort(401, "Votre compte a été désactivé. Veuillez contacter l'administrateur.");
             exit(-1);
+            // return redirect('/erreur');
         }
-        if(Auth::user()->role != 'ADMIN')
-        {
-            return'historiques';
-        }
+        // if(Auth::user()->role != 'ADMIN')
+        // {
+        //     return'historiques';
+        // }
        
     }
 
